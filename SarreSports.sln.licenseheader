@@ -1,0 +1,42 @@
+extensions: .cs .c .cpp .cxx .h. .hpp
+//Project Name: %Project% | File Name: %FileName%
+//Author Name: Samuel Steven David Herring
+//Author Email: s.s.herring1042@canterbury.ac.uk
+//Author URI: http://sherring.me
+//UserID: sh1042
+//Created On: %CreationDay%/%CreationMonth%/%CreationYear% | %CreationTime%
+//Last Updated On:  %CurrentDay%/%CurrentMonth%/%CurrentYear% | %CurrentTime%
+extensions: .py
+"""
+Project Name: %Project% | File Name: %FileName%
+Author Name: Samuel Steven David Herring
+Author URI: http://sherring.me
+UserID: sh1042
+Created On: %CreationDay%/%CreationMonth%/%CreationYear% | %CreationTime%
+Last Updated On:  %CurrentDay%/%CurrentMonth%/%CurrentYear% | %CurrentTime%
+"""
+extensions: .aspx .ascx
+<%-- 
+Project Name: %Project% | File Name: %FileName%
+Author Name: Samuel Steven David Herring
+Author URI: http://sherring.me
+UserID: sh1042
+Created On: %CreationDay%/%CreationMonth%/%CreationYear% | %CreationTime%
+Last Updated On:  %CurrentDay%/%CurrentMonth%/%CurrentYear% | %CurrentTime%
+--%>
+extensions: .vb
+'Project Name: %Project% | File Name: %FileName%
+'Author Name: Samuel Steven David Herring
+'Author URI: http://sherring.me
+'UserID: sh1042
+'Created On: %CreationDay%/%CreationMonth%/%CreationYear% | %CreationTime%
+'Last Updated On:  %CurrentDay%/%CurrentMonth%/%CurrentYear% | %CurrentTime%
+extensions:  .xml .config .xsd .html
+<!--
+Project Name: %Project% | File Name: %FileName%
+Author Name: Samuel Steven David Herring
+Author URI: http://sherring.me
+UserID: sh1042
+Created On: %CreationDay%/%CreationMonth%/%CreationYear% | %CreationTime%
+Last Updated On:  %CurrentDay%/%CurrentMonth%/%CurrentYear% | %CurrentTime%
+-->

@@ -1,4 +1,11 @@
-﻿using System.Reflection;
+﻿//Project Name: SarreSports | File Name: AssemblyInfo.cs
+//Author Name: Samuel Steven David Herring
+//Author Email: s.s.herring1042@canterbury.ac.uk
+//Author URI: http://sherring.me
+//UserID: sh1042
+//Created On: 3/12/2018 | 21:01
+//Last Updated On:  20/12/2018 | 14:44
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 

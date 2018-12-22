@@ -1,4 +1,11 @@
-﻿using System;
+﻿//Project Name: SarreSports | File Name: Program.cs
+//Author Name: Samuel Steven David Herring
+//Author Email: s.s.herring1042@canterbury.ac.uk
+//Author URI: http://sherring.me
+//UserID: sh1042
+//Created On: 3/12/2018 | 21:01
+//Last Updated On:  20/12/2018 | 14:44
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +23,7 @@ namespace SarreSports
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new loginForm());
         }
     }
 }
