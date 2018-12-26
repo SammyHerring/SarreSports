@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/12/2018 | 17:26
-//Last Updated On:  20/12/2018 | 20:57
+//Last Updated On:  26/12/2018 | 20:12
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,14 +51,14 @@ namespace SarreSports
             return branchName;
         }
 
-        public (bool Success, int customerID) createCustomer(Customer c)
+        public (bool Success, int customerID) createCustomer(Customer customer)
         {
-            if (!(c is null))
+            if (!(customer is null))
             {
                 try
                 {
-                    mCustomers.Add(c);
-                    return (true, c.ID());
+                    mCustomers.Add(customer);
+                    return (true, customer.ID());
                 }
                 catch (Exception ex)
                 {
@@ -100,6 +100,25 @@ namespace SarreSports
             }
         }
 
+        //Customer Attribute Methods
+        public string getFullName(int customerID)
+        {
+            try
+            {
+                return findCustomer(customerID).FullName();
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Customer Not Found.");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(String.Format("Error: {0}", ex.Message));
+                return null;
+            }
+        }
+
         public string getFirstName(int customerID)
         {
             try
@@ -115,6 +134,25 @@ namespace SarreSports
             {
                 Console.WriteLine(String.Format("Error: {0}", ex.Message));
                 return null;
+            }
+        }
+
+        public bool setFirstName(int customerID, string firstName)
+        {
+            try
+            {
+                findCustomer(customerID).FirstName = firstName;
+                return true;
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Customer Not Found.");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(String.Format("Error: {0}", ex.Message));
+                return false;
             }
         }
 
@@ -136,6 +174,25 @@ namespace SarreSports
             }
         }
 
+        public bool setLastName(int customerID, string lastName)
+        {
+            try
+            {
+                findCustomer(customerID).LastName = lastName;
+                return true;
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Customer Not Found.");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(String.Format("Error: {0}", ex.Message));
+                return false;
+            }
+        }
+
         public string getEmailAddress(int customerID)
         {
             try
@@ -154,6 +211,26 @@ namespace SarreSports
 
             }
         }
+
+        public bool setEmailAddress(int customerID, string emailAddress)
+        {
+            try
+            {
+                findCustomer(customerID).Email = emailAddress;
+                return true;
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Customer Not Found.");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(String.Format("Error: {0}", ex.Message));
+                return false;
+            }
+        }
+
         public string getMobileNo(int customerID)
         {
             try
@@ -169,6 +246,25 @@ namespace SarreSports
             {
                 Console.WriteLine(String.Format("Error: {0}", ex.Message));
                 return null;
+            }
+        }
+    
+        public bool setMobileNo(int customerID, string mobileNo)
+        {
+            try
+            {
+                findCustomer(customerID).MobileNo = mobileNo;
+                return true;
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Customer Not Found.");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(String.Format("Error: {0}", ex.Message));
+                return false;
             }
         }
 
@@ -190,6 +286,25 @@ namespace SarreSports
             }
         }
 
+        public bool setPostCode(int customerID, string postCode)
+        {
+            try
+            {
+                findCustomer(customerID).PostCode = postCode;
+                return true;
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Customer Not Found.");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(String.Format("Error: {0}", ex.Message));
+                return false;
+            }
+        }
+
         public bool? getGDPR(int customerID)
         {
             try
@@ -205,6 +320,25 @@ namespace SarreSports
             {
                 Console.WriteLine(String.Format("Error: {0}", ex.Message));
                 return null;
+            }
+        }
+
+        public bool setGDPR(int customerID, bool GDPR)
+        {
+            try
+            {
+                findCustomer(customerID).GDPR = GDPR;
+                return true;
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Customer Not Found.");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(String.Format("Error: {0}", ex.Message));
+                return false;
             }
         }
 

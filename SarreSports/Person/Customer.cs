@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/12/2018 | 18:18
-//Last Updated On:  20/12/2018 | 20:56
+//Last Updated On:  26/12/2018 | 20:11
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +37,7 @@ namespace SarreSports
             this.email = email;
         }
 
-        public bool GDPR { get; private set; }
+        public bool GDPR { get; set; }
 
         public int ID()
         {

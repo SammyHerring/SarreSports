@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 10/12/2018 | 16:59
-//Last Updated On:  20/12/2018 | 17:31
+//Last Updated On:  26/12/2018 | 22:00
 namespace SarreSports
 {
     partial class posForm
@@ -40,12 +40,14 @@ namespace SarreSports
             this.uiBranchTitleLabel = new System.Windows.Forms.Label();
             this.uiPosViewTabControl = new System.Windows.Forms.TabControl();
             this.uiSaleTab = new System.Windows.Forms.TabPage();
+            this.uiSaleCustomerIDUpDown = new System.Windows.Forms.NumericUpDown();
             this.uiSalePurchaseGroupBox = new System.Windows.Forms.GroupBox();
+            this.uiSaleProductIDUpDown = new System.Windows.Forms.NumericUpDown();
+            this.uiSaleCancelButton = new System.Windows.Forms.Button();
             this.uiSaleProductSearchButton = new System.Windows.Forms.Button();
             this.uiSaleRemoveItemButton = new System.Windows.Forms.Button();
             this.uiSaleProductIDLabel = new System.Windows.Forms.Label();
             this.uiSaleSaleButton = new System.Windows.Forms.Button();
-            this.uiSaleProductIDTextBox = new System.Windows.Forms.TextBox();
             this.uiSaleBasketListView = new System.Windows.Forms.ListView();
             this.uiSaleProductNameLabel = new System.Windows.Forms.Label();
             this.uiSaleBasketLabel = new System.Windows.Forms.Label();
@@ -55,11 +57,11 @@ namespace SarreSports
             this.uiSaleNewCustomerButton = new System.Windows.Forms.Button();
             this.uiSaleCustomerNameTextBox = new System.Windows.Forms.TextBox();
             this.uiSaleCustomerNameLabel = new System.Windows.Forms.Label();
-            this.uiSaleCustomerIDTextbox = new System.Windows.Forms.TextBox();
             this.uiSaleCustomerIDLabel = new System.Windows.Forms.Label();
             this.uiCustomersTab = new System.Windows.Forms.TabPage();
+            this.uiCustomersCustomerIDUpDown = new System.Windows.Forms.NumericUpDown();
             this.uiCustomersCustomerEditSaveButton = new System.Windows.Forms.Button();
-            this.uiCustomersCancelCustomerCreateButton = new System.Windows.Forms.Button();
+            this.uiCustomersCancelButton = new System.Windows.Forms.Button();
             this.uiCustomersCreateCustomerButton = new System.Windows.Forms.Button();
             this.uiCustomersCustomerActionsGroupBox = new System.Windows.Forms.GroupBox();
             this.uiCustomersQRCodePrintButton = new System.Windows.Forms.Button();
@@ -96,17 +98,18 @@ namespace SarreSports
             this.uiAdminTab = new System.Windows.Forms.TabPage();
             this.uiLogoutButton = new System.Windows.Forms.Button();
             this.uiCustomersErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.uiCustomersCustomerIDUpDown = new System.Windows.Forms.NumericUpDown();
             this.uiPosViewTabControl.SuspendLayout();
             this.uiSaleTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uiSaleCustomerIDUpDown)).BeginInit();
             this.uiSalePurchaseGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uiSaleProductIDUpDown)).BeginInit();
             this.uiCustomersTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uiCustomersCustomerIDUpDown)).BeginInit();
             this.uiCustomersCustomerActionsGroupBox.SuspendLayout();
             this.uiCustomersCustomerDetailsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uiCustomersQRCodePictureBox)).BeginInit();
             this.uiInventoryTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uiCustomersErrorProvider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.uiCustomersCustomerIDUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // uiBranchTitleLabel
@@ -134,12 +137,12 @@ namespace SarreSports
             // 
             // uiSaleTab
             // 
+            this.uiSaleTab.Controls.Add(this.uiSaleCustomerIDUpDown);
             this.uiSaleTab.Controls.Add(this.uiSalePurchaseGroupBox);
             this.uiSaleTab.Controls.Add(this.uiSaleCustomerSearchButton);
             this.uiSaleTab.Controls.Add(this.uiSaleNewCustomerButton);
             this.uiSaleTab.Controls.Add(this.uiSaleCustomerNameTextBox);
             this.uiSaleTab.Controls.Add(this.uiSaleCustomerNameLabel);
-            this.uiSaleTab.Controls.Add(this.uiSaleCustomerIDTextbox);
             this.uiSaleTab.Controls.Add(this.uiSaleCustomerIDLabel);
             this.uiSaleTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uiSaleTab.Location = new System.Drawing.Point(8, 56);
@@ -150,13 +153,26 @@ namespace SarreSports
             this.uiSaleTab.Text = "Sale";
             this.uiSaleTab.UseVisualStyleBackColor = true;
             // 
+            // uiSaleCustomerIDUpDown
+            // 
+            this.uiSaleCustomerIDUpDown.Location = new System.Drawing.Point(231, 41);
+            this.uiSaleCustomerIDUpDown.Name = "uiSaleCustomerIDUpDown";
+            this.uiSaleCustomerIDUpDown.Size = new System.Drawing.Size(418, 44);
+            this.uiSaleCustomerIDUpDown.TabIndex = 17;
+            this.uiSaleCustomerIDUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // uiSalePurchaseGroupBox
             // 
+            this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleProductIDUpDown);
+            this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleCancelButton);
             this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleProductSearchButton);
             this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleRemoveItemButton);
             this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleProductIDLabel);
             this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleSaleButton);
-            this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleProductIDTextBox);
             this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleBasketListView);
             this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleProductNameLabel);
             this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleBasketLabel);
@@ -168,6 +184,22 @@ namespace SarreSports
             this.uiSalePurchaseGroupBox.TabIndex = 16;
             this.uiSalePurchaseGroupBox.TabStop = false;
             this.uiSalePurchaseGroupBox.Text = "Purchase System";
+            // 
+            // uiSaleProductIDUpDown
+            // 
+            this.uiSaleProductIDUpDown.Location = new System.Drawing.Point(206, 48);
+            this.uiSaleProductIDUpDown.Name = "uiSaleProductIDUpDown";
+            this.uiSaleProductIDUpDown.Size = new System.Drawing.Size(418, 44);
+            this.uiSaleProductIDUpDown.TabIndex = 18;
+            // 
+            // uiSaleCancelButton
+            // 
+            this.uiSaleCancelButton.Location = new System.Drawing.Point(1097, 1092);
+            this.uiSaleCancelButton.Name = "uiSaleCancelButton";
+            this.uiSaleCancelButton.Size = new System.Drawing.Size(319, 55);
+            this.uiSaleCancelButton.TabIndex = 16;
+            this.uiSaleCancelButton.Text = "Cancel";
+            this.uiSaleCancelButton.UseVisualStyleBackColor = true;
             // 
             // uiSaleProductSearchButton
             // 
@@ -205,13 +237,6 @@ namespace SarreSports
             this.uiSaleSaleButton.TabIndex = 14;
             this.uiSaleSaleButton.Text = "Sale";
             this.uiSaleSaleButton.UseVisualStyleBackColor = true;
-            // 
-            // uiSaleProductIDTextBox
-            // 
-            this.uiSaleProductIDTextBox.Location = new System.Drawing.Point(206, 47);
-            this.uiSaleProductIDTextBox.Name = "uiSaleProductIDTextBox";
-            this.uiSaleProductIDTextBox.Size = new System.Drawing.Size(418, 44);
-            this.uiSaleProductIDTextBox.TabIndex = 7;
             // 
             // uiSaleBasketListView
             // 
@@ -294,13 +319,6 @@ namespace SarreSports
             this.uiSaleCustomerNameLabel.TabIndex = 2;
             this.uiSaleCustomerNameLabel.Text = "Customer Name";
             // 
-            // uiSaleCustomerIDTextbox
-            // 
-            this.uiSaleCustomerIDTextbox.Location = new System.Drawing.Point(231, 40);
-            this.uiSaleCustomerIDTextbox.Name = "uiSaleCustomerIDTextbox";
-            this.uiSaleCustomerIDTextbox.Size = new System.Drawing.Size(418, 44);
-            this.uiSaleCustomerIDTextbox.TabIndex = 1;
-            // 
             // uiSaleCustomerIDLabel
             // 
             this.uiSaleCustomerIDLabel.AutoSize = true;
@@ -315,7 +333,7 @@ namespace SarreSports
             // 
             this.uiCustomersTab.Controls.Add(this.uiCustomersCustomerIDUpDown);
             this.uiCustomersTab.Controls.Add(this.uiCustomersCustomerEditSaveButton);
-            this.uiCustomersTab.Controls.Add(this.uiCustomersCancelCustomerCreateButton);
+            this.uiCustomersTab.Controls.Add(this.uiCustomersCancelButton);
             this.uiCustomersTab.Controls.Add(this.uiCustomersCreateCustomerButton);
             this.uiCustomersTab.Controls.Add(this.uiCustomersCustomerActionsGroupBox);
             this.uiCustomersTab.Controls.Add(this.uiCustomersCustomerDetailsGroupBox);
@@ -336,6 +354,23 @@ namespace SarreSports
             this.uiCustomersTab.Text = "Customers";
             this.uiCustomersTab.UseVisualStyleBackColor = true;
             // 
+            // uiCustomersCustomerIDUpDown
+            // 
+            this.uiCustomersCustomerIDUpDown.Location = new System.Drawing.Point(231, 41);
+            this.uiCustomersCustomerIDUpDown.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.uiCustomersCustomerIDUpDown.Name = "uiCustomersCustomerIDUpDown";
+            this.uiCustomersCustomerIDUpDown.Size = new System.Drawing.Size(418, 44);
+            this.uiCustomersCustomerIDUpDown.TabIndex = 29;
+            this.uiCustomersCustomerIDUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // uiCustomersCustomerEditSaveButton
             // 
             this.uiCustomersCustomerEditSaveButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -347,21 +382,21 @@ namespace SarreSports
             this.uiCustomersCustomerEditSaveButton.UseVisualStyleBackColor = true;
             this.uiCustomersCustomerEditSaveButton.Click += new System.EventHandler(this.uiCustomersCustomerEditSaveButton_Click);
             // 
-            // uiCustomersCancelCustomerCreateButton
+            // uiCustomersCancelButton
             // 
-            this.uiCustomersCancelCustomerCreateButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.uiCustomersCancelCustomerCreateButton.Location = new System.Drawing.Point(953, 303);
-            this.uiCustomersCancelCustomerCreateButton.Name = "uiCustomersCancelCustomerCreateButton";
-            this.uiCustomersCancelCustomerCreateButton.Size = new System.Drawing.Size(319, 119);
-            this.uiCustomersCancelCustomerCreateButton.TabIndex = 27;
-            this.uiCustomersCancelCustomerCreateButton.Text = "Cancel";
-            this.uiCustomersCancelCustomerCreateButton.UseVisualStyleBackColor = true;
-            this.uiCustomersCancelCustomerCreateButton.Click += new System.EventHandler(this.uiCustomersCancelCustomerCreateButton_Click);
+            this.uiCustomersCancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uiCustomersCancelButton.Location = new System.Drawing.Point(955, 303);
+            this.uiCustomersCancelButton.Name = "uiCustomersCancelButton";
+            this.uiCustomersCancelButton.Size = new System.Drawing.Size(319, 119);
+            this.uiCustomersCancelButton.TabIndex = 27;
+            this.uiCustomersCancelButton.Text = "Cancel";
+            this.uiCustomersCancelButton.UseVisualStyleBackColor = true;
+            this.uiCustomersCancelButton.Click += new System.EventHandler(this.uiCustomersCancelCustomerCreateButton_Click);
             // 
             // uiCustomersCreateCustomerButton
             // 
             this.uiCustomersCreateCustomerButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.uiCustomersCreateCustomerButton.Location = new System.Drawing.Point(953, 440);
+            this.uiCustomersCreateCustomerButton.Location = new System.Drawing.Point(955, 440);
             this.uiCustomersCreateCustomerButton.Name = "uiCustomersCreateCustomerButton";
             this.uiCustomersCreateCustomerButton.Size = new System.Drawing.Size(319, 119);
             this.uiCustomersCreateCustomerButton.TabIndex = 26;
@@ -460,6 +495,7 @@ namespace SarreSports
             this.uiCustomersFirstNameTextBox.Name = "uiCustomersFirstNameTextBox";
             this.uiCustomersFirstNameTextBox.Size = new System.Drawing.Size(550, 44);
             this.uiCustomersFirstNameTextBox.TabIndex = 7;
+            this.uiCustomersFirstNameTextBox.Tag = "protected";
             // 
             // uiCustomersLastNameTextBox
             // 
@@ -468,6 +504,7 @@ namespace SarreSports
             this.uiCustomersLastNameTextBox.Name = "uiCustomersLastNameTextBox";
             this.uiCustomersLastNameTextBox.Size = new System.Drawing.Size(550, 44);
             this.uiCustomersLastNameTextBox.TabIndex = 8;
+            this.uiCustomersLastNameTextBox.Tag = "protected";
             // 
             // uiCustomersEmailAddressTextBox
             // 
@@ -599,6 +636,7 @@ namespace SarreSports
             this.uiCustomersCustomerNameTextBox.Name = "uiCustomersCustomerNameTextBox";
             this.uiCustomersCustomerNameTextBox.Size = new System.Drawing.Size(486, 44);
             this.uiCustomersCustomerNameTextBox.TabIndex = 3;
+            this.uiCustomersCustomerNameTextBox.Tag = "protected";
             // 
             // uiCustomersCustomerNameLabel
             // 
@@ -717,23 +755,6 @@ namespace SarreSports
             this.uiCustomersErrorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
             this.uiCustomersErrorProvider.ContainerControl = this;
             // 
-            // uiCustomersCustomerIDUpDown
-            // 
-            this.uiCustomersCustomerIDUpDown.Location = new System.Drawing.Point(231, 41);
-            this.uiCustomersCustomerIDUpDown.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.uiCustomersCustomerIDUpDown.Name = "uiCustomersCustomerIDUpDown";
-            this.uiCustomersCustomerIDUpDown.Size = new System.Drawing.Size(418, 44);
-            this.uiCustomersCustomerIDUpDown.TabIndex = 29;
-            this.uiCustomersCustomerIDUpDown.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
             // posForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -751,10 +772,13 @@ namespace SarreSports
             this.uiPosViewTabControl.ResumeLayout(false);
             this.uiSaleTab.ResumeLayout(false);
             this.uiSaleTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uiSaleCustomerIDUpDown)).EndInit();
             this.uiSalePurchaseGroupBox.ResumeLayout(false);
             this.uiSalePurchaseGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uiSaleProductIDUpDown)).EndInit();
             this.uiCustomersTab.ResumeLayout(false);
             this.uiCustomersTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uiCustomersCustomerIDUpDown)).EndInit();
             this.uiCustomersCustomerActionsGroupBox.ResumeLayout(false);
             this.uiCustomersCustomerDetailsGroupBox.ResumeLayout(false);
             this.uiCustomersCustomerDetailsGroupBox.PerformLayout();
@@ -762,7 +786,6 @@ namespace SarreSports
             this.uiInventoryTab.ResumeLayout(false);
             this.uiInventoryTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uiCustomersErrorProvider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.uiCustomersCustomerIDUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -780,13 +803,11 @@ namespace SarreSports
         private System.Windows.Forms.Button uiSaleProductSearchButton;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label uiSaleProductNameLabel;
-        private System.Windows.Forms.TextBox uiSaleProductIDTextBox;
         private System.Windows.Forms.Label uiSaleProductIDLabel;
         private System.Windows.Forms.Button uiSaleCustomerSearchButton;
         private System.Windows.Forms.Button uiSaleNewCustomerButton;
         private System.Windows.Forms.TextBox uiSaleCustomerNameTextBox;
         private System.Windows.Forms.Label uiSaleCustomerNameLabel;
-        private System.Windows.Forms.TextBox uiSaleCustomerIDTextbox;
         private System.Windows.Forms.Label uiSaleCustomerIDLabel;
         private System.Windows.Forms.Button uiSaleRemoveItemButton;
         private System.Windows.Forms.Button uiSaleSaleButton;
@@ -826,9 +847,12 @@ namespace SarreSports
         private System.Windows.Forms.GroupBox uiCustomersCustomerActionsGroupBox;
         private System.Windows.Forms.GroupBox uiSalePurchaseGroupBox;
         private System.Windows.Forms.Button uiCustomersCreateCustomerButton;
-        private System.Windows.Forms.Button uiCustomersCancelCustomerCreateButton;
+        private System.Windows.Forms.Button uiCustomersCancelButton;
         private System.Windows.Forms.Button uiCustomersCustomerEditSaveButton;
         private System.Windows.Forms.ErrorProvider uiCustomersErrorProvider;
         private System.Windows.Forms.NumericUpDown uiCustomersCustomerIDUpDown;
+        private System.Windows.Forms.Button uiSaleCancelButton;
+        private System.Windows.Forms.NumericUpDown uiSaleCustomerIDUpDown;
+        private System.Windows.Forms.NumericUpDown uiSaleProductIDUpDown;
     }
 }

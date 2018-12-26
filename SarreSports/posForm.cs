@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 10/12/2018 | 16:59
-//Last Updated On:  22/12/2018 | 23:29
+//Last Updated On:  26/12/2018 | 22:11
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,19 +13,27 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Security.Authentication.ExtendedProtection.Configuration;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 /*
  * Programming Structure and Development Notes
- * System Requires C# 7.0 or greater to compile and run due to syntax utilised.
+ *
+ * System Requires C# 7.0 or greater to compile and run due to syntax utilised, incl. tuple function return values.
  * Zen.Barcode.Rendering.Framework required to compile from NuGet Packages for Barcode Generation.
+ *
  * System uses custom naming convention for Tabulated Form Layout.
  * Each control or function has a prefix ('Sale', 'Customers', 'Inventory', 'Admin'), typically after 'ui' relating a given function to a tab
  * Unless the given control of function is to be used form-wide - see comments for guidance.
+ *
+ * As a form-wide function, some controls may have protected values and as such GroupBox handlers abide by control tags -
+ * specifically searching for 'protected' tag. Requires implementation by parent to override optional argument value.
+ *
  * Default branch and default users setup for testing - see help button upon first run. Help button to be removed in production environment.
  */
 
@@ -35,8 +43,22 @@ namespace SarreSports
     {
         private Branch currentBranch;
         private SystemUser currentUser;
-        private bool customersCustomerEditStateValue;
-        private bool salePurchaseEditStateValue;
+
+        private enum Tabs
+        {
+            Sale = 0,
+            Customers = 1,
+            Inventory = 2,
+            Admin = 3
+        };
+        private enum TabStates
+        {
+            Default = 0,
+            New_Customer = 1,
+            Loaded_Customer = 2,
+            Edit_Customer = 3
+
+        }
 
         public posForm(IBranch b, SystemUser u)
         {
@@ -83,7 +105,7 @@ namespace SarreSports
             uiCustomersPurchasesListView.Columns.Add("Purchase ID", 200, HorizontalAlignment.Left);
             uiCustomersPurchasesListView.Columns.Add("Purchase Date", 400, HorizontalAlignment.Left);
             uiCustomersPurchasesListView.Columns.Add("Total Cost", -2, HorizontalAlignment.Left);
-            //Set Tab Edit States
+            //Set Default Tab Edit States
             setDefaultFormState();
         }
 
@@ -103,18 +125,6 @@ namespace SarreSports
         }
 
         //Sale General Functions
-
-        //Sale Control Management Functions
-        private bool salePurchaseEditState
-        {
-            get => salePurchaseEditState;
-
-            set
-            {
-                salePurchaseEditStateValue = value;
-                uiSalePurchaseGroupBox.Enabled = value;
-            }
-        }
 
         //Customers Tab Functions
         //Customer Events
@@ -140,7 +150,7 @@ namespace SarreSports
 
         private void uiCustomersCancelCustomerCreateButton_Click(object sender, EventArgs e)
         {
-            changeTabState("Customers", "Default");
+            changeTabState(Tabs.Customers, TabStates.Default);
         }
 
         private void uiCustomersQRCodeSaveButton_Click(object sender, EventArgs e)
@@ -161,7 +171,7 @@ namespace SarreSports
         //Customer General Functions
         private void customersNewCustomer()
         {
-            changeTabState("Customers", "NewCustomer");
+            changeTabState(Tabs.Customers, TabStates.New_Customer, true);
         }
 
         private void customersSearchCustomer()
@@ -189,7 +199,6 @@ namespace SarreSports
                     {
                         currentBranch.emailCustomer(currentCustomer.customerID);
                     }
-                    customersResetTab(); //Reset Customers Tab Contents
                     customersLoadCustomer(currentCustomer.customerID); //Load newly created customer
                 }
                 else
@@ -207,16 +216,75 @@ namespace SarreSports
 
         private void customersEditCustomer()
         {
+            if (uiCustomersCustomerEditSaveButton.Text == "Edit")
+            {
+                changeTabState(Tabs.Customers, TabStates.Edit_Customer);
+            }
+            else
+            {
+                //Validate All Customer Details
+                if (customersValidateCustomerDetails())
+                {
+                    //Get Loaded Customer value and if loaded check form values
+                    //If value has changed, push new value to given attribute in customer object
+                    if (int.TryParse(uiCustomersCustomerIDUpDown.Text, out int customerID))
+                    {
+                        if (uiCustomersFirstNameTextBox.Text != (currentBranch.getFirstName(customerID) ?? "Error"))
+                        {
+                            currentBranch.setFirstName(customerID, uiCustomersFirstNameTextBox.Text);
+                        }
 
+                        if (uiCustomersLastNameTextBox.Text != (currentBranch.getLastName(customerID) ?? "Error"))
+                        {
+                            currentBranch.setLastName(customerID, uiCustomersLastNameTextBox.Text);
+                        }
+
+                        if (uiCustomersEmailAddressTextBox.Text != (currentBranch.getEmailAddress(customerID) ?? "Error"))
+                        {
+                            currentBranch.setEmailAddress(customerID, uiCustomersEmailAddressTextBox.Text);
+                        }
+
+                        if (uiCustomersMobileNoTextBox.Text != (currentBranch.getMobileNo(customerID) ?? "Error"))
+                        {
+                            currentBranch.setMobileNo(customerID, uiCustomersMobileNoTextBox.Text);
+                        }
+
+                        if (uiCustomersPostCodeTextBox.Text != (currentBranch.getPostCode(customerID) ?? "Error"))
+                        {
+                            currentBranch.setPostCode(customerID, uiCustomersPostCodeTextBox.Text);
+                        }
+
+                        if (uiCustomersPoliciesGDPRCheckBox.Checked != (currentBranch.getGDPR(customerID) ?? false))
+                        {
+                            currentBranch.setGDPR(customerID, uiCustomersPoliciesGDPRCheckBox.Checked);
+                        }
+                        customersLoadCustomer(customerID); //Once edit completed reload customer
+                    }
+                    else
+                    {
+                        //Customer Edit Loading Failed
+                        MessageBox.Show("Customer Details Edit Error. Customer ID related error.\n" +
+                                        "Cancel edit query and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    //Customer Details Validation Failed
+                    MessageBox.Show("Invalid values entered. See Error Prompts.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void customersLoadCustomer(int customerID)
         {
             if (!string.IsNullOrEmpty(customerID.ToString()))
             {
-                changeTabState("Customers", "LoadCustomer");
+                changeTabState(Tabs.Customers, TabStates.Loaded_Customer);
+                Console.WriteLine(String.Format("Customer ID: {0}. Loaded.", customerID));
 
-                uiCustomersCustomerIDUpDown.Value = customerID;
+                uiCustomersCustomerIDUpDown.Text = customerID.ToString();
+                uiCustomersCustomerNameTextBox.Text = currentBranch.getFullName(customerID) ?? "Not Found";
+
                 Zen.Barcode.CodeQrBarcodeDraw qrcode = Zen.Barcode.BarcodeDrawFactory.CodeQr;
                 uiCustomersQRCodePictureBox.Image = qrcode.Draw(customerID.ToString(), uiCustomersQRCodePictureBox.Height);
 
@@ -284,7 +352,16 @@ namespace SarreSports
 
         private void customersEmailDetails()
         {
-            //currentBranch.emailCustomer(int customerID);
+            if (int.TryParse(uiCustomersCustomerIDUpDown.Text, out int customerID))
+            {
+                currentBranch.emailCustomer(customerID);
+            } else
+            {
+                //Customer Loading Failed
+                MessageBox.Show("Customer Details Loading Error. Customer ID related error.\n" +
+                                "Try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
         }
 
         //Customer Control Management Functions
@@ -350,45 +427,6 @@ namespace SarreSports
             }
 
             return valid;
-        }
-
-        private void customersResetTab()
-        {
-            uiCustomersCustomerIDUpDown.Focus();
-
-            uiCustomersNewCustomerButton.Enabled = true;
-            uiCustomersSearchCustomersButton.Enabled = true;
-
-            uiCustomersCustomerIDUpDown.ResetText();
-            uiCustomersCustomerIDUpDown.Enabled = true;
-
-            uiCustomersCustomerNameTextBox.Clear();
-            uiCustomersCustomerNameTextBox.Enabled = true;
-
-            resetGroupBoxControls(uiCustomersCustomerDetailsGroupBox);
-            customersCustomerEditState = false;
-
-            uiCustomersCancelCustomerCreateButton.Hide();
-            uiCustomersCreateCustomerButton.Hide();
-            uiCustomersCustomerEditSaveButton.Hide();
-
-            uiCustomersErrorProvider.Clear();
-
-        }
-
-        private bool customersCustomerEditState
-        {
-            get => customersCustomerEditStateValue;
-
-            set
-            {
-                customersCustomerEditStateValue = value;
-                uiCustomersCustomerDetailsGroupBox.Enabled = value;
-                uiCustomersCustomerActionsGroupBox.Enabled = value;
-                uiCustomersQRCodePictureBox.Enabled = value;
-                uiCustomersPurchasesTitleLabel.Enabled = value;
-                uiCustomersPurchasesListView.Enabled = value;
-            }
         }
 
         //Form-wide Functions
@@ -465,17 +503,33 @@ namespace SarreSports
 
         private void setDefaultFormState()
         {
-            customersResetTab();
-            salePurchaseEditState = salePurchaseEditStateValue;
+            changeTabState(Tabs.Admin, TabStates.Default);
+            changeTabState(Tabs.Inventory, TabStates.Default);
+            changeTabState(Tabs.Customers, TabStates.Default);
+            changeTabState(Tabs.Sale, TabStates.Default);
         }
 
-        private void resetGroupBoxControls(GroupBox box)
+        private void resetGroupBoxControls(GroupBox box, bool protectedText = false)
         {
             foreach (Control ctr in box.Controls)
             {
                 if (ctr is TextBox)
                 {
-                    ctr.Text = "";
+                    if (ctr.Tag is null)
+                    {
+                        ctr.Text = "";
+                    } else if ((ctr.Tag.ToString() ?? "") == "protected" && protectedText)
+                    {
+                        ctr.Text = ctr.Text;
+                    }
+                    else
+                    {
+                        ctr.Text = "";
+                    }
+                }
+                else if (ctr is NumericUpDown)
+                {
+                    ((NumericUpDown)ctr).ResetText();
                 }
                 else if (ctr is CheckedListBox)
                 {
@@ -492,6 +546,10 @@ namespace SarreSports
                 else if (ctr is ComboBox)
                 {
                     ((ComboBox)ctr).SelectedIndex = 0;
+                }
+                else if (ctr is ListView)
+                {
+                    ((ListView)ctr).Items.Clear();
                 }
             }
         }
@@ -516,56 +574,201 @@ namespace SarreSports
                 {
                     ctr.Enabled = state;
                 }
+                else if (ctr is Button)
+                {
+                    ctr.Enabled = state;
+                }
+                else if (ctr is NumericUpDown)
+                {
+                    ctr.Enabled = state;
+                }
+                else if (ctr is ListView)
+                {
+                    ctr.Enabled = state;
+                }
             }
         }
 
-        private void changeTabState(string tab, string state)
+        private void changeTabState(Tabs tab, TabStates state, bool nameHelper = false)
         {
+            Console.WriteLine(string.Format("Tab State Change Request. Tab: {0}. New Tab State: {1}", tab, state));
             switch (tab)
             {
-                case "Sale":
-                    break;
-                case "Customers":
+                //Each Tab follows UI Breakdown orders.
+                case Tabs.Sale:
                     switch (state)
                     {
-                        case "Default":
-                            customersResetTab();
+                        case TabStates.Default:
+                            uiSaleCustomerIDUpDown.Focus();
+                            resetGroupBoxControls(uiSalePurchaseGroupBox);
+                            groupBoxControlsEnabled(uiSalePurchaseGroupBox, false);
                             break;
-                        case "NewCustomer":
-                            uiCustomersNewCustomerButton.Enabled = false;
-                            uiCustomersSearchCustomersButton.Enabled = false;
-
-                            uiCustomersCustomerIDUpDown.ResetText();
-                            uiCustomersCustomerIDUpDown.Enabled = false;
-
-                            (uiCustomersCustomerNameTextBox.Text, uiCustomersFirstNameTextBox.Text, uiCustomersLastNameTextBox.Text) =
-                                customerNameFormattingHelper(uiCustomersCustomerNameTextBox.Text);
-                            uiCustomersCustomerNameTextBox.Enabled = false;
-
-                            uiCustomersCustomerDetailsGroupBox.Enabled = true;
-                            uiCustomersCreateCustomerButton.Show();
-                            uiCustomersCancelCustomerCreateButton.Show();
-                            break;
-                        case "LoadCustomer":
-                            customersCustomerEditState = true;
-                            groupBoxControlsEnabled(uiCustomersCustomerDetailsGroupBox, false);
-                            uiCustomersQRCodePictureBox.Enabled = true;
-
-                            uiCustomersCancelCustomerCreateButton.Show();
-
-                            uiCustomersCustomerIDUpDown.Enabled = false;
-                            uiCustomersCustomerNameTextBox.Enabled = false;
-
-                            uiCustomersNewCustomerButton.Enabled = false;
-                            uiCustomersSearchCustomersButton.Enabled = false;
+                        case TabStates.Loaded_Customer:
+                            uiSaleProductIDUpDown.Focus();
+                            resetGroupBoxControls(uiSalePurchaseGroupBox);
+                            groupBoxControlsEnabled(uiSalePurchaseGroupBox, true);
                             break;
                         default:
+                            Console.WriteLine("Tab State Changed Failed.");
                             break;
                     }
                     break;
-                case "Inventory":
+                case Tabs.Customers:
+                    switch (state)
+                    {
+                        case TabStates.Default:
+                            //Element 1
+                            uiCustomersCustomerIDUpDown.ResetText();
+                            uiCustomersCustomerIDUpDown.Enabled = true;
+                            uiCustomersCustomerIDUpDown.Focus();
+
+                            //Element 2
+                            uiCustomersCustomerNameTextBox.Clear();
+                            uiCustomersCustomerNameTextBox.Enabled = true;
+
+                            
+                            uiCustomersNewCustomerButton.Enabled = true;        //Element 3
+                            uiCustomersSearchCustomersButton.Enabled = true;    //Element 4
+
+                            //Element 5
+                            resetGroupBoxControls(uiCustomersCustomerDetailsGroupBox);
+                            groupBoxControlsEnabled(uiCustomersCustomerDetailsGroupBox, false);
+
+                            //Element 6
+                            uiCustomersCustomerEditSaveButton.Text = "Edit";
+                            uiCustomersCustomerEditSaveButton.Hide();
+
+                            uiCustomersCancelButton.Hide();       //Element 7
+                            uiCustomersCreateCustomerButton.Hide();             //Element 8
+
+                            //Element 9
+                            uiCustomersQRCodePictureBox.Image = uiCustomersQRCodePictureBox.InitialImage;
+                            uiCustomersQRCodePictureBox.Enabled = false;
+
+                            //Element 10
+                            groupBoxControlsEnabled(uiCustomersCustomerActionsGroupBox, false);
+
+                            //Element 11
+                            uiCustomersPurchasesListView.Items.Clear();
+                            uiCustomersPurchasesListView.Enabled = false;
+                            break;
+                        case TabStates.New_Customer:
+                            //Element 1
+                            uiCustomersCustomerIDUpDown.ResetText();
+                            uiCustomersCustomerIDUpDown.Enabled = false;
+
+                            //Element 2 + 5
+                            if (nameHelper)
+                            {
+                                //New Customer Click
+                                (uiCustomersCustomerNameTextBox.Text, uiCustomersFirstNameTextBox.Text, uiCustomersLastNameTextBox.Text) =
+                                    customerNameFormattingHelper(uiCustomersCustomerNameTextBox.Text);
+                                uiCustomersCustomerNameTextBox.Enabled = false;
+                                resetGroupBoxControls(uiCustomersCustomerDetailsGroupBox, true); //Element 5 - protected reset
+                                groupBoxControlsEnabled(uiCustomersCustomerDetailsGroupBox, true);
+                            }
+                            else
+                            {
+                                uiCustomersCustomerNameTextBox.Clear();
+                                uiCustomersCustomerNameTextBox.Enabled = false;
+                                resetGroupBoxControls(uiCustomersCustomerDetailsGroupBox); //Element 5 - reset
+                                groupBoxControlsEnabled(uiCustomersCustomerDetailsGroupBox, true);
+
+                            }
+                            
+                            uiCustomersNewCustomerButton.Enabled = false;        //Element 3
+                            uiCustomersSearchCustomersButton.Enabled = false;    //Element 4
+
+                            //Element 6
+                            uiCustomersCustomerEditSaveButton.Text = "Edit";
+                            uiCustomersCustomerEditSaveButton.Hide();
+
+                            uiCustomersCancelButton.Show();       //Element 7
+                            uiCustomersCreateCustomerButton.Show();             //Element 8
+
+                            //Element 9
+                            uiCustomersQRCodePictureBox.Image = uiCustomersQRCodePictureBox.InitialImage;
+                            uiCustomersQRCodePictureBox.Enabled = false;
+
+                            //Element 10
+                            groupBoxControlsEnabled(uiCustomersCustomerActionsGroupBox, false);
+
+                            //Element 11
+                            uiCustomersPurchasesListView.Items.Clear();
+                            uiCustomersPurchasesListView.Enabled = false;
+                            break;
+                        case TabStates.Loaded_Customer:
+                            //Element 1
+                            uiCustomersCustomerIDUpDown.ResetText();
+                            uiCustomersCustomerIDUpDown.Enabled = false;
+
+                            //Element 2
+                            uiCustomersCustomerNameTextBox.Clear();
+                            uiCustomersCustomerNameTextBox.Enabled = false;
+
+                            uiCustomersNewCustomerButton.Enabled = false;        //Element 3
+                            uiCustomersSearchCustomersButton.Enabled = false;    //Element 4
+
+                            //Element 5
+                            resetGroupBoxControls(uiCustomersCustomerDetailsGroupBox);
+                            groupBoxControlsEnabled(uiCustomersCustomerDetailsGroupBox, false);
+
+                            //Element 6
+                            uiCustomersCustomerEditSaveButton.Text = "Edit";
+                            uiCustomersCustomerEditSaveButton.Show();
+
+                            uiCustomersCancelButton.Show();       //Element 7
+                            uiCustomersCreateCustomerButton.Hide();             //Element 8
+
+                            //Element 9
+                            uiCustomersQRCodePictureBox.Image = uiCustomersQRCodePictureBox.InitialImage;
+                            uiCustomersQRCodePictureBox.Enabled = true;
+
+                            //Element 10
+                            groupBoxControlsEnabled(uiCustomersCustomerActionsGroupBox, true);
+
+                            //Element 11
+                            uiCustomersPurchasesListView.Items.Clear();
+                            uiCustomersPurchasesListView.Enabled = true;
+                            break;
+                        case TabStates.Edit_Customer:
+                            //Element 1
+                            uiCustomersCustomerIDUpDown.Enabled = false;
+
+                            //Element 2
+                            uiCustomersCustomerNameTextBox.Enabled = false;
+
+                            uiCustomersNewCustomerButton.Enabled = false;        //Element 3
+                            uiCustomersSearchCustomersButton.Enabled = false;    //Element 4
+
+                            //Element 5
+                            groupBoxControlsEnabled(uiCustomersCustomerDetailsGroupBox, true);
+
+                            //Element 6
+                            uiCustomersCustomerEditSaveButton.Text = "Save";
+                            uiCustomersCustomerEditSaveButton.Show();
+
+                            uiCustomersCancelButton.Show();                     //Element 7
+                            uiCustomersCreateCustomerButton.Hide();             //Element 8
+
+                            //Element 9
+                            uiCustomersQRCodePictureBox.Enabled = true;
+
+                            //Element 10
+                            groupBoxControlsEnabled(uiCustomersCustomerActionsGroupBox, false);
+
+                            //Element 11
+                            uiCustomersPurchasesListView.Items.Clear();
+                            uiCustomersPurchasesListView.Enabled = false;
+                            break;
+                        default:
+                            Console.WriteLine("Tab State Changed Failed.");
+                            break;
+                    }
                     break;
-                case "Admin":
+                case Tabs.Inventory:
+                    break;
+                case Tabs.Admin:
                     break;
                 default:
                     break;
