@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 10/12/2018 | 16:59
-//Last Updated On:  26/12/2018 | 22:11
+//Last Updated On:  28/12/2018 | 20:55
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +14,7 @@ using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Security.Authentication.ExtendedProtection.Configuration;
 using System.Text;
@@ -91,7 +92,8 @@ namespace SarreSports
             //Initialise Form List View
             //Initialise Basket Listing List View
             uiSaleBasketListView.View = View.Details;
-            uiSaleBasketListView.LabelEdit = true;
+            uiSaleBasketListView.LabelEdit = false;
+            uiSaleBasketListView.LabelEdit = false;
             //Initialise Basket Listing List View Column Values
             uiSaleBasketListView.Columns.Add("Product ID", 200, HorizontalAlignment.Left);
             uiSaleBasketListView.Columns.Add("Product Name", 400, HorizontalAlignment.Left);
@@ -100,7 +102,8 @@ namespace SarreSports
             uiSaleBasketListView.Columns.Add("Total Cost", -2, HorizontalAlignment.Left);
             //Initialise Basket Listing List View
             uiCustomersPurchasesListView.View = View.Details;
-            uiCustomersPurchasesListView.LabelEdit = true;
+            uiCustomersPurchasesListView.LabelEdit = false;
+            uiCustomersPurchasesListView.LabelEdit = false;
             //Initialise Basket Listing List View Column Values
             uiCustomersPurchasesListView.Columns.Add("Purchase ID", 200, HorizontalAlignment.Left);
             uiCustomersPurchasesListView.Columns.Add("Purchase Date", 400, HorizontalAlignment.Left);
@@ -176,9 +179,19 @@ namespace SarreSports
 
         private void customersSearchCustomer()
         {
+            using (genericSearch customerSearch = new genericSearch(getCustomerListViewItems(), "Customer"))
+            {
+                var result = customerSearch.ShowDialog();
 
+                if (result == DialogResult.OK)
+                {
+                    customersLoadCustomer(customerSearch.returnedID); //Load Customer IF Selected
+                }
+
+                customerSearch.Dispose();
+            };
         }
-
+        
         private void customersCreateCustomer()
         {
             if (customersValidateCustomerDetails())
@@ -279,21 +292,30 @@ namespace SarreSports
         {
             if (!string.IsNullOrEmpty(customerID.ToString()))
             {
-                changeTabState(Tabs.Customers, TabStates.Loaded_Customer);
-                Console.WriteLine(String.Format("Customer ID: {0}. Loaded.", customerID));
+                if (currentBranch.findCustomer(customerID) != null)
+                {
+                    changeTabState(Tabs.Customers, TabStates.Loaded_Customer);
+                    Console.WriteLine(String.Format("Customer ID: {0}. Loaded.", customerID));
 
-                uiCustomersCustomerIDUpDown.Text = customerID.ToString();
-                uiCustomersCustomerNameTextBox.Text = currentBranch.getFullName(customerID) ?? "Not Found";
+                    uiCustomersCustomerIDUpDown.Text = customerID.ToString();
+                    uiCustomersCustomerNameTextBox.Text = currentBranch.getFullName(customerID) ?? "Not Found";
 
-                Zen.Barcode.CodeQrBarcodeDraw qrcode = Zen.Barcode.BarcodeDrawFactory.CodeQr;
-                uiCustomersQRCodePictureBox.Image = qrcode.Draw(customerID.ToString(), uiCustomersQRCodePictureBox.Height);
+                    Zen.Barcode.CodeQrBarcodeDraw qrcode = Zen.Barcode.BarcodeDrawFactory.CodeQr;
+                    uiCustomersQRCodePictureBox.Image = qrcode.Draw(customerID.ToString(), uiCustomersQRCodePictureBox.Height);
 
-                uiCustomersFirstNameTextBox.Text = currentBranch.getFirstName(customerID) ?? "Not Found";
-                uiCustomersLastNameTextBox.Text = currentBranch.getLastName(customerID) ?? "Not Found";
-                uiCustomersEmailAddressTextBox.Text = currentBranch.getEmailAddress(customerID) ?? "Not Found";
-                uiCustomersMobileNoTextBox.Text = currentBranch.getMobileNo(customerID) ?? "Not Found";
-                uiCustomersPostCodeTextBox.Text = currentBranch.getPostCode(customerID) ?? "Not Found";
-                uiCustomersPoliciesGDPRCheckBox.Checked = currentBranch.getGDPR(customerID) ?? false;
+                    uiCustomersFirstNameTextBox.Text = currentBranch.getFirstName(customerID) ?? "Not Found";
+                    uiCustomersLastNameTextBox.Text = currentBranch.getLastName(customerID) ?? "Not Found";
+                    uiCustomersEmailAddressTextBox.Text = currentBranch.getEmailAddress(customerID) ?? "Not Found";
+                    uiCustomersMobileNoTextBox.Text = currentBranch.getMobileNo(customerID) ?? "Not Found";
+                    uiCustomersPostCodeTextBox.Text = currentBranch.getPostCode(customerID) ?? "Not Found";
+                    uiCustomersPoliciesGDPRCheckBox.Checked = currentBranch.getGDPR(customerID) ?? false;
+                }
+                else
+                {
+                    changeTabState(Tabs.Customers, TabStates.Default);
+                    //Customer Creation Error
+                    MessageBox.Show("Customer Not Found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -429,12 +451,8 @@ namespace SarreSports
             return valid;
         }
 
+        //Form-wide
         //Form-wide Functions
-        private void uiLogoutButton_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
         private (string, string, string)  customerNameFormattingHelper(string fullName)
         {
             string firstName = "";
@@ -499,6 +517,35 @@ namespace SarreSports
                 fullName = "";
             }
             return (fullName, firstName, lastName);
+        }
+
+        public ListViewItem[] getCustomerListViewItems()
+        {
+            var customerListingListViewItems = new List<ListViewItem>();
+
+            foreach (var customer in currentBranch.MCustomers())
+            {
+                ListViewItem customerItem = new ListViewItem(customer.ID().ToString());
+                customerItem.SubItems.Add(customer.FullName());
+                customerListingListViewItems.Add(customerItem);
+            }
+
+            return customerListingListViewItems.ToArray();
+        }
+
+        public ListViewItem[] getProductListViewItems()
+        {
+            var productListingListViewItems = new List<ListViewItem>();
+
+            //foreach (var customer in currentBranch.MCustomers())
+            //{
+            //    ListViewItem customerItem = new ListViewItem(customer.ID().ToString());
+            //    customerItem.SubItems.Add(customer.FullName());
+            //    customerListingListViewItems.Add(customerItem);
+            //}
+
+            //return customerListingListViewItems.ToArray();
+            return null;
         }
 
         private void setDefaultFormState()
@@ -773,6 +820,12 @@ namespace SarreSports
                 default:
                     break;
             }
+        }
+
+        //Form-wide Events
+        private void uiLogoutButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 

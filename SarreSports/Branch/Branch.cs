@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/12/2018 | 17:26
-//Last Updated On:  26/12/2018 | 20:12
+//Last Updated On:  27/12/2018 | 14:16
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -346,6 +346,12 @@ namespace SarreSports
         {
             return mUsers;
         }
+
+        public List<Customer> MCustomers()
+        {
+            return mCustomers;
+        }
+
 
         public void Dispose()
         {

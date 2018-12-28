@@ -177,7 +177,7 @@ namespace SarreSports
             this.Controls.Add(this.uiLoginTitleLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "loginForm";
-            this.Text = "PoS System";
+            this.Text = "PoS System | Login View";
             this.Load += new System.EventHandler(this.loginForm_Load);
             this.uiBranchSelectionGroupBox.ResumeLayout(false);
             this.uiBranchSelectionGroupBox.PerformLayout();

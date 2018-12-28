@@ -158,7 +158,7 @@ namespace SarreSports
             this.uiSaleCustomerIDUpDown.Location = new System.Drawing.Point(231, 41);
             this.uiSaleCustomerIDUpDown.Name = "uiSaleCustomerIDUpDown";
             this.uiSaleCustomerIDUpDown.Size = new System.Drawing.Size(418, 44);
-            this.uiSaleCustomerIDUpDown.TabIndex = 17;
+            this.uiSaleCustomerIDUpDown.TabIndex = 0;
             this.uiSaleCustomerIDUpDown.Value = new decimal(new int[] {
             1,
             0,
@@ -190,14 +190,14 @@ namespace SarreSports
             this.uiSaleProductIDUpDown.Location = new System.Drawing.Point(206, 48);
             this.uiSaleProductIDUpDown.Name = "uiSaleProductIDUpDown";
             this.uiSaleProductIDUpDown.Size = new System.Drawing.Size(418, 44);
-            this.uiSaleProductIDUpDown.TabIndex = 18;
+            this.uiSaleProductIDUpDown.TabIndex = 0;
             // 
             // uiSaleCancelButton
             // 
             this.uiSaleCancelButton.Location = new System.Drawing.Point(1097, 1092);
             this.uiSaleCancelButton.Name = "uiSaleCancelButton";
             this.uiSaleCancelButton.Size = new System.Drawing.Size(319, 55);
-            this.uiSaleCancelButton.TabIndex = 16;
+            this.uiSaleCancelButton.TabIndex = 6;
             this.uiSaleCancelButton.Text = "Cancel";
             this.uiSaleCancelButton.UseVisualStyleBackColor = true;
             // 
@@ -206,7 +206,7 @@ namespace SarreSports
             this.uiSaleProductSearchButton.Location = new System.Drawing.Point(1806, 41);
             this.uiSaleProductSearchButton.Name = "uiSaleProductSearchButton";
             this.uiSaleProductSearchButton.Size = new System.Drawing.Size(319, 55);
-            this.uiSaleProductSearchButton.TabIndex = 10;
+            this.uiSaleProductSearchButton.TabIndex = 3;
             this.uiSaleProductSearchButton.Text = "Search Products";
             this.uiSaleProductSearchButton.UseVisualStyleBackColor = true;
             // 
@@ -215,7 +215,7 @@ namespace SarreSports
             this.uiSaleRemoveItemButton.Location = new System.Drawing.Point(1452, 1092);
             this.uiSaleRemoveItemButton.Name = "uiSaleRemoveItemButton";
             this.uiSaleRemoveItemButton.Size = new System.Drawing.Size(319, 55);
-            this.uiSaleRemoveItemButton.TabIndex = 15;
+            this.uiSaleRemoveItemButton.TabIndex = 5;
             this.uiSaleRemoveItemButton.Text = "Remove Item";
             this.uiSaleRemoveItemButton.UseVisualStyleBackColor = true;
             // 
@@ -234,7 +234,7 @@ namespace SarreSports
             this.uiSaleSaleButton.Location = new System.Drawing.Point(1806, 1092);
             this.uiSaleSaleButton.Name = "uiSaleSaleButton";
             this.uiSaleSaleButton.Size = new System.Drawing.Size(319, 55);
-            this.uiSaleSaleButton.TabIndex = 14;
+            this.uiSaleSaleButton.TabIndex = 4;
             this.uiSaleSaleButton.Text = "Sale";
             this.uiSaleSaleButton.UseVisualStyleBackColor = true;
             // 
@@ -254,7 +254,7 @@ namespace SarreSports
             this.uiSaleProductNameLabel.Location = new System.Drawing.Point(689, 50);
             this.uiSaleProductNameLabel.Name = "uiSaleProductNameLabel";
             this.uiSaleProductNameLabel.Size = new System.Drawing.Size(235, 37);
-            this.uiSaleProductNameLabel.TabIndex = 8;
+            this.uiSaleProductNameLabel.TabIndex = 1;
             this.uiSaleProductNameLabel.Text = "Product Name";
             // 
             // uiSaleBasketLabel
@@ -272,14 +272,14 @@ namespace SarreSports
             this.textBox1.Location = new System.Drawing.Point(930, 47);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(486, 44);
-            this.textBox1.TabIndex = 9;
+            this.textBox1.TabIndex = 1;
             // 
             // uiSaleAddToBasketButton
             // 
             this.uiSaleAddToBasketButton.Location = new System.Drawing.Point(1452, 41);
             this.uiSaleAddToBasketButton.Name = "uiSaleAddToBasketButton";
             this.uiSaleAddToBasketButton.Size = new System.Drawing.Size(319, 55);
-            this.uiSaleAddToBasketButton.TabIndex = 11;
+            this.uiSaleAddToBasketButton.TabIndex = 2;
             this.uiSaleAddToBasketButton.Text = "Add to Basket";
             this.uiSaleAddToBasketButton.UseVisualStyleBackColor = true;
             // 
@@ -288,7 +288,7 @@ namespace SarreSports
             this.uiSaleCustomerSearchButton.Location = new System.Drawing.Point(1831, 34);
             this.uiSaleCustomerSearchButton.Name = "uiSaleCustomerSearchButton";
             this.uiSaleCustomerSearchButton.Size = new System.Drawing.Size(319, 55);
-            this.uiSaleCustomerSearchButton.TabIndex = 5;
+            this.uiSaleCustomerSearchButton.TabIndex = 3;
             this.uiSaleCustomerSearchButton.Text = "Search Customers";
             this.uiSaleCustomerSearchButton.UseVisualStyleBackColor = true;
             this.uiSaleCustomerSearchButton.Click += new System.EventHandler(this.uiSaleSearchButton_Click);
@@ -298,7 +298,7 @@ namespace SarreSports
             this.uiSaleNewCustomerButton.Location = new System.Drawing.Point(1477, 34);
             this.uiSaleNewCustomerButton.Name = "uiSaleNewCustomerButton";
             this.uiSaleNewCustomerButton.Size = new System.Drawing.Size(319, 55);
-            this.uiSaleNewCustomerButton.TabIndex = 4;
+            this.uiSaleNewCustomerButton.TabIndex = 2;
             this.uiSaleNewCustomerButton.Text = "New Customer";
             this.uiSaleNewCustomerButton.UseVisualStyleBackColor = true;
             // 
@@ -307,7 +307,7 @@ namespace SarreSports
             this.uiSaleCustomerNameTextBox.Location = new System.Drawing.Point(955, 40);
             this.uiSaleCustomerNameTextBox.Name = "uiSaleCustomerNameTextBox";
             this.uiSaleCustomerNameTextBox.Size = new System.Drawing.Size(486, 44);
-            this.uiSaleCustomerNameTextBox.TabIndex = 3;
+            this.uiSaleCustomerNameTextBox.TabIndex = 1;
             // 
             // uiSaleCustomerNameLabel
             // 
@@ -364,7 +364,7 @@ namespace SarreSports
             0});
             this.uiCustomersCustomerIDUpDown.Name = "uiCustomersCustomerIDUpDown";
             this.uiCustomersCustomerIDUpDown.Size = new System.Drawing.Size(418, 44);
-            this.uiCustomersCustomerIDUpDown.TabIndex = 29;
+            this.uiCustomersCustomerIDUpDown.TabIndex = 0;
             this.uiCustomersCustomerIDUpDown.Value = new decimal(new int[] {
             1,
             0,
@@ -377,7 +377,7 @@ namespace SarreSports
             this.uiCustomersCustomerEditSaveButton.Location = new System.Drawing.Point(955, 167);
             this.uiCustomersCustomerEditSaveButton.Name = "uiCustomersCustomerEditSaveButton";
             this.uiCustomersCustomerEditSaveButton.Size = new System.Drawing.Size(319, 119);
-            this.uiCustomersCustomerEditSaveButton.TabIndex = 28;
+            this.uiCustomersCustomerEditSaveButton.TabIndex = 6;
             this.uiCustomersCustomerEditSaveButton.Text = "Edit";
             this.uiCustomersCustomerEditSaveButton.UseVisualStyleBackColor = true;
             this.uiCustomersCustomerEditSaveButton.Click += new System.EventHandler(this.uiCustomersCustomerEditSaveButton_Click);
@@ -388,7 +388,7 @@ namespace SarreSports
             this.uiCustomersCancelButton.Location = new System.Drawing.Point(955, 303);
             this.uiCustomersCancelButton.Name = "uiCustomersCancelButton";
             this.uiCustomersCancelButton.Size = new System.Drawing.Size(319, 119);
-            this.uiCustomersCancelButton.TabIndex = 27;
+            this.uiCustomersCancelButton.TabIndex = 5;
             this.uiCustomersCancelButton.Text = "Cancel";
             this.uiCustomersCancelButton.UseVisualStyleBackColor = true;
             this.uiCustomersCancelButton.Click += new System.EventHandler(this.uiCustomersCancelCustomerCreateButton_Click);
@@ -399,7 +399,7 @@ namespace SarreSports
             this.uiCustomersCreateCustomerButton.Location = new System.Drawing.Point(955, 440);
             this.uiCustomersCreateCustomerButton.Name = "uiCustomersCreateCustomerButton";
             this.uiCustomersCreateCustomerButton.Size = new System.Drawing.Size(319, 119);
-            this.uiCustomersCreateCustomerButton.TabIndex = 26;
+            this.uiCustomersCreateCustomerButton.TabIndex = 4;
             this.uiCustomersCreateCustomerButton.Text = "Create Customer";
             this.uiCustomersCreateCustomerButton.UseVisualStyleBackColor = true;
             this.uiCustomersCreateCustomerButton.Click += new System.EventHandler(this.uiCustomersCreateCustomerButton_Click);
@@ -422,7 +422,7 @@ namespace SarreSports
             this.uiCustomersQRCodePrintButton.Location = new System.Drawing.Point(18, 201);
             this.uiCustomersQRCodePrintButton.Name = "uiCustomersQRCodePrintButton";
             this.uiCustomersQRCodePrintButton.Size = new System.Drawing.Size(319, 119);
-            this.uiCustomersQRCodePrintButton.TabIndex = 23;
+            this.uiCustomersQRCodePrintButton.TabIndex = 1;
             this.uiCustomersQRCodePrintButton.Text = "Print QR Code";
             this.uiCustomersQRCodePrintButton.UseVisualStyleBackColor = true;
             this.uiCustomersQRCodePrintButton.Click += new System.EventHandler(this.uiCustomersQRCodePrintButton_Click);
@@ -433,7 +433,7 @@ namespace SarreSports
             this.uiCustomersEmailCustomerDetailsButton.Location = new System.Drawing.Point(18, 338);
             this.uiCustomersEmailCustomerDetailsButton.Name = "uiCustomersEmailCustomerDetailsButton";
             this.uiCustomersEmailCustomerDetailsButton.Size = new System.Drawing.Size(319, 119);
-            this.uiCustomersEmailCustomerDetailsButton.TabIndex = 25;
+            this.uiCustomersEmailCustomerDetailsButton.TabIndex = 2;
             this.uiCustomersEmailCustomerDetailsButton.Text = "Email\r\nCustomer Details";
             this.uiCustomersEmailCustomerDetailsButton.UseVisualStyleBackColor = true;
             this.uiCustomersEmailCustomerDetailsButton.Click += new System.EventHandler(this.uiCustomersEmailCustomerDetailsButton_Click);
@@ -444,7 +444,7 @@ namespace SarreSports
             this.uiCustomersQRCodeSaveButton.Location = new System.Drawing.Point(18, 65);
             this.uiCustomersQRCodeSaveButton.Name = "uiCustomersQRCodeSaveButton";
             this.uiCustomersQRCodeSaveButton.Size = new System.Drawing.Size(319, 119);
-            this.uiCustomersQRCodeSaveButton.TabIndex = 22;
+            this.uiCustomersQRCodeSaveButton.TabIndex = 0;
             this.uiCustomersQRCodeSaveButton.Text = "Save QR Code";
             this.uiCustomersQRCodeSaveButton.UseVisualStyleBackColor = true;
             this.uiCustomersQRCodeSaveButton.Click += new System.EventHandler(this.uiCustomersQRCodeSaveButton_Click);
@@ -477,7 +477,7 @@ namespace SarreSports
             this.uiCustomersPostCodeTextBox.Location = new System.Drawing.Point(261, 357);
             this.uiCustomersPostCodeTextBox.Name = "uiCustomersPostCodeTextBox";
             this.uiCustomersPostCodeTextBox.Size = new System.Drawing.Size(550, 44);
-            this.uiCustomersPostCodeTextBox.TabIndex = 11;
+            this.uiCustomersPostCodeTextBox.TabIndex = 4;
             // 
             // uiCustomersFirstNameLabel
             // 
@@ -494,7 +494,7 @@ namespace SarreSports
             this.uiCustomersFirstNameTextBox.Location = new System.Drawing.Point(261, 49);
             this.uiCustomersFirstNameTextBox.Name = "uiCustomersFirstNameTextBox";
             this.uiCustomersFirstNameTextBox.Size = new System.Drawing.Size(550, 44);
-            this.uiCustomersFirstNameTextBox.TabIndex = 7;
+            this.uiCustomersFirstNameTextBox.TabIndex = 0;
             this.uiCustomersFirstNameTextBox.Tag = "protected";
             // 
             // uiCustomersLastNameTextBox
@@ -503,7 +503,7 @@ namespace SarreSports
             this.uiCustomersLastNameTextBox.Location = new System.Drawing.Point(261, 126);
             this.uiCustomersLastNameTextBox.Name = "uiCustomersLastNameTextBox";
             this.uiCustomersLastNameTextBox.Size = new System.Drawing.Size(550, 44);
-            this.uiCustomersLastNameTextBox.TabIndex = 8;
+            this.uiCustomersLastNameTextBox.TabIndex = 1;
             this.uiCustomersLastNameTextBox.Tag = "protected";
             // 
             // uiCustomersEmailAddressTextBox
@@ -512,7 +512,7 @@ namespace SarreSports
             this.uiCustomersEmailAddressTextBox.Location = new System.Drawing.Point(261, 203);
             this.uiCustomersEmailAddressTextBox.Name = "uiCustomersEmailAddressTextBox";
             this.uiCustomersEmailAddressTextBox.Size = new System.Drawing.Size(550, 44);
-            this.uiCustomersEmailAddressTextBox.TabIndex = 9;
+            this.uiCustomersEmailAddressTextBox.TabIndex = 2;
             // 
             // uiCustomersMobileNoTextBox
             // 
@@ -520,7 +520,7 @@ namespace SarreSports
             this.uiCustomersMobileNoTextBox.Location = new System.Drawing.Point(261, 280);
             this.uiCustomersMobileNoTextBox.Name = "uiCustomersMobileNoTextBox";
             this.uiCustomersMobileNoTextBox.Size = new System.Drawing.Size(550, 44);
-            this.uiCustomersMobileNoTextBox.TabIndex = 10;
+            this.uiCustomersMobileNoTextBox.TabIndex = 3;
             // 
             // uiCustomersPoliciesGDPRCheckBox
             // 
@@ -594,7 +594,7 @@ namespace SarreSports
             this.uiCustomersPurchasesListView.Location = new System.Drawing.Point(25, 655);
             this.uiCustomersPurchasesListView.Name = "uiCustomersPurchasesListView";
             this.uiCustomersPurchasesListView.Size = new System.Drawing.Size(2162, 625);
-            this.uiCustomersPurchasesListView.TabIndex = 20;
+            this.uiCustomersPurchasesListView.TabIndex = 1;
             this.uiCustomersPurchasesListView.UseCompatibleStateImageBehavior = false;
             // 
             // uiCustomersPurchasesTitleLabel
@@ -613,7 +613,7 @@ namespace SarreSports
             this.uiCustomersSearchCustomersButton.Location = new System.Drawing.Point(1831, 34);
             this.uiCustomersSearchCustomersButton.Name = "uiCustomersSearchCustomersButton";
             this.uiCustomersSearchCustomersButton.Size = new System.Drawing.Size(319, 55);
-            this.uiCustomersSearchCustomersButton.TabIndex = 5;
+            this.uiCustomersSearchCustomersButton.TabIndex = 3;
             this.uiCustomersSearchCustomersButton.Text = "Search Customers";
             this.uiCustomersSearchCustomersButton.UseVisualStyleBackColor = true;
             this.uiCustomersSearchCustomersButton.Click += new System.EventHandler(this.uiCustomersSearchCustomersButton_Click);
@@ -624,7 +624,7 @@ namespace SarreSports
             this.uiCustomersNewCustomerButton.Location = new System.Drawing.Point(1477, 34);
             this.uiCustomersNewCustomerButton.Name = "uiCustomersNewCustomerButton";
             this.uiCustomersNewCustomerButton.Size = new System.Drawing.Size(319, 55);
-            this.uiCustomersNewCustomerButton.TabIndex = 4;
+            this.uiCustomersNewCustomerButton.TabIndex = 2;
             this.uiCustomersNewCustomerButton.Text = "New Customer";
             this.uiCustomersNewCustomerButton.UseVisualStyleBackColor = true;
             this.uiCustomersNewCustomerButton.Click += new System.EventHandler(this.uiCustomersNewCustomerButton_Click);
@@ -635,7 +635,7 @@ namespace SarreSports
             this.uiCustomersCustomerNameTextBox.Location = new System.Drawing.Point(955, 40);
             this.uiCustomersCustomerNameTextBox.Name = "uiCustomersCustomerNameTextBox";
             this.uiCustomersCustomerNameTextBox.Size = new System.Drawing.Size(486, 44);
-            this.uiCustomersCustomerNameTextBox.TabIndex = 3;
+            this.uiCustomersCustomerNameTextBox.TabIndex = 1;
             this.uiCustomersCustomerNameTextBox.Tag = "protected";
             // 
             // uiCustomersCustomerNameLabel
@@ -766,7 +766,7 @@ namespace SarreSports
             this.Controls.Add(this.uiBranchTitleLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "posForm";
-            this.Text = "posForm";
+            this.Text = "PoS System | Main View";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.posForm_FormClosing);
             this.Load += new System.EventHandler(this.posForm_Load);
             this.uiPosViewTabControl.ResumeLayout(false);
