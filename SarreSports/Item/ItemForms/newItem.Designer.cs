@@ -35,6 +35,7 @@ namespace SarreSports
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.uiNewItemTitle = new System.Windows.Forms.Label();
             this.uiSupplierLabel = new System.Windows.Forms.Label();
             this.uiSupplierNameLabel = new System.Windows.Forms.Label();
@@ -48,10 +49,12 @@ namespace SarreSports
             this.uiItemNameTextBox = new System.Windows.Forms.TextBox();
             this.uiItemNameLabel = new System.Windows.Forms.Label();
             this.uiAddItemButton = new System.Windows.Forms.Button();
+            this.uiGeneralItemAttributesErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.uiGeneralItemAttributesGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uiRestockLevelUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.uiStockLevelUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.uiItemCostUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uiGeneralItemAttributesErrorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // uiNewItemTitle
@@ -98,7 +101,7 @@ namespace SarreSports
             this.uiGeneralItemAttributesGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uiGeneralItemAttributesGroupBox.Location = new System.Drawing.Point(24, 146);
             this.uiGeneralItemAttributesGroupBox.Name = "uiGeneralItemAttributesGroupBox";
-            this.uiGeneralItemAttributesGroupBox.Size = new System.Drawing.Size(836, 318);
+            this.uiGeneralItemAttributesGroupBox.Size = new System.Drawing.Size(888, 318);
             this.uiGeneralItemAttributesGroupBox.TabIndex = 3;
             this.uiGeneralItemAttributesGroupBox.TabStop = false;
             this.uiGeneralItemAttributesGroupBox.Text = "General Item Attributes";
@@ -171,7 +174,7 @@ namespace SarreSports
             // uiAddItemButton
             // 
             this.uiAddItemButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.uiAddItemButton.Location = new System.Drawing.Point(585, 784);
+            this.uiAddItemButton.Location = new System.Drawing.Point(637, 784);
             this.uiAddItemButton.Name = "uiAddItemButton";
             this.uiAddItemButton.Size = new System.Drawing.Size(275, 59);
             this.uiAddItemButton.TabIndex = 5;
@@ -179,11 +182,16 @@ namespace SarreSports
             this.uiAddItemButton.UseVisualStyleBackColor = true;
             this.uiAddItemButton.Click += new System.EventHandler(this.uiAddItemButton_Click);
             // 
+            // uiGeneralItemAttributesErrorProvider
+            // 
+            this.uiGeneralItemAttributesErrorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
+            this.uiGeneralItemAttributesErrorProvider.ContainerControl = this;
+            // 
             // newItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(882, 870);
+            this.ClientSize = new System.Drawing.Size(934, 870);
             this.Controls.Add(this.uiAddItemButton);
             this.Controls.Add(this.uiGeneralItemAttributesGroupBox);
             this.Controls.Add(this.uiSupplierNameLabel);
@@ -199,6 +207,7 @@ namespace SarreSports
             ((System.ComponentModel.ISupportInitialize)(this.uiRestockLevelUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.uiStockLevelUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.uiItemCostUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uiGeneralItemAttributesErrorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -219,5 +228,6 @@ namespace SarreSports
         private System.Windows.Forms.NumericUpDown uiStockLevelUpDown;
         private System.Windows.Forms.Label uiStockLevelLabel;
         protected System.Windows.Forms.Button uiAddItemButton;
+        private System.Windows.Forms.ErrorProvider uiGeneralItemAttributesErrorProvider;
     }
 }

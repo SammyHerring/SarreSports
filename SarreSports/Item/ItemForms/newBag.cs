@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/1/2019 | 15:12
-//Last Updated On:  4/1/2019 | 16:13
+//Last Updated On:  4/1/2019 | 17:19
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,7 +17,7 @@ using System.Windows.Forms;
 
 namespace SarreSports
 {
-    public partial class newBag : newItem
+    public partial class newBag : newItem, IItemForm
     {
         public int capacityReturn { get; set; }
 
@@ -30,16 +30,32 @@ namespace SarreSports
 
         protected override void addItem()
         {
-            Console.WriteLine("New Item Form Aborting. No Item Type Passed.");
-            MessageBox.Show("New Item Form Aborting. No Item Type Passed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            this.DialogResult = DialogResult.Abort;
-            this.Close();
+            if (validateSpecificItemAttributes(out int bagCapacity) && base.validateGeneralItemAttributes())
+            {
+                //base.itemNameReturn
+                //base.itemCostReturn
+                //base.stockLevelReturn
+                //base.restockLevelReturn
+                this.capacityReturn = bagCapacity;
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
         }
 
-        private bool validateSpecificItemAttributes()
+        public bool validateSpecificItemAttributes(out int bagCapacity)
         {
-            //if ()
-            return true;
+            bool valid = true;
+            uiSpecificItemAttributesErrorProvider.Clear();
+            bagCapacity = -1;
+
+            if (string.IsNullOrWhiteSpace(uiBagCapacityUpDown.Text) && int.TryParse(uiBagCapacityUpDown.Text, out bagCapacity))
+            {
+                uiSpecificItemAttributesErrorProvider.SetError(uiBagCapacityUpDown, "Please enter valid bag capacity");
+                uiSpecificItemAttributesErrorProvider.SetIconPadding(uiBagCapacityUpDown, 10);
+                valid = false;
+            }
+
+            return valid;
         }
     }
 }

@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/1/2019 | 15:12
-//Last Updated On:  4/1/2019 | 16:13
+//Last Updated On:  4/1/2019 | 17:15
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,8 +21,8 @@ namespace SarreSports
     {
         public string itemNameReturn { get; set; }
         public decimal itemCostReturn { get; set; }
-        public int stockLevel { get; set; }
-        public int restockLevel { get; set; }
+        public int stockLevelReturn { get; set; }
+        public int restockLevelReturn { get; set; }
 
         public newItem()
         {
@@ -57,16 +57,38 @@ namespace SarreSports
             uiSupplierNameLabel.Text = supplierName;
         }
 
-        public void updateAddItemButtonLocation(Point location)
-        {
-            uiAddItemButton.Location = location;
-        }
-
-        private bool validateGeneralItemAttributes()
+        public bool validateGeneralItemAttributes()
         {
             bool valid = true;
+            uiGeneralItemAttributesErrorProvider.Clear();
+            
+            if (string.IsNullOrWhiteSpace(uiItemNameTextBox.Text))
+            {
+                uiGeneralItemAttributesErrorProvider.SetError(uiItemNameTextBox, "Please enter item name");
+                uiGeneralItemAttributesErrorProvider.SetIconPadding(uiItemNameTextBox, 10);
+                valid = false;
+            }
 
-            if (string.IsNullOrWhiteSpace(uiItemNameTextBox.Text)) valid = false;
+            if (string.IsNullOrWhiteSpace(uiItemCostUpDown.Text) && decimal.TryParse(uiItemCostUpDown.Text, out decimal itemCost))
+            {
+                uiGeneralItemAttributesErrorProvider.SetError(uiItemCostUpDown, "Please enter valid item cost");
+                uiGeneralItemAttributesErrorProvider.SetIconPadding(uiItemCostUpDown, 10);
+                valid = false;
+            }
+
+            if (string.IsNullOrWhiteSpace(uiStockLevelUpDown.Text) && int.TryParse(uiStockLevelUpDown.Text, out int stockLevel))
+            {
+                uiGeneralItemAttributesErrorProvider.SetError(uiStockLevelUpDown, "Please enter valid initial stock level");
+                uiGeneralItemAttributesErrorProvider.SetIconPadding(uiStockLevelUpDown, 10);
+                valid = false;
+            }
+
+            if (string.IsNullOrWhiteSpace(uiRestockLevelUpDown.Text) && int.TryParse(uiRestockLevelUpDown.Text, out int restockLevel))
+            {
+                uiGeneralItemAttributesErrorProvider.SetError(uiRestockLevelUpDown, "Please enter valid restock level");
+                uiGeneralItemAttributesErrorProvider.SetIconPadding(uiRestockLevelUpDown, 10);
+                valid = false;
+            }
 
             return valid;
         }

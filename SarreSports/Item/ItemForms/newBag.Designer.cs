@@ -35,63 +35,72 @@ namespace SarreSports
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.label3 = new System.Windows.Forms.Label();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            this.components = new System.ComponentModel.Container();
+            this.uiSpecificItemAttributesGroupBox = new System.Windows.Forms.GroupBox();
+            this.uiBagCapacityUpDown = new System.Windows.Forms.NumericUpDown();
+            this.uiBagCapacityLabel = new System.Windows.Forms.Label();
+            this.uiSpecificItemAttributesErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.uiSpecificItemAttributesGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uiBagCapacityUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uiSpecificItemAttributesErrorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // uiAddItemButton
             // 
             this.uiAddItemButton.Location = new System.Drawing.Point(585, 630);
             // 
-            // groupBox1
+            // uiSpecificItemAttributesGroupBox
             // 
-            this.groupBox1.Controls.Add(this.numericUpDown2);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(24, 492);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(836, 120);
-            this.groupBox1.TabIndex = 4;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Specific Item Attributes";
+            this.uiSpecificItemAttributesGroupBox.Controls.Add(this.uiBagCapacityUpDown);
+            this.uiSpecificItemAttributesGroupBox.Controls.Add(this.uiBagCapacityLabel);
+            this.uiSpecificItemAttributesGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uiSpecificItemAttributesGroupBox.Location = new System.Drawing.Point(24, 492);
+            this.uiSpecificItemAttributesGroupBox.Name = "uiSpecificItemAttributesGroupBox";
+            this.uiSpecificItemAttributesGroupBox.Size = new System.Drawing.Size(888, 120);
+            this.uiSpecificItemAttributesGroupBox.TabIndex = 4;
+            this.uiSpecificItemAttributesGroupBox.TabStop = false;
+            this.uiSpecificItemAttributesGroupBox.Text = "Specific Item Attributes";
             // 
-            // numericUpDown2
+            // uiBagCapacityUpDown
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(226, 52);
-            this.numericUpDown2.Maximum = new decimal(new int[] {
+            this.uiBagCapacityUpDown.Location = new System.Drawing.Point(226, 52);
+            this.uiBagCapacityUpDown.Maximum = new decimal(new int[] {
             40,
             0,
             0,
             0});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(586, 44);
-            this.numericUpDown2.TabIndex = 3;
+            this.uiBagCapacityUpDown.Name = "uiBagCapacityUpDown";
+            this.uiBagCapacityUpDown.Size = new System.Drawing.Size(586, 44);
+            this.uiBagCapacityUpDown.TabIndex = 3;
             // 
-            // label3
+            // uiBagCapacityLabel
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 54);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(205, 37);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Clothing Size";
+            this.uiBagCapacityLabel.AutoSize = true;
+            this.uiBagCapacityLabel.Location = new System.Drawing.Point(6, 54);
+            this.uiBagCapacityLabel.Name = "uiBagCapacityLabel";
+            this.uiBagCapacityLabel.Size = new System.Drawing.Size(207, 37);
+            this.uiBagCapacityLabel.TabIndex = 0;
+            this.uiBagCapacityLabel.Text = "Bag Capacity";
+            // 
+            // uiSpecificItemAttributesErrorProvider
+            // 
+            this.uiSpecificItemAttributesErrorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
+            this.uiSpecificItemAttributesErrorProvider.ContainerControl = this;
             // 
             // newBag
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(882, 710);
-            this.Controls.Add(this.groupBox1);
+            this.ClientSize = new System.Drawing.Size(934, 710);
+            this.Controls.Add(this.uiSpecificItemAttributesGroupBox);
             this.Name = "newBag";
             this.Text = "PoS System | New Bag";
             this.Controls.SetChildIndex(this.uiAddItemButton, 0);
-            this.Controls.SetChildIndex(this.groupBox1, 0);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            this.Controls.SetChildIndex(this.uiSpecificItemAttributesGroupBox, 0);
+            this.uiSpecificItemAttributesGroupBox.ResumeLayout(false);
+            this.uiSpecificItemAttributesGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uiBagCapacityUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uiSpecificItemAttributesErrorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -99,8 +108,9 @@ namespace SarreSports
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.GroupBox uiSpecificItemAttributesGroupBox;
+        private System.Windows.Forms.Label uiBagCapacityLabel;
+        private System.Windows.Forms.NumericUpDown uiBagCapacityUpDown;
+        private System.Windows.Forms.ErrorProvider uiSpecificItemAttributesErrorProvider;
     }
 }

@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Item\ItemForms\IItemForm.cs" />
     <Compile Include="Item\Accessory\Accessory.cs" />
     <Compile Include="Item\ItemForms\itemSelector.cs">
       <SubType>Form</SubType>
