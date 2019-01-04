@@ -4,16 +4,53 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 12/12/2018 | 17:04
-//Last Updated On:  20/12/2018 | 14:44
+//Last Updated On:  4/1/2019 | 02:50
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SarreSports
 {
     public abstract class Item
     {
+        private string name;
+        private static int nextID;
+        private readonly int id;
+
+        public enum Type
+        {
+            Clothing = 0,
+            Shoe = 1,
+            Accessory = 2
+        }
+        private Type itemType;
+
+        private decimal cost;
+        private int stockLevel;
+        private int restockLevel;
+        //Avaliable For Sale - AutoProperty 
+
+        public Item(string name, Type itemType, decimal cost, int stockLevel, int restockLevel)
+        {
+            this.name = name;
+            this.id = Interlocked.Increment(ref nextID);
+            this.itemType = itemType;
+            this.cost = cost;
+            this.stockLevel = stockLevel;
+            this.restockLevel = restockLevel;
+            this.availableForSale = true;
+        }
+
+        public string Name => name;
+        public int ID => id;
+        public Type ItemType => itemType;
+        public decimal Cost => cost;
+        public int StockLevel => stockLevel;
+        public int RestockLevel => restockLevel;
+        public bool Restock() => (restockLevel >= stockLevel);
+        public bool availableForSale { get; set; }
     }
 }

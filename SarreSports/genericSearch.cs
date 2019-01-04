@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 26/12/2018 | 22:35
-//Last Updated On:  28/12/2018 | 21:00
+//Last Updated On:  1/1/2019 | 20:37
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,16 +20,23 @@ namespace SarreSports
 {
     public partial class genericSearch : Form
     {
+        //Public Return Variables
         public int returnedID { get; set; }
 
+        //Private Global Variables
+        private bool itemsFound = false;
+        private List<int> foundItems = new List<int>();
+        private int foundItemIndex = 0;
+
         private string searchQueryWatermark = "Enter Search Term";
-        public genericSearch(ListViewItem[] queryListSource, string searchName = "")
+        public genericSearch(ListViewItem[] queryListSource, string searchName = "", string initialSearch = "")
         {
             InitializeComponent();
 
             uiSearchTitle.Text = String.Format("{0} Search", searchName);
             this.Text = String.Format("PoS System | {0} Search", searchName);
 
+            uiSearchQueryTextBox.Focus();
             uiSearchQueryTextBox.Text = searchQueryWatermark;
             uiSearchQueryTextBox.ForeColor = Color.Silver;
 
@@ -42,41 +49,84 @@ namespace SarreSports
             uiSearchQueryListView.Columns.Add(String.Format("{0} Name", searchName), -2, HorizontalAlignment.Left);
 
             loadList(queryListSource);
+
+            if (initialSearch != "")
+            {
+                uiSearchQueryTextBox.Text = initialSearch;
+                uiSearchQueryTextBox.ForeColor = Color.Black;
+                search();
+            }
         }
 
         //Search Functions
         private void search()
         {
-            uiSearchQueryListView.SelectedItems.Clear();
-
-            List<ListViewItem> foundItems = new List<ListViewItem>();
-
-            for (int listIndex = 0; listIndex < uiSearchQueryListView.Items.Count; listIndex++)
+            if (!(string.IsNullOrEmpty(uiSearchQueryTextBox.Text)) && uiSearchQueryTextBox.Text != searchQueryWatermark)
             {
-                if (IsInteger(uiSearchQueryTextBox.Text))
+                uiSearchQueryListView.SelectedItems.Clear();
+
+                if (!itemsFound)
                 {
-                    if (uiSearchQueryListView.Items[listIndex].ToString().ToLower()
-                        .Contains(uiSearchQueryTextBox.Text.ToLower()))
+                    for (int listIndex = uiSearchQueryListView.Items.Count - 1; listIndex >= 0; listIndex--)
                     {
-                        uiSearchQueryListView.Items[listIndex].Selected = true;
-                        uiSearchQueryListView.Select();
+                        if (IsInteger(uiSearchQueryTextBox.Text))
+                        {
+                            if (uiSearchQueryListView.Items[listIndex].ToString().ToLower()
+                                .Contains(uiSearchQueryTextBox.Text.ToLower()))
+                            {
+                                foundItems.Add(listIndex);
+                            }
+                        }
+                        else
+                        {
+                            if (uiSearchQueryListView.Items[listIndex].SubItems[1].ToString().ToLower()
+                                .Contains(uiSearchQueryTextBox.Text.ToLower()))
+                            {
+                                foundItems.Add(listIndex);
+                            }
+                        }
                     }
+                    foundItems.Reverse();
                 }
-                else
-                {
-                    if (uiSearchQueryListView.Items[listIndex].SubItems[1].ToString().ToLower()
-                        .Contains(uiSearchQueryTextBox.Text.ToLower()))
-                    {
-                        uiSearchQueryListView.Items[listIndex].Selected = true;
-                        uiSearchQueryListView.Select();
-                    }
-                }
+
+                searchItemsIterator();
+                itemsFound = true;
             }
         }
 
         private void searchItemsIterator()
         {
+            uiSearchQueryListView.SelectedItems.Clear();
+            if (foundItemIndex < foundItems.Count && foundItems.Count > 0)
+            {
+                uiSearchQueryListView.Items[foundItems[foundItemIndex]].Selected = true;
+                uiSearchQueryListView.Select();
+                foundItemIndex++;
+            }
 
+            if (foundItemIndex == foundItems.Count) foundItemIndex = 0;
+        }
+
+        private void resetSearch()
+        {
+            itemsFound = false;
+            foundItems.Clear();
+            foundItemIndex = 0;
+        }
+
+        private void selectEntity()
+        {
+            if (uiSearchQueryListView.SelectedItems.Count > 0)
+            {
+                if (int.TryParse(uiSearchQueryListView.SelectedItems[0].Text, out int entityID))
+                {
+                    returnValue(entityID);
+                } else
+                {
+                    //Entity Not Found
+                    MessageBox.Show("Entity Not Found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void returnValue(int ID)
@@ -109,12 +159,17 @@ namespace SarreSports
 
         private void uiSearchQueryListView_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            selectEntity();
+        }
 
+        private void uiSearchQueryListView_KeyDown(object sender, KeyEventArgs e)
+        {
+            selectEntity();
         }
 
         private void uiSelectButton_Click(object sender, EventArgs e)
         {
-            
+            selectEntity();
         }
 
         private void uiCancelButton_Click(object sender, EventArgs e)
@@ -124,9 +179,10 @@ namespace SarreSports
 
         private void uiSearchQueryTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && string.IsNullOrEmpty(uiSearchQueryTextBox.Text))
+            if (e.KeyCode == Keys.Enter && (!string.IsNullOrEmpty(uiSearchQueryTextBox.Text)))
             {
                 search();
+                uiSearchQueryTextBox.Focus();
             }
         }
 
@@ -146,6 +202,11 @@ namespace SarreSports
                 uiSearchQueryTextBox.Text = searchQueryWatermark;
                 uiSearchQueryTextBox.ForeColor = Color.Silver;
             }
+        }
+
+        private void uiSearchQueryTextBox_TextChanged(object sender, EventArgs e)
+        {
+            resetSearch();
         }
 
         //General Functions

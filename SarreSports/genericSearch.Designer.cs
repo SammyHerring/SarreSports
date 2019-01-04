@@ -60,6 +60,7 @@ namespace SarreSports
             this.uiSearchQueryTextBox.Name = "uiSearchQueryTextBox";
             this.uiSearchQueryTextBox.Size = new System.Drawing.Size(486, 44);
             this.uiSearchQueryTextBox.TabIndex = 1;
+            this.uiSearchQueryTextBox.TextChanged += new System.EventHandler(this.uiSearchQueryTextBox_TextChanged);
             this.uiSearchQueryTextBox.Enter += new System.EventHandler(this.uiSearchQueryTextBox_Enter);
             this.uiSearchQueryTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uiSearchQueryTextBox_KeyDown);
             this.uiSearchQueryTextBox.Leave += new System.EventHandler(this.uiSearchQueryTextBox_Leave);
@@ -84,6 +85,7 @@ namespace SarreSports
             this.uiSearchQueryListView.Size = new System.Drawing.Size(821, 653);
             this.uiSearchQueryListView.TabIndex = 3;
             this.uiSearchQueryListView.UseCompatibleStateImageBehavior = false;
+            this.uiSearchQueryListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uiSearchQueryListView_KeyDown);
             this.uiSearchQueryListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.uiSearchQueryListView_MouseDoubleClick);
             // 
             // uiSelectButton
@@ -119,6 +121,9 @@ namespace SarreSports
             this.Controls.Add(this.uiSearchButton);
             this.Controls.Add(this.uiSearchQueryTextBox);
             this.Controls.Add(this.uiSearchTitle);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "genericSearch";
             this.Text = "PoS System | Search";
             this.ResumeLayout(false);

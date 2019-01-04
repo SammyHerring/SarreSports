@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/12/2018 | 17:26
-//Last Updated On:  27/12/2018 | 14:16
+//Last Updated On:  2/1/2019 | 01:02
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +19,7 @@ namespace SarreSports
         private string branchName;
         private List<SystemUser> mUsers = new List<SystemUser>();
         private List<Customer> mCustomers = new List<Customer>();
+        private List<Supplier> mSuppliers  = new List<Supplier>();
 
         private static List<bool> UsedCounter = new List<bool>();
         private static object Lock = new object();
@@ -51,6 +52,7 @@ namespace SarreSports
             return branchName;
         }
 
+        //Customer General Methods
         public (bool Success, int customerID) createCustomer(Customer customer)
         {
             if (!(customer is null))
@@ -100,7 +102,7 @@ namespace SarreSports
             }
         }
 
-        //Customer Attribute Methods
+        //Customer Attribute Accessor Methods
         public string getFullName(int customerID)
         {
             try
@@ -342,6 +344,29 @@ namespace SarreSports
             }
         }
 
+        //Supplier General Methods
+        public (bool Success, int supplierID) createSupplier(Supplier supplier)
+        {
+            if (!(supplier is null))
+            {
+                try
+                {
+                    mSuppliers.Add(supplier);
+                    return (true, supplier.ID());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(String.Format("Error: {0}",ex.Message));
+                    return (false, -1);
+                }
+            }
+            else
+            {
+                return (false, -1);
+            }
+        }
+
+        //Branch List Accessors
         public List<SystemUser> MUsers()
         {
             return mUsers;
@@ -352,7 +377,12 @@ namespace SarreSports
             return mCustomers;
         }
 
+        public List<Supplier> MSuppliers()
+        {
+            return mSuppliers;
+        }
 
+        //Branch Identifer Methods
         public void Dispose()
         {
             lock (Lock)

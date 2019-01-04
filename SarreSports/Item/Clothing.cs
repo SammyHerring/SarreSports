@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 12/12/2018 | 17:04
-//Last Updated On:  20/12/2018 | 14:44
+//Last Updated On:  3/1/2019 | 14:02
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +15,26 @@ namespace SarreSports
 {
     public class Clothing : Item
     {
+        private int size;
+        private string colour;
+
+        public enum clothingType
+        {
+            Shorts = 0,
+            Capris = 1,
+            Leggings = 2,
+            Vests = 3,
+            Tops = 4,
+            Jackets = 5
+        }
+        private clothingType style;
+
+        public Clothing(string name, Type itemType, decimal cost, int stockLevel, int restockLevel, int size, string colour, clothingType style) :
+            base(name, itemType, cost, stockLevel, restockLevel)
+        {
+            this.size = size;
+            this.colour = colour;
+            this.style = style;
+        }
     }
 }

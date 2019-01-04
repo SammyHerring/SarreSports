@@ -4,23 +4,15 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 10/12/2018 | 16:59
-//Last Updated On:  28/12/2018 | 20:55
+//Last Updated On:  4/1/2019 | 15:46
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
+using System.Globalization;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Security.Authentication.ExtendedProtection.Configuration;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 
 /*
  * Programming Structure and Development Notes
@@ -57,8 +49,8 @@ namespace SarreSports
             Default = 0,
             New_Customer = 1,
             Loaded_Customer = 2,
-            Edit_Customer = 3
-
+            Edit_Customer = 3,
+            Loaded_Product = 4
         }
 
         public posForm(IBranch b, SystemUser u)
@@ -93,7 +85,6 @@ namespace SarreSports
             //Initialise Basket Listing List View
             uiSaleBasketListView.View = View.Details;
             uiSaleBasketListView.LabelEdit = false;
-            uiSaleBasketListView.LabelEdit = false;
             //Initialise Basket Listing List View Column Values
             uiSaleBasketListView.Columns.Add("Product ID", 200, HorizontalAlignment.Left);
             uiSaleBasketListView.Columns.Add("Product Name", 400, HorizontalAlignment.Left);
@@ -103,34 +94,184 @@ namespace SarreSports
             //Initialise Basket Listing List View
             uiCustomersPurchasesListView.View = View.Details;
             uiCustomersPurchasesListView.LabelEdit = false;
-            uiCustomersPurchasesListView.LabelEdit = false;
             //Initialise Basket Listing List View Column Values
             uiCustomersPurchasesListView.Columns.Add("Purchase ID", 200, HorizontalAlignment.Left);
             uiCustomersPurchasesListView.Columns.Add("Purchase Date", 400, HorizontalAlignment.Left);
             uiCustomersPurchasesListView.Columns.Add("Total Cost", -2, HorizontalAlignment.Left);
+            //Initialise Basket Listing List View
+            uiInventorySupplierItemsListView.View = View.Details;
+            uiInventorySupplierItemsListView.LabelEdit = false;
+            //Initialise Basket Listing List View Column Values
+            uiInventorySupplierItemsListView.Columns.Add("Item ID", 100, HorizontalAlignment.Left);
+            uiInventorySupplierItemsListView.Columns.Add("Item Name", 250, HorizontalAlignment.Left);
+            uiInventorySupplierItemsListView.Columns.Add("Item Type", 125, HorizontalAlignment.Left);
+            uiInventorySupplierItemsListView.Columns.Add("Item Cost", 100, HorizontalAlignment.Left);
+            uiInventorySupplierItemsListView.Columns.Add("Available", 100, HorizontalAlignment.Left);
+            uiInventorySupplierItemsListView.Columns.Add("Stock Level", 125, HorizontalAlignment.Left);
+            uiInventorySupplierItemsListView.Columns.Add("Restock Level", 125, HorizontalAlignment.Left);
+            uiInventorySupplierItemsListView.Columns.Add("Restock?", -2, HorizontalAlignment.Left);
             //Set Default Tab Edit States
             setDefaultFormState();
         }
 
-        private void posForm_FormClosing(object sender, FormClosingEventArgs e)
+        /// <summary>
+        /// Sale Tab Functions
+        /// </summary>
+        //Sale Button Events
+        private void uiSaleNewCustomerButton_Click(object sender, EventArgs e)
         {
-                if (MessageBox.Show("Are you sure you want to logout?", "Logging Out", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
-                {
-                    e.Cancel = true;
-                } 
+            if (!string.IsNullOrEmpty(uiSaleCustomerNameTextBox.Text)) uiCustomersCustomerNameTextBox.Text = uiSaleCustomerNameTextBox.Text;
+            uiSaleCustomerNameTextBox.Clear();
+            uiPosViewTabControl.SelectedTab = uiCustomersTab;
+            customersNewCustomer();
         }
 
-        //Sale Tab Functions
-        //Sale Events
         private void uiSaleSearchButton_Click(object sender, EventArgs e)
         {
+            saleSearchCustomers();
+        }
 
+        private void uiSaleProductSearchButton_Click(object sender, EventArgs e)
+        {
+            saleSearchProducts();
+        }
+
+        private void uiSaleAddToBasketButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void uiSaleCancelProductSelectionButton_Click(object sender, EventArgs e)
+        {
+            if (int.TryParse(uiSaleCustomerIDUpDown.Text, out int customerID))
+            {
+                changeTabState(Tabs.Sale, TabStates.Loaded_Customer);
+                saleLoadCustomers(customerID);
+            } else
+            {
+                //Customer Loading Failed
+                MessageBox.Show("Customer Details Loading Error. Customer ID related error.\n" +
+                                "Try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                changeTabState(Tabs.Sale, TabStates.Default);
+            }
+            
+        }
+
+        private void uiSaleSaleButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void uiSaleRemoveItemButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void uiSaleCancelButton_Click(object sender, EventArgs e)
+        {
+            changeTabState(Tabs.Sale, TabStates.Default);
         }
 
         //Sale General Functions
+        private void saleSearchCustomers()
+        {
+            string initialSearch = "";
 
-        //Customers Tab Functions
-        //Customer Events
+            if (!string.IsNullOrEmpty(uiSaleCustomerIDUpDown.Text) && IsInteger(uiSaleCustomerIDUpDown.Text))
+            {
+                initialSearch = uiSaleCustomerIDUpDown.Text;
+            } else if (!string.IsNullOrEmpty(uiSaleCustomerNameTextBox.Text))
+            {
+                initialSearch = uiSaleCustomerNameTextBox.Text;
+            }
+
+            using (genericSearch customerSearch = new genericSearch(getCustomerListViewItems(), "Customer", initialSearch))
+            {
+                var result = customerSearch.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    saleLoadCustomers(customerSearch.returnedID); //Load Customer IF Selected
+                }
+                else
+                {
+                    changeTabState(Tabs.Customers, TabStates.Default);
+                }
+
+                customerSearch.Dispose();
+            };
+        }
+
+        private void saleLoadCustomers(int customerID)
+        {
+            if (!string.IsNullOrEmpty(customerID.ToString()))
+            {
+                if (currentBranch.findCustomer(customerID) != null)
+                {
+                    changeTabState(Tabs.Sale, TabStates.Loaded_Customer);
+                    Console.WriteLine(String.Format("Tab: Sale. Customer ID: {0}. Loaded.", customerID));
+
+                    uiSaleCustomerIDUpDown.Text = customerID.ToString();
+                    uiSaleCustomerNameTextBox.Text = currentBranch.getFullName(customerID) ?? "Not Found";
+                }
+                else
+                {
+                    changeTabState(Tabs.Sale, TabStates.Default);
+                    //Customer Creation Error
+                    MessageBox.Show("Customer Not Found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void saleSearchProducts()
+        {
+
+        }
+
+        private void saleLoadProduct(int productID)
+        {
+
+        }
+
+        //Sale General Events
+        private void uiSaleCustomerIDUpDown_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((e.KeyCode == Keys.Enter) && !string.IsNullOrEmpty(uiSaleCustomerIDUpDown.Text) && IsInteger(uiSaleCustomerIDUpDown.Text))
+            {
+                saleSearchCustomers();
+            }
+        }
+
+        private void uiSaleCustomerNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(uiSaleCustomerNameTextBox.Text))
+            {
+                DialogResult searchCustomerDialog = MessageBox.Show("Do you wish to search for this customer?",
+                    "Search Customers",
+                    MessageBoxButtons.YesNo, 
+                    MessageBoxIcon.Question,
+                    MessageBoxDefaultButton.Button1);
+                if (searchCustomerDialog == DialogResult.Yes)
+                {
+                    saleSearchCustomers();
+                }
+            }
+        }
+
+        private void uiSaleProductIDUpDown_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void uiSaleProductNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// Customers Tab Functions
+        /// </summary>
+        //Customers Button Events
         private void uiCustomersNewCustomerButton_Click(object sender, EventArgs e)
         {
             customersNewCustomer();
@@ -179,13 +320,27 @@ namespace SarreSports
 
         private void customersSearchCustomer()
         {
-            using (genericSearch customerSearch = new genericSearch(getCustomerListViewItems(), "Customer"))
+            string initialSearch = "";
+
+            if (!string.IsNullOrEmpty(uiCustomersCustomerIDUpDown.Text) && IsInteger(uiCustomersCustomerIDUpDown.Text))
+            {
+                initialSearch = uiCustomersCustomerIDUpDown.Text;
+            } else if (!string.IsNullOrEmpty(uiCustomersCustomerNameTextBox.Text))
+            {
+                initialSearch = uiCustomersCustomerNameTextBox.Text;
+            }
+
+            using (genericSearch customerSearch = new genericSearch(getCustomerListViewItems(), "Customer", initialSearch))
             {
                 var result = customerSearch.ShowDialog();
 
                 if (result == DialogResult.OK)
                 {
                     customersLoadCustomer(customerSearch.returnedID); //Load Customer IF Selected
+                }
+                else
+                {
+                    changeTabState(Tabs.Customers, TabStates.Default);
                 }
 
                 customerSearch.Dispose();
@@ -295,7 +450,7 @@ namespace SarreSports
                 if (currentBranch.findCustomer(customerID) != null)
                 {
                     changeTabState(Tabs.Customers, TabStates.Loaded_Customer);
-                    Console.WriteLine(String.Format("Customer ID: {0}. Loaded.", customerID));
+                    Console.WriteLine(String.Format("Tab: Customers. Customer ID: {0}. Loaded.", customerID));
 
                     uiCustomersCustomerIDUpDown.Text = customerID.ToString();
                     uiCustomersCustomerNameTextBox.Text = currentBranch.getFullName(customerID) ?? "Not Found";
@@ -361,17 +516,6 @@ namespace SarreSports
             }
         }
 
-        private void printQR_PrintPage(object sender, PrintPageEventArgs e)
-        {
-            using (var bitmap = new Bitmap(uiCustomersQRCodePictureBox.Width, uiCustomersQRCodePictureBox.Height))
-            {
-                uiCustomersQRCodePictureBox.DrawToBitmap(bitmap, uiCustomersQRCodePictureBox.ClientRectangle);
-                Image img = (Image)bitmap;
-                Point loc = new Point(100, 100);
-                e.Graphics.DrawImage(img, loc); 
-            }
-        }
-
         private void customersEmailDetails()
         {
             if (int.TryParse(uiCustomersCustomerIDUpDown.Text, out int customerID))
@@ -386,7 +530,6 @@ namespace SarreSports
             
         }
 
-        //Customer Control Management Functions
         private bool customersValidateCustomerDetails()
         {
             bool valid = true;
@@ -441,8 +584,8 @@ namespace SarreSports
             }
             finally
             {
-                uiCustomersFirstNameTextBox.Text = uiCustomersFirstNameTextBox.Text.Trim();
-                uiCustomersLastNameTextBox.Text = uiCustomersLastNameTextBox.Text.Trim();
+                uiCustomersFirstNameTextBox.Text = uiCustomersFirstNameTextBox.Text.Trim().ToLower().FirstCharToUpper();
+                uiCustomersLastNameTextBox.Text = uiCustomersLastNameTextBox.Text.Trim().ToLower().FirstCharToUpper();
                 uiCustomersEmailAddressTextBox.Text = uiCustomersEmailAddressTextBox.Text.Trim();
                 uiCustomersMobileNoTextBox.Text = uiCustomersMobileNoTextBox.Text.Trim();
                 uiCustomersPostCodeTextBox.Text = uiCustomersPostCodeTextBox.Text.Trim();
@@ -450,6 +593,265 @@ namespace SarreSports
 
             return valid;
         }
+
+        //Customer General Events
+        private void printQR_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            using (var bitmap = new Bitmap(uiCustomersQRCodePictureBox.Width, uiCustomersQRCodePictureBox.Height))
+            {
+                uiCustomersQRCodePictureBox.DrawToBitmap(bitmap, uiCustomersQRCodePictureBox.ClientRectangle);
+                Image img = (Image)bitmap;
+                Point loc = new Point(100, 100);
+                e.Graphics.DrawImage(img, loc); 
+            }
+        }
+
+        private void uiCustomersCustomerIDUpDown_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(uiCustomersCustomerIDUpDown.Text) && IsInteger(uiCustomersCustomerIDUpDown.Text))
+            {
+                customersSearchCustomer();
+            }
+        }
+
+        private void uiCustomersCustomerNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(uiCustomersCustomerNameTextBox.Text))
+            {
+                DialogResult createCustomerDialog = MessageBox.Show("Do you wish to create this customer?",
+                                                                    "New Customer",
+                                                                     MessageBoxButtons.YesNo, 
+                                                                     MessageBoxIcon.Question,
+                                                                     MessageBoxDefaultButton.Button1);
+                if (createCustomerDialog == DialogResult.Yes)
+                {
+                    customersNewCustomer();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Inventory Tab Functions
+        /// </summary>
+        //Inventory Button Events
+        private void uiInventoryFindSupplierButton_Click(object sender, EventArgs e)
+        {
+            inventorySearchSupplier();
+        }
+
+        private void uiInventoryNewSupplierButton_Click(object sender, EventArgs e)
+        {
+            inventoryCreateSupplier();
+        }
+
+        private void uiInventoryNewItem_Click(object sender, EventArgs e)
+        {
+            inventoryCreateItem();
+        }
+
+        private void uiInventoryRemoveItem_Click(object sender, EventArgs e)
+        {
+            inventoryRemoveItem();
+        }
+
+        //Inventory General Functions
+        private void inventorySearchSupplier()
+        {
+            string initialSearch = "";
+
+            if (!string.IsNullOrEmpty(uiInventorySupplierIDUpDown.Text))
+            {
+                initialSearch = uiInventorySupplierIDUpDown.Text;
+            }
+
+            using (genericSearch supplierSearch = new genericSearch(getSupplierListViewItems(), "Supplier", initialSearch))
+            {
+                var result = supplierSearch.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    changeTabState(Tabs.Inventory, TabStates.Default);
+                    inventoryLoadSupplier(supplierSearch.returnedID); //Load Customer IF Selected
+                }
+                else
+                {
+                    changeTabState(Tabs.Customers, TabStates.Default);
+                }
+
+                supplierSearch.Dispose();
+            };
+        }
+
+        private void inventoryCreateSupplier()
+        {
+            using (newSupplier suppliersSearch = new newSupplier())
+            {
+                var result = suppliersSearch.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    var currentSuppplier = currentBranch.createSupplier(new Supplier(suppliersSearch.supplierName));
+                    if (currentSuppplier.Success)
+                    {
+                        changeTabState(Tabs.Inventory, TabStates.Default);
+                        inventoryLoadSupplier(currentSuppplier.supplierID); //Load newly created customer
+                    }
+                    else
+                    {
+                        //Supplier Creation Error
+                        MessageBox.Show("Supplier Creation Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        changeTabState(Tabs.Inventory, TabStates.Default);
+                    }
+                }
+                else
+                {
+                    changeTabState(Tabs.Inventory, TabStates.Default);
+                }
+                suppliersSearch.Dispose();
+            };
+        }
+
+        private void inventoryLoadSupplier(int supplierID)
+        {
+            groupBoxControlsEnabled(uiInventorySupplierItemsGroupBox, true);
+            Console.WriteLine(String.Format("Tab: Inventory. Supplier ID: {0}. Loaded.", supplierID));
+
+            uiInventorySupplierIDUpDown.Text = supplierID.ToString();
+            uiInventorySuppliersComboBox.SelectedIndex = supplierID-1;
+
+            uiInventorySupplierItemsListView.Items.AddRange(getSupplierItemsListViewItems(supplierID));
+        }
+
+        private void inventoryCreateItem()
+        {
+            using (itemSelector itemSelector = new itemSelector())
+            {
+                var result = itemSelector.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    if (itemSelector.accessoryTypeReturn == null)
+                    {
+                        //Standard Item Selected
+                        if (!inventoryNewStandardItem(itemSelector.itemTypeReturn))
+                        {
+                            Console.WriteLine("Item Type Selection Error Occurred.");
+                            MessageBox.Show("Item Type Selection Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    else
+                    {
+                        //Accessory Type Selected
+                        if (!inventoryNewAccessoryItem(itemSelector.accessoryTypeReturn))
+                        {
+                            Console.WriteLine("Accessory Item Type Selection Error Occurred.");
+                            MessageBox.Show("Accessory Item Type Selection Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+                itemSelector.Dispose();
+            };
+        }
+
+        private bool inventoryNewStandardItem(Item.Type type)
+        {
+            if (type == Item.Type.Clothing)
+            {
+                return true;
+            } else if (type == Item.Type.Shoe)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool inventoryNewAccessoryItem(Accessory.accessoryType? type)
+        {
+            if (type != null)
+            {
+                if (type == Accessory.accessoryType.Bag)
+                {
+                    using (newBag itemCreator = new newBag(Accessory.accessoryType.Bag.ToString(), uiInventorySuppliersComboBox.Text))
+                    {
+                        var result = itemCreator.ShowDialog();
+
+                        if (result == DialogResult.OK)
+                        {
+
+                        }
+
+                        itemCreator.Dispose();
+                    };
+                    ////var currentSuppplier = currentBranch.createSupplier(new Supplier(suppliersSearch.supplierName));
+                    //if (currentSuppplier.Success)
+                    //{
+                    //    changeTabState(Tabs.Inventory, TabStates.Default);
+                    //    inventoryLoadSupplier(currentSuppplier.supplierID); //Load newly created customer
+                    //}
+                    //else
+                    //{
+                    //    //Supplier Creation Error
+                    //    MessageBox.Show("Supplier Creation Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //    changeTabState(Tabs.Inventory, TabStates.Default);
+                    //}
+                    return true;
+                } else if (type == Accessory.accessoryType.Nutrition)
+                {
+                    return true;
+                } else if (type == Accessory.accessoryType.Watch)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void inventoryRemoveItem()
+        {
+
+        }
+
+        //Inventory General Events
+        private void uiInventorySuppliersComboBox_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (uiInventorySuppliersComboBox.SelectedIndex > -1)
+            {
+                changeTabState(Tabs.Inventory, TabStates.Default);
+                inventoryLoadSupplier(uiInventorySuppliersComboBox.SelectedIndex+1);
+            }
+            else
+            {
+                changeTabState(Tabs.Inventory, TabStates.Default);
+            }
+
+        }
+
+        private void uiInventorySupplierIDUpDown_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(uiInventorySupplierIDUpDown.Text) && IsInteger(uiInventorySupplierIDUpDown.Text))
+            {
+                inventorySearchSupplier();
+            }
+        }
+
+        /// <summary>
+        /// Admin Tab Functions
+        /// </summary>
+        //Admin Button Events
+
+        //Admin General Functions
+
+        //Admin General Events
 
         //Form-wide
         //Form-wide Functions
@@ -546,6 +948,71 @@ namespace SarreSports
 
             //return customerListingListViewItems.ToArray();
             return null;
+        }
+
+        public ListViewItem[] getSupplierListViewItems()
+        {
+            var supplierListingListViewItems = new List<ListViewItem>();
+
+            foreach (var supplier in currentBranch.MSuppliers())
+            {
+                ListViewItem supplierItem = new ListViewItem(supplier.ID().ToString());
+                supplierItem.SubItems.Add(supplier.Name());
+                supplierListingListViewItems.Add(supplierItem);
+            }
+
+            return supplierListingListViewItems.ToArray();
+        }
+
+        public ListViewItem[] getSupplierItemsListViewItems(int supplierID)
+        {
+            var itemsListingListViewItems = new List<ListViewItem>();
+
+            foreach (var supplier in currentBranch.MSuppliers())
+            {
+                if (supplier.ID() == supplierID)
+                {
+                    foreach (var item in supplier.MProducts())
+                    {
+                        ListViewItem supplierItem = new ListViewItem(item.ID.ToString() ?? "Not Found");
+                        
+                        supplierItem.UseItemStyleForSubItems = false;
+
+                        supplierItem.SubItems.Add(item.Name ?? "Not Found");
+                        supplierItem.SubItems.Add(item.ItemType.ToString() ?? "Not Found");
+                        supplierItem.SubItems.Add(item.Cost.ToString() ?? "Not Found");
+
+                        if (item.availableForSale)
+                        {
+                            supplierItem.SubItems.Add("✓");
+                            supplierItem.SubItems[supplierItem.SubItems.Count-1].ForeColor = Color.Green;
+                        }
+                        else
+                        {
+                            supplierItem.SubItems.Add("X");
+                            supplierItem.SubItems[supplierItem.SubItems.Count-1].ForeColor = Color.Red;
+                        }
+
+                        supplierItem.SubItems.Add(item.StockLevel.ToString() ?? "Not Found");
+                        supplierItem.SubItems.Add(item.RestockLevel.ToString() ?? "Not Found");
+                        
+                        if (item.Restock())
+                        {
+                            supplierItem.SubItems.Add("✓");
+                            supplierItem.SubItems[supplierItem.SubItems.Count-1].ForeColor = Color.Green;
+                        }
+                        else
+                        {
+                            supplierItem.SubItems.Add("X");
+                            supplierItem.SubItems[supplierItem.SubItems.Count-1].ForeColor = Color.Red;
+                        }
+
+                        itemsListingListViewItems.Add(supplierItem);
+                    }
+                }
+
+            }
+            return itemsListingListViewItems.ToArray();
         }
 
         private void setDefaultFormState()
@@ -646,14 +1113,62 @@ namespace SarreSports
                     switch (state)
                     {
                         case TabStates.Default:
+                            //Element 1
+                            uiSaleCustomerIDUpDown.ResetText();
+                            uiSaleCustomerIDUpDown.Enabled = true;
                             uiSaleCustomerIDUpDown.Focus();
+
+                            //Element 2
+                            uiSaleCustomerNameTextBox.Clear();
+                            uiSaleCustomerNameTextBox.Enabled = true;
+
+                            //Element 3
+                            uiSaleNewCustomerButton.Enabled = true;
+                            uiSaleCustomerSearchButton.Enabled = true;
+
+                            //Element 4 (inside GroupBox Controls)
+                            uiSaleCancelProductSelectionButton.Hide();
+
                             resetGroupBoxControls(uiSalePurchaseGroupBox);
                             groupBoxControlsEnabled(uiSalePurchaseGroupBox, false);
                             break;
                         case TabStates.Loaded_Customer:
+                            //Element 1
+                            uiSaleCustomerIDUpDown.ResetText();
+                            uiSaleCustomerIDUpDown.Enabled = false;
+
+                            //Element 2
+                            uiSaleCustomerNameTextBox.Clear();
+                            uiSaleCustomerNameTextBox.Enabled = false;
+
+                            //Element 3
+                            uiSaleNewCustomerButton.Enabled = false;
+                            uiSaleCustomerSearchButton.Enabled = false;
+
+                            //Element 4
+                            uiSaleCancelProductSelectionButton.Hide(); 
+
+
                             uiSaleProductIDUpDown.Focus();
                             resetGroupBoxControls(uiSalePurchaseGroupBox);
                             groupBoxControlsEnabled(uiSalePurchaseGroupBox, true);
+                            break;
+                        case TabStates.Loaded_Product:
+                            //Element 3
+                            uiSaleNewCustomerButton.Enabled = false;
+                            uiSaleCustomerSearchButton.Enabled = false;
+
+                            //Element 4
+                            uiSaleProductIDUpDown.ResetText();
+                            uiSaleProductIDUpDown.Enabled = false;
+
+                            uiSaleProductNameTextBox.Clear();
+                            uiSaleProductNameTextBox.Enabled = false;
+
+                            uiSaleProductSearchButton.Enabled = false;
+                            uiSaleAddToBasketButton.Enabled = false;
+
+                            uiSaleCancelProductSelectionButton.Show();
                             break;
                         default:
                             Console.WriteLine("Tab State Changed Failed.");
@@ -814,6 +1329,28 @@ namespace SarreSports
                     }
                     break;
                 case Tabs.Inventory:
+                    switch (state)
+                    {
+                        case TabStates.Default:
+                            //Element 1
+                            uiInventorySuppliersComboBox.Items.Clear();
+                            foreach (var supplier in currentBranch.MSuppliers()) {
+                                uiInventorySuppliersComboBox.Items.Add(supplier.Name());
+                            }
+                            uiInventorySuppliersComboBox.Enabled = true;
+
+                            //Element 2
+                            uiInventorySupplierIDUpDown.ResetText();
+                            uiInventorySupplierIDUpDown.Enabled = true;
+
+                            //Element 5 - GroupBox
+                            resetGroupBoxControls(uiInventorySupplierItemsGroupBox);
+                            groupBoxControlsEnabled(uiInventorySupplierItemsGroupBox, false);
+                            break;
+                        default:
+                            Console.WriteLine("Tab State Changed Failed.");
+                            break;
+                    }
                     break;
                 case Tabs.Admin:
                     break;
@@ -822,10 +1359,19 @@ namespace SarreSports
             }
         }
 
+        private bool IsInteger(string value) => value.All(c => c >= '0' && c <= '9');
+
         //Form-wide Events
         private void uiLogoutButton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+        private void posForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to logout?", "Logging Out", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            {
+                e.Cancel = true;
+            } 
         }
     }
 
@@ -845,7 +1391,15 @@ namespace SarreSports
             {
                 case null: throw new ArgumentNullException(nameof(input));
                 case "": return null; //throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)) IsUdtRet;
-                default: return input.First().ToString().ToUpper() + input.Substring(1);
+                default:
+                    if (input.Contains(' '))
+                    {
+                        TextInfo textInfo = new CultureInfo("en-UK",false).TextInfo;
+                        return (string)textInfo.ToTitleCase(input);
+                    } else
+                    {
+                        return input.First().ToString().ToUpper() + input.Substring(1);
+                    }
             }
         }
     }

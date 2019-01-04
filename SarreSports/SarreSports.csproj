@@ -52,13 +52,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Item\Accessory\Accessory.cs" />
+    <Compile Include="Item\ItemForms\itemSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Item\ItemForms\itemSelector.Designer.cs">
+      <DependentUpon>itemSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Item\Accessory\Bag.cs" />
     <Compile Include="genericSearch.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="genericSearch.Designer.cs">
       <DependentUpon>genericSearch.cs</DependentUpon>
     </Compile>
-    <Compile Include="Item\Accessory.cs" />
     <Compile Include="Branch\Branch.cs" />
     <Compile Include="Branch\IBranch.cs" />
     <Compile Include="Item\Clothing.cs" />
@@ -71,6 +78,31 @@
     </Compile>
     <Compile Include="Branch\NullBranch.cs" />
     <Compile Include="MailClient.cs" />
+    <Compile Include="Item\ItemForms\newItem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Item\ItemForms\newItem.Designer.cs">
+      <DependentUpon>newItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Item\ItemForms\newBag.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Item\ItemForms\newBag.Designer.cs">
+      <DependentUpon>newBag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Item\ItemForms\newShoe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Item\ItemForms\newShoe.Designer.cs">
+      <DependentUpon>newShoe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="newSupplier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="newSupplier.Designer.cs">
+      <DependentUpon>newSupplier.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Item\Accessory\Nutrition.cs" />
     <Compile Include="Person\Customer.cs" />
     <Compile Include="Person\Person.cs" />
     <Compile Include="Person\SystemUser.cs" />
@@ -87,11 +119,27 @@
     <Compile Include="Purchase.cs" />
     <Compile Include="Item\Shoe.cs" />
     <Compile Include="Supplier.cs" />
+    <Compile Include="Item\Accessory\Watch.cs" />
     <EmbeddedResource Include="genericSearch.resx">
       <DependentUpon>genericSearch.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Item\ItemForms\itemSelector.resx">
+      <DependentUpon>itemSelector.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="loginForm.resx">
       <DependentUpon>loginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Item\ItemForms\newItem.resx">
+      <DependentUpon>newItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Item\ItemForms\newBag.resx">
+      <DependentUpon>newBag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Item\ItemForms\newShoe.resx">
+      <DependentUpon>newShoe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="newSupplier.resx">
+      <DependentUpon>newSupplier.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="posForm.resx">
       <DependentUpon>posForm.cs</DependentUpon>

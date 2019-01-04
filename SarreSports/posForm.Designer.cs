@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 10/12/2018 | 16:59
-//Last Updated On:  26/12/2018 | 22:00
+//Last Updated On:  3/1/2019 | 21:13
 namespace SarreSports
 {
     partial class posForm
@@ -42,6 +42,7 @@ namespace SarreSports
             this.uiSaleTab = new System.Windows.Forms.TabPage();
             this.uiSaleCustomerIDUpDown = new System.Windows.Forms.NumericUpDown();
             this.uiSalePurchaseGroupBox = new System.Windows.Forms.GroupBox();
+            this.uiSaleCancelProductSelectionButton = new System.Windows.Forms.Button();
             this.uiSaleProductIDUpDown = new System.Windows.Forms.NumericUpDown();
             this.uiSaleCancelButton = new System.Windows.Forms.Button();
             this.uiSaleProductSearchButton = new System.Windows.Forms.Button();
@@ -51,7 +52,7 @@ namespace SarreSports
             this.uiSaleBasketListView = new System.Windows.Forms.ListView();
             this.uiSaleProductNameLabel = new System.Windows.Forms.Label();
             this.uiSaleBasketLabel = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.uiSaleProductNameTextBox = new System.Windows.Forms.TextBox();
             this.uiSaleAddToBasketButton = new System.Windows.Forms.Button();
             this.uiSaleCustomerSearchButton = new System.Windows.Forms.Button();
             this.uiSaleNewCustomerButton = new System.Windows.Forms.Button();
@@ -89,8 +90,12 @@ namespace SarreSports
             this.uiCustomersCustomerNameLabel = new System.Windows.Forms.Label();
             this.uiCustomersCustomerIDLabel = new System.Windows.Forms.Label();
             this.uiInventoryTab = new System.Windows.Forms.TabPage();
+            this.uiInventorySupplierItemsGroupBox = new System.Windows.Forms.GroupBox();
+            this.uiInventoryRemoveItem = new System.Windows.Forms.Button();
+            this.uiInventorySupplierItemsListView = new System.Windows.Forms.ListView();
+            this.uiInventoryNewItem = new System.Windows.Forms.Button();
+            this.uiInventorySupplierIDUpDown = new System.Windows.Forms.NumericUpDown();
             this.uiInventoryFindSupplierButton = new System.Windows.Forms.Button();
-            this.uiInventorySupplierIDTextBox = new System.Windows.Forms.TextBox();
             this.uiInventorySupplierIDLabel = new System.Windows.Forms.Label();
             this.uiInventoryNewSupplierButton = new System.Windows.Forms.Button();
             this.uiInventorySuppliersLabel = new System.Windows.Forms.Label();
@@ -109,6 +114,8 @@ namespace SarreSports
             this.uiCustomersCustomerDetailsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uiCustomersQRCodePictureBox)).BeginInit();
             this.uiInventoryTab.SuspendLayout();
+            this.uiInventorySupplierItemsGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uiInventorySupplierIDUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.uiCustomersErrorProvider)).BeginInit();
             this.SuspendLayout();
             // 
@@ -156,6 +163,11 @@ namespace SarreSports
             // uiSaleCustomerIDUpDown
             // 
             this.uiSaleCustomerIDUpDown.Location = new System.Drawing.Point(231, 41);
+            this.uiSaleCustomerIDUpDown.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.uiSaleCustomerIDUpDown.Name = "uiSaleCustomerIDUpDown";
             this.uiSaleCustomerIDUpDown.Size = new System.Drawing.Size(418, 44);
             this.uiSaleCustomerIDUpDown.TabIndex = 0;
@@ -164,9 +176,11 @@ namespace SarreSports
             0,
             0,
             0});
+            this.uiSaleCustomerIDUpDown.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uiSaleCustomerIDUpDown_KeyDown);
             // 
             // uiSalePurchaseGroupBox
             // 
+            this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleCancelProductSelectionButton);
             this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleProductIDUpDown);
             this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleCancelButton);
             this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleProductSearchButton);
@@ -176,7 +190,7 @@ namespace SarreSports
             this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleBasketListView);
             this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleProductNameLabel);
             this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleBasketLabel);
-            this.uiSalePurchaseGroupBox.Controls.Add(this.textBox1);
+            this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleProductNameTextBox);
             this.uiSalePurchaseGroupBox.Controls.Add(this.uiSaleAddToBasketButton);
             this.uiSalePurchaseGroupBox.Location = new System.Drawing.Point(25, 111);
             this.uiSalePurchaseGroupBox.Name = "uiSalePurchaseGroupBox";
@@ -185,12 +199,28 @@ namespace SarreSports
             this.uiSalePurchaseGroupBox.TabStop = false;
             this.uiSalePurchaseGroupBox.Text = "Purchase System";
             // 
+            // uiSaleCancelProductSelectionButton
+            // 
+            this.uiSaleCancelProductSelectionButton.Location = new System.Drawing.Point(1806, 114);
+            this.uiSaleCancelProductSelectionButton.Name = "uiSaleCancelProductSelectionButton";
+            this.uiSaleCancelProductSelectionButton.Size = new System.Drawing.Size(319, 55);
+            this.uiSaleCancelProductSelectionButton.TabIndex = 14;
+            this.uiSaleCancelProductSelectionButton.Text = "Cancel Selection";
+            this.uiSaleCancelProductSelectionButton.UseVisualStyleBackColor = true;
+            this.uiSaleCancelProductSelectionButton.Click += new System.EventHandler(this.uiSaleCancelProductSelectionButton_Click);
+            // 
             // uiSaleProductIDUpDown
             // 
             this.uiSaleProductIDUpDown.Location = new System.Drawing.Point(206, 48);
+            this.uiSaleProductIDUpDown.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.uiSaleProductIDUpDown.Name = "uiSaleProductIDUpDown";
             this.uiSaleProductIDUpDown.Size = new System.Drawing.Size(418, 44);
             this.uiSaleProductIDUpDown.TabIndex = 0;
+            this.uiSaleProductIDUpDown.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uiSaleProductIDUpDown_KeyDown);
             // 
             // uiSaleCancelButton
             // 
@@ -198,8 +228,9 @@ namespace SarreSports
             this.uiSaleCancelButton.Name = "uiSaleCancelButton";
             this.uiSaleCancelButton.Size = new System.Drawing.Size(319, 55);
             this.uiSaleCancelButton.TabIndex = 6;
-            this.uiSaleCancelButton.Text = "Cancel";
+            this.uiSaleCancelButton.Text = "Cancel Sale";
             this.uiSaleCancelButton.UseVisualStyleBackColor = true;
+            this.uiSaleCancelButton.Click += new System.EventHandler(this.uiSaleCancelButton_Click);
             // 
             // uiSaleProductSearchButton
             // 
@@ -209,6 +240,7 @@ namespace SarreSports
             this.uiSaleProductSearchButton.TabIndex = 3;
             this.uiSaleProductSearchButton.Text = "Search Products";
             this.uiSaleProductSearchButton.UseVisualStyleBackColor = true;
+            this.uiSaleProductSearchButton.Click += new System.EventHandler(this.uiSaleProductSearchButton_Click);
             // 
             // uiSaleRemoveItemButton
             // 
@@ -218,6 +250,7 @@ namespace SarreSports
             this.uiSaleRemoveItemButton.TabIndex = 5;
             this.uiSaleRemoveItemButton.Text = "Remove Item";
             this.uiSaleRemoveItemButton.UseVisualStyleBackColor = true;
+            this.uiSaleRemoveItemButton.Click += new System.EventHandler(this.uiSaleRemoveItemButton_Click);
             // 
             // uiSaleProductIDLabel
             // 
@@ -237,6 +270,7 @@ namespace SarreSports
             this.uiSaleSaleButton.TabIndex = 4;
             this.uiSaleSaleButton.Text = "Sale";
             this.uiSaleSaleButton.UseVisualStyleBackColor = true;
+            this.uiSaleSaleButton.Click += new System.EventHandler(this.uiSaleSaleButton_Click);
             // 
             // uiSaleBasketListView
             // 
@@ -251,7 +285,7 @@ namespace SarreSports
             // 
             this.uiSaleProductNameLabel.AutoSize = true;
             this.uiSaleProductNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.uiSaleProductNameLabel.Location = new System.Drawing.Point(689, 50);
+            this.uiSaleProductNameLabel.Location = new System.Drawing.Point(680, 50);
             this.uiSaleProductNameLabel.Name = "uiSaleProductNameLabel";
             this.uiSaleProductNameLabel.Size = new System.Drawing.Size(235, 37);
             this.uiSaleProductNameLabel.TabIndex = 1;
@@ -267,12 +301,13 @@ namespace SarreSports
             this.uiSaleBasketLabel.TabIndex = 12;
             this.uiSaleBasketLabel.Text = "Basket";
             // 
-            // textBox1
+            // uiSaleProductNameTextBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(930, 47);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(486, 44);
-            this.textBox1.TabIndex = 1;
+            this.uiSaleProductNameTextBox.Location = new System.Drawing.Point(931, 47);
+            this.uiSaleProductNameTextBox.Name = "uiSaleProductNameTextBox";
+            this.uiSaleProductNameTextBox.Size = new System.Drawing.Size(486, 44);
+            this.uiSaleProductNameTextBox.TabIndex = 1;
+            this.uiSaleProductNameTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uiSaleProductNameTextBox_KeyDown);
             // 
             // uiSaleAddToBasketButton
             // 
@@ -282,6 +317,7 @@ namespace SarreSports
             this.uiSaleAddToBasketButton.TabIndex = 2;
             this.uiSaleAddToBasketButton.Text = "Add to Basket";
             this.uiSaleAddToBasketButton.UseVisualStyleBackColor = true;
+            this.uiSaleAddToBasketButton.Click += new System.EventHandler(this.uiSaleAddToBasketButton_Click);
             // 
             // uiSaleCustomerSearchButton
             // 
@@ -301,19 +337,21 @@ namespace SarreSports
             this.uiSaleNewCustomerButton.TabIndex = 2;
             this.uiSaleNewCustomerButton.Text = "New Customer";
             this.uiSaleNewCustomerButton.UseVisualStyleBackColor = true;
+            this.uiSaleNewCustomerButton.Click += new System.EventHandler(this.uiSaleNewCustomerButton_Click);
             // 
             // uiSaleCustomerNameTextBox
             // 
-            this.uiSaleCustomerNameTextBox.Location = new System.Drawing.Point(955, 40);
+            this.uiSaleCustomerNameTextBox.Location = new System.Drawing.Point(956, 41);
             this.uiSaleCustomerNameTextBox.Name = "uiSaleCustomerNameTextBox";
             this.uiSaleCustomerNameTextBox.Size = new System.Drawing.Size(486, 44);
             this.uiSaleCustomerNameTextBox.TabIndex = 1;
+            this.uiSaleCustomerNameTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uiSaleCustomerNameTextBox_KeyDown);
             // 
             // uiSaleCustomerNameLabel
             // 
             this.uiSaleCustomerNameLabel.AutoSize = true;
             this.uiSaleCustomerNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.uiSaleCustomerNameLabel.Location = new System.Drawing.Point(685, 43);
+            this.uiSaleCustomerNameLabel.Location = new System.Drawing.Point(676, 43);
             this.uiSaleCustomerNameLabel.Name = "uiSaleCustomerNameLabel";
             this.uiSaleCustomerNameLabel.Size = new System.Drawing.Size(264, 37);
             this.uiSaleCustomerNameLabel.TabIndex = 2;
@@ -358,7 +396,7 @@ namespace SarreSports
             // 
             this.uiCustomersCustomerIDUpDown.Location = new System.Drawing.Point(231, 41);
             this.uiCustomersCustomerIDUpDown.Maximum = new decimal(new int[] {
-            1000000,
+            10000,
             0,
             0,
             0});
@@ -370,6 +408,7 @@ namespace SarreSports
             0,
             0,
             0});
+            this.uiCustomersCustomerIDUpDown.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uiCustomersCustomerIDUpDown_KeyDown);
             // 
             // uiCustomersCustomerEditSaveButton
             // 
@@ -637,6 +676,7 @@ namespace SarreSports
             this.uiCustomersCustomerNameTextBox.Size = new System.Drawing.Size(486, 44);
             this.uiCustomersCustomerNameTextBox.TabIndex = 1;
             this.uiCustomersCustomerNameTextBox.Tag = "protected";
+            this.uiCustomersCustomerNameTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uiCustomersCustomerNameTextBox_KeyDown);
             // 
             // uiCustomersCustomerNameLabel
             // 
@@ -660,8 +700,9 @@ namespace SarreSports
             // 
             // uiInventoryTab
             // 
+            this.uiInventoryTab.Controls.Add(this.uiInventorySupplierItemsGroupBox);
+            this.uiInventoryTab.Controls.Add(this.uiInventorySupplierIDUpDown);
             this.uiInventoryTab.Controls.Add(this.uiInventoryFindSupplierButton);
-            this.uiInventoryTab.Controls.Add(this.uiInventorySupplierIDTextBox);
             this.uiInventoryTab.Controls.Add(this.uiInventorySupplierIDLabel);
             this.uiInventoryTab.Controls.Add(this.uiInventoryNewSupplierButton);
             this.uiInventoryTab.Controls.Add(this.uiInventorySuppliersLabel);
@@ -675,27 +716,80 @@ namespace SarreSports
             this.uiInventoryTab.Text = "Inventory";
             this.uiInventoryTab.UseVisualStyleBackColor = true;
             // 
+            // uiInventorySupplierItemsGroupBox
+            // 
+            this.uiInventorySupplierItemsGroupBox.Controls.Add(this.uiInventoryRemoveItem);
+            this.uiInventorySupplierItemsGroupBox.Controls.Add(this.uiInventorySupplierItemsListView);
+            this.uiInventorySupplierItemsGroupBox.Controls.Add(this.uiInventoryNewItem);
+            this.uiInventorySupplierItemsGroupBox.Location = new System.Drawing.Point(25, 110);
+            this.uiInventorySupplierItemsGroupBox.Name = "uiInventorySupplierItemsGroupBox";
+            this.uiInventorySupplierItemsGroupBox.Size = new System.Drawing.Size(2159, 1169);
+            this.uiInventorySupplierItemsGroupBox.TabIndex = 8;
+            this.uiInventorySupplierItemsGroupBox.TabStop = false;
+            this.uiInventorySupplierItemsGroupBox.Text = "Supplier Items";
+            // 
+            // uiInventoryRemoveItem
+            // 
+            this.uiInventoryRemoveItem.Location = new System.Drawing.Point(1478, 1097);
+            this.uiInventoryRemoveItem.Name = "uiInventoryRemoveItem";
+            this.uiInventoryRemoveItem.Size = new System.Drawing.Size(319, 55);
+            this.uiInventoryRemoveItem.TabIndex = 10;
+            this.uiInventoryRemoveItem.Text = "Remove Item";
+            this.uiInventoryRemoveItem.UseVisualStyleBackColor = true;
+            this.uiInventoryRemoveItem.Click += new System.EventHandler(this.uiInventoryRemoveItem_Click);
+            // 
+            // uiInventorySupplierItemsListView
+            // 
+            this.uiInventorySupplierItemsListView.GridLines = true;
+            this.uiInventorySupplierItemsListView.Location = new System.Drawing.Point(28, 59);
+            this.uiInventorySupplierItemsListView.Name = "uiInventorySupplierItemsListView";
+            this.uiInventorySupplierItemsListView.Size = new System.Drawing.Size(2107, 1020);
+            this.uiInventorySupplierItemsListView.TabIndex = 7;
+            this.uiInventorySupplierItemsListView.UseCompatibleStateImageBehavior = false;
+            // 
+            // uiInventoryNewItem
+            // 
+            this.uiInventoryNewItem.Location = new System.Drawing.Point(1830, 1097);
+            this.uiInventoryNewItem.Name = "uiInventoryNewItem";
+            this.uiInventoryNewItem.Size = new System.Drawing.Size(319, 55);
+            this.uiInventoryNewItem.TabIndex = 9;
+            this.uiInventoryNewItem.Text = "New Item";
+            this.uiInventoryNewItem.UseVisualStyleBackColor = true;
+            this.uiInventoryNewItem.Click += new System.EventHandler(this.uiInventoryNewItem_Click);
+            // 
+            // uiInventorySupplierIDUpDown
+            // 
+            this.uiInventorySupplierIDUpDown.Location = new System.Drawing.Point(1050, 41);
+            this.uiInventorySupplierIDUpDown.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.uiInventorySupplierIDUpDown.Name = "uiInventorySupplierIDUpDown";
+            this.uiInventorySupplierIDUpDown.Size = new System.Drawing.Size(396, 44);
+            this.uiInventorySupplierIDUpDown.TabIndex = 6;
+            this.uiInventorySupplierIDUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.uiInventorySupplierIDUpDown.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uiInventorySupplierIDUpDown_KeyDown);
+            // 
             // uiInventoryFindSupplierButton
             // 
-            this.uiInventoryFindSupplierButton.Location = new System.Drawing.Point(1631, 34);
+            this.uiInventoryFindSupplierButton.Location = new System.Drawing.Point(1503, 34);
             this.uiInventoryFindSupplierButton.Name = "uiInventoryFindSupplierButton";
-            this.uiInventoryFindSupplierButton.Size = new System.Drawing.Size(253, 55);
+            this.uiInventoryFindSupplierButton.Size = new System.Drawing.Size(319, 55);
             this.uiInventoryFindSupplierButton.TabIndex = 5;
             this.uiInventoryFindSupplierButton.Text = "Find Supplier";
             this.uiInventoryFindSupplierButton.UseVisualStyleBackColor = true;
-            // 
-            // uiInventorySupplierIDTextBox
-            // 
-            this.uiInventorySupplierIDTextBox.Location = new System.Drawing.Point(1154, 40);
-            this.uiInventorySupplierIDTextBox.Name = "uiInventorySupplierIDTextBox";
-            this.uiInventorySupplierIDTextBox.Size = new System.Drawing.Size(396, 44);
-            this.uiInventorySupplierIDTextBox.TabIndex = 4;
+            this.uiInventoryFindSupplierButton.Click += new System.EventHandler(this.uiInventoryFindSupplierButton_Click);
             // 
             // uiInventorySupplierIDLabel
             // 
             this.uiInventorySupplierIDLabel.AutoSize = true;
             this.uiInventorySupplierIDLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.uiInventorySupplierIDLabel.Location = new System.Drawing.Point(963, 43);
+            this.uiInventorySupplierIDLabel.Location = new System.Drawing.Point(839, 43);
             this.uiInventorySupplierIDLabel.Name = "uiInventorySupplierIDLabel";
             this.uiInventorySupplierIDLabel.Size = new System.Drawing.Size(185, 37);
             this.uiInventorySupplierIDLabel.TabIndex = 3;
@@ -703,12 +797,13 @@ namespace SarreSports
             // 
             // uiInventoryNewSupplierButton
             // 
-            this.uiInventoryNewSupplierButton.Location = new System.Drawing.Point(1911, 34);
+            this.uiInventoryNewSupplierButton.Location = new System.Drawing.Point(1855, 34);
             this.uiInventoryNewSupplierButton.Name = "uiInventoryNewSupplierButton";
-            this.uiInventoryNewSupplierButton.Size = new System.Drawing.Size(253, 55);
+            this.uiInventoryNewSupplierButton.Size = new System.Drawing.Size(319, 55);
             this.uiInventoryNewSupplierButton.TabIndex = 2;
             this.uiInventoryNewSupplierButton.Text = "New Supplier";
             this.uiInventoryNewSupplierButton.UseVisualStyleBackColor = true;
+            this.uiInventoryNewSupplierButton.Click += new System.EventHandler(this.uiInventoryNewSupplierButton_Click);
             // 
             // uiInventorySuppliersLabel
             // 
@@ -723,10 +818,11 @@ namespace SarreSports
             // uiInventorySuppliersComboBox
             // 
             this.uiInventorySuppliersComboBox.FormattingEnabled = true;
-            this.uiInventorySuppliersComboBox.Location = new System.Drawing.Point(183, 40);
+            this.uiInventorySuppliersComboBox.Location = new System.Drawing.Point(197, 40);
             this.uiInventorySuppliersComboBox.Name = "uiInventorySuppliersComboBox";
-            this.uiInventorySuppliersComboBox.Size = new System.Drawing.Size(731, 45);
+            this.uiInventorySuppliersComboBox.Size = new System.Drawing.Size(607, 45);
             this.uiInventorySuppliersComboBox.TabIndex = 0;
+            this.uiInventorySuppliersComboBox.SelectionChangeCommitted += new System.EventHandler(this.uiInventorySuppliersComboBox_SelectionChangeCommitted);
             // 
             // uiAdminTab
             // 
@@ -765,6 +861,7 @@ namespace SarreSports
             this.Controls.Add(this.uiPosViewTabControl);
             this.Controls.Add(this.uiBranchTitleLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "posForm";
             this.Text = "PoS System | Main View";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.posForm_FormClosing);
@@ -785,6 +882,8 @@ namespace SarreSports
             ((System.ComponentModel.ISupportInitialize)(this.uiCustomersQRCodePictureBox)).EndInit();
             this.uiInventoryTab.ResumeLayout(false);
             this.uiInventoryTab.PerformLayout();
+            this.uiInventorySupplierItemsGroupBox.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.uiInventorySupplierIDUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.uiCustomersErrorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -801,7 +900,7 @@ namespace SarreSports
         private System.Windows.Forms.TabPage uiAdminTab;
         private System.Windows.Forms.Button uiSaleAddToBasketButton;
         private System.Windows.Forms.Button uiSaleProductSearchButton;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox uiSaleProductNameTextBox;
         private System.Windows.Forms.Label uiSaleProductNameLabel;
         private System.Windows.Forms.Label uiSaleProductIDLabel;
         private System.Windows.Forms.Button uiSaleCustomerSearchButton;
@@ -836,7 +935,6 @@ namespace SarreSports
         private System.Windows.Forms.PictureBox uiCustomersQRCodePictureBox;
         private System.Windows.Forms.Button uiCustomersQRCodePrintButton;
         private System.Windows.Forms.Button uiCustomersQRCodeSaveButton;
-        private System.Windows.Forms.TextBox uiInventorySupplierIDTextBox;
         private System.Windows.Forms.Label uiInventorySupplierIDLabel;
         private System.Windows.Forms.Button uiInventoryNewSupplierButton;
         private System.Windows.Forms.Label uiInventorySuppliersLabel;
@@ -854,5 +952,11 @@ namespace SarreSports
         private System.Windows.Forms.Button uiSaleCancelButton;
         private System.Windows.Forms.NumericUpDown uiSaleCustomerIDUpDown;
         private System.Windows.Forms.NumericUpDown uiSaleProductIDUpDown;
+        private System.Windows.Forms.Button uiSaleCancelProductSelectionButton;
+        private System.Windows.Forms.NumericUpDown uiInventorySupplierIDUpDown;
+        private System.Windows.Forms.GroupBox uiInventorySupplierItemsGroupBox;
+        private System.Windows.Forms.Button uiInventoryRemoveItem;
+        private System.Windows.Forms.ListView uiInventorySupplierItemsListView;
+        private System.Windows.Forms.Button uiInventoryNewItem;
     }
 }
