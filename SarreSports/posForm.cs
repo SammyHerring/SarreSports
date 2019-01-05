@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 10/12/2018 | 16:59
-//Last Updated On:  5/1/2019 | 16:21
+//Last Updated On:  5/1/2019 | 16:37
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -195,7 +195,7 @@ namespace SarreSports
                 }
                 else
                 {
-                    changeTabState(Tabs.Customers, TabStates.Default);
+                    changeTabState(Tabs.Sale, TabStates.Default);
                 }
 
                 customerSearch.Dispose();
@@ -225,7 +225,27 @@ namespace SarreSports
 
         private void saleSearchProducts()
         {
+            string initialSearch = "";
 
+            if (!string.IsNullOrEmpty(uiSaleProductIDUpDown.Text) && IsInteger(uiSaleProductIDUpDown.Text))
+            {
+                initialSearch = uiSaleProductIDUpDown.Text;
+            } else if (!string.IsNullOrEmpty(uiSaleProductNameTextBox.Text))
+            {
+                initialSearch = uiSaleProductNameTextBox.Text;
+            }
+
+            using (genericSearch productSearch = new genericSearch(getProductListViewItems(), "Product", initialSearch))
+            {
+                var result = productSearch.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    saleLoadProduct(productSearch.returnedID); //Load Product IF Selected
+                }
+
+                productSearch.Dispose();
+            };
         }
 
         private void saleLoadProduct(int productID)
@@ -260,12 +280,18 @@ namespace SarreSports
 
         private void uiSaleProductIDUpDown_KeyDown(object sender, KeyEventArgs e)
         {
-
+            if ((e.KeyCode == Keys.Enter) && !string.IsNullOrEmpty(uiSaleProductIDUpDown.Text) && IsInteger(uiSaleProductIDUpDown.Text))
+            {
+                saleSearchProducts();
+            }
         }
 
         private void uiSaleProductNameTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-
+            if (e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(uiSaleProductNameTextBox.Text))
+            {
+                    saleSearchProducts();
+            }
         }
 
         /// <summary>
@@ -927,19 +953,27 @@ namespace SarreSports
             return customerListingListViewItems.ToArray();
         }
 
+        //uiSaleBasketListView.Columns.Add("Product ID", 200, HorizontalAlignment.Left);
+        //uiSaleBasketListView.Columns.Add("Product Name", 400, HorizontalAlignment.Left);
+        //uiSaleBasketListView.Columns.Add("Quantity", 125, HorizontalAlignment.Left);
+        //uiSaleBasketListView.Columns.Add("Item Cost", 125, HorizontalAlignment.Left);
+        //uiSaleBasketListView.Columns.Add("Total Cost", -2, HorizontalAlignment.Left);
+
         public ListViewItem[] getProductListViewItems()
         {
             var productListingListViewItems = new List<ListViewItem>();
 
-            //foreach (var customer in currentBranch.MCustomers())
-            //{
-            //    ListViewItem customerItem = new ListViewItem(customer.ID().ToString());
-            //    customerItem.SubItems.Add(customer.FullName());
-            //    customerListingListViewItems.Add(customerItem);
-            //}
+            foreach (Supplier supplier in currentBranch.MSuppliers())
+            {
+                foreach (var product in supplier.MProducts())
+                {
+                    ListViewItem productItem = new ListViewItem(product.ID.ToString());
+                    productItem.SubItems.Add(product.Name);
+                    productListingListViewItems.Add(productItem);
+                }
+            }
 
-            //return customerListingListViewItems.ToArray();
-            return null;
+            return productListingListViewItems.ToArray();
         }
 
         public ListViewItem[] getSupplierListViewItems()

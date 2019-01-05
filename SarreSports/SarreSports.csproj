@@ -52,12 +52,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Item\ItemForms\IItemForm.cs" />
+    <Compile Include="Item\NewItemForms\IItemForm.cs" />
     <Compile Include="Item\Accessory.cs" />
-    <Compile Include="Item\ItemForms\itemSelector.cs">
+    <Compile Include="Item\NewItemForms\itemSelector.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Item\ItemForms\itemSelector.Designer.cs">
+    <Compile Include="Item\NewItemForms\itemSelector.Designer.cs">
       <DependentUpon>itemSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="Item\Accessory\Bag.cs" />
@@ -79,34 +79,34 @@
     </Compile>
     <Compile Include="Branch\NullBranch.cs" />
     <Compile Include="MailClient.cs" />
-    <Compile Include="Item\ItemForms\newItem.cs">
+    <Compile Include="Item\NewItemForms\newItem.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Item\ItemForms\newItem.Designer.cs">
+    <Compile Include="Item\NewItemForms\newItem.Designer.cs">
       <DependentUpon>newItem.cs</DependentUpon>
     </Compile>
-    <Compile Include="Item\ItemForms\newBag.cs">
+    <Compile Include="Item\NewItemForms\newBag.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Item\ItemForms\newBag.Designer.cs">
+    <Compile Include="Item\NewItemForms\newBag.Designer.cs">
       <DependentUpon>newBag.cs</DependentUpon>
     </Compile>
-    <Compile Include="Item\ItemForms\newShoe.cs">
+    <Compile Include="Item\NewItemForms\newShoe.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Item\ItemForms\newShoe.Designer.cs">
+    <Compile Include="Item\NewItemForms\newShoe.Designer.cs">
       <DependentUpon>newShoe.cs</DependentUpon>
     </Compile>
-    <Compile Include="Item\ItemForms\newClothing.cs">
+    <Compile Include="Item\NewItemForms\newClothing.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Item\ItemForms\newClothing.Designer.cs">
+    <Compile Include="Item\NewItemForms\newClothing.Designer.cs">
       <DependentUpon>newClothing.cs</DependentUpon>
     </Compile>
-    <Compile Include="Item\ItemForms\newNutrition.cs">
+    <Compile Include="Item\NewItemForms\newNutrition.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Item\ItemForms\newNutrition.Designer.cs">
+    <Compile Include="Item\NewItemForms\newNutrition.Designer.cs">
       <DependentUpon>newNutrition.cs</DependentUpon>
     </Compile>
     <Compile Include="newSupplier.cs">
@@ -142,25 +142,25 @@
     <EmbeddedResource Include="genericSearch.resx">
       <DependentUpon>genericSearch.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Item\ItemForms\itemSelector.resx">
+    <EmbeddedResource Include="Item\NewItemForms\itemSelector.resx">
       <DependentUpon>itemSelector.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Item\ItemForms\newNutrition.resx">
+    <EmbeddedResource Include="Item\NewItemForms\newNutrition.resx">
       <DependentUpon>newNutrition.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="loginForm.resx">
       <DependentUpon>loginForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Item\ItemForms\newItem.resx">
+    <EmbeddedResource Include="Item\NewItemForms\newItem.resx">
       <DependentUpon>newItem.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Item\ItemForms\newBag.resx">
+    <EmbeddedResource Include="Item\NewItemForms\newBag.resx">
       <DependentUpon>newBag.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Item\ItemForms\newShoe.resx">
+    <EmbeddedResource Include="Item\NewItemForms\newShoe.resx">
       <DependentUpon>newShoe.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Item\ItemForms\newClothing.resx">
+    <EmbeddedResource Include="Item\NewItemForms\newClothing.resx">
       <DependentUpon>newClothing.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="newSupplier.resx">
@@ -194,6 +194,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Item\ViewItemForms\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
