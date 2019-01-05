@@ -1,10 +1,10 @@
-﻿//Project Name: SarreSports | File Name: newBag.cs
+﻿//Project Name: SarreSports | File Name: newWatch.cs
 //Author Name: Samuel Steven David Herring
 //Author Email: s.s.herring1042@canterbury.ac.uk
 //Author URI: http://sherring.me
 //UserID: sh1042
-//Created On: 4/1/2019 | 15:12
-//Last Updated On:  5/1/2019 | 00:54
+//Created On: 5/1/2019 | 16:08
+//Last Updated On:  5/1/2019 | 16:16
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,22 +17,23 @@ using System.Windows.Forms;
 
 namespace SarreSports
 {
-    public partial class newBag : newItem, IItemForm
+    public partial class newWatch : newItem, IItemForm
     {
-        public int capacityReturn { get; set; }
+        public Watch.watchType watchType { get; set; }
 
-        public newBag(string mainTitle, string supplierName)
+        public newWatch(string mainTitle, string supplierName)
         {
             InitializeComponent();
             base.updateMainTitle(mainTitle);
             base.updateSupplierName(supplierName);
+            uiWatchTypeComboBox.DataSource = Enum.GetValues(typeof(Watch.watchType));
         }
 
         protected override void addItem()
         {
             if (validateSpecificItemAttributes(out object[] elements) && base.validateGeneralItemAttributes())
             {
-                this.capacityReturn = (int)elements[0];
+                this.watchType = (Watch.watchType)elements[0];
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
@@ -44,17 +45,20 @@ namespace SarreSports
             uiSpecificItemAttributesErrorProvider.Clear();
 
             elements = new object[1];
-            int bagCapacity = -1;
+            Watch.watchType? watchType = null;
 
-            if (string.IsNullOrWhiteSpace(uiBagCapacityUpDown.Text) || !(int.TryParse(uiBagCapacityUpDown.Text, out bagCapacity)) 
-                                                                    || bagCapacity <= 0)
+            if (uiWatchTypeComboBox.SelectedIndex < 0)
             {
-                uiSpecificItemAttributesErrorProvider.SetError(uiBagCapacityUpDown, "Please enter valid bag capacity");
-                uiSpecificItemAttributesErrorProvider.SetIconPadding(uiBagCapacityUpDown, 10);
+                uiSpecificItemAttributesErrorProvider.SetError(uiWatchTypeComboBox, "Please select watch type");
+                uiSpecificItemAttributesErrorProvider.SetIconPadding(uiWatchTypeComboBox, 10);
                 valid = false;
             }
+            else
+            {
+                watchType = (Watch.watchType)uiWatchTypeComboBox.SelectedItem;
+            }
 
-            elements[0] = bagCapacity;
+            elements[0] = watchType;
             return valid;
         }
     }

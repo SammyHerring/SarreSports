@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 12/12/2018 | 17:04
-//Last Updated On:  3/1/2019 | 14:02
+//Last Updated On:  5/1/2019 | 15:52
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +25,7 @@ namespace SarreSports
             Leggings = 2,
             Vests = 3,
             Tops = 4,
-            Jackets = 5
+            Jackets = 5,
         }
         private clothingType style;
 

@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/1/2019 | 15:12
-//Last Updated On:  4/1/2019 | 17:15
+//Last Updated On:  5/1/2019 | 16:04
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,6 +36,10 @@ namespace SarreSports
 
         private void uiAddItemButton_Click(object sender, EventArgs e)
         {
+            itemNameReturn = uiItemNameTextBox.Text;
+            itemCostReturn = Math.Round(uiItemCostUpDown.Value, 2);
+            stockLevelReturn = Int32.Parse(uiStockLevelUpDown.Text);
+            restockLevelReturn = Int32.Parse(uiRestockLevelUpDown.Text);
             addItem();
         }
 
@@ -69,21 +73,24 @@ namespace SarreSports
                 valid = false;
             }
 
-            if (string.IsNullOrWhiteSpace(uiItemCostUpDown.Text) && decimal.TryParse(uiItemCostUpDown.Text, out decimal itemCost))
+            if (string.IsNullOrWhiteSpace(uiItemCostUpDown.Text) || !(decimal.TryParse(uiItemCostUpDown.Text, out decimal itemCost)) 
+                                                                 || itemCost <= 0.0m)
             {
                 uiGeneralItemAttributesErrorProvider.SetError(uiItemCostUpDown, "Please enter valid item cost");
                 uiGeneralItemAttributesErrorProvider.SetIconPadding(uiItemCostUpDown, 10);
                 valid = false;
             }
 
-            if (string.IsNullOrWhiteSpace(uiStockLevelUpDown.Text) && int.TryParse(uiStockLevelUpDown.Text, out int stockLevel))
+            if (string.IsNullOrWhiteSpace(uiStockLevelUpDown.Text) || !(int.TryParse(uiStockLevelUpDown.Text, out int stockLevel)) 
+                                                                   || stockLevel <= 0)
             {
                 uiGeneralItemAttributesErrorProvider.SetError(uiStockLevelUpDown, "Please enter valid initial stock level");
                 uiGeneralItemAttributesErrorProvider.SetIconPadding(uiStockLevelUpDown, 10);
                 valid = false;
             }
 
-            if (string.IsNullOrWhiteSpace(uiRestockLevelUpDown.Text) && int.TryParse(uiRestockLevelUpDown.Text, out int restockLevel))
+            if (string.IsNullOrWhiteSpace(uiRestockLevelUpDown.Text) || !(int.TryParse(uiRestockLevelUpDown.Text, out int restockLevel)) 
+                                                                     || restockLevel <= 0)
             {
                 uiGeneralItemAttributesErrorProvider.SetError(uiRestockLevelUpDown, "Please enter valid restock level");
                 uiGeneralItemAttributesErrorProvider.SetIconPadding(uiRestockLevelUpDown, 10);

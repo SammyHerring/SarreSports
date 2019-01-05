@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Item\ItemForms\IItemForm.cs" />
-    <Compile Include="Item\Accessory\Accessory.cs" />
+    <Compile Include="Item\Accessory.cs" />
     <Compile Include="Item\ItemForms\itemSelector.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +97,18 @@
     <Compile Include="Item\ItemForms\newShoe.Designer.cs">
       <DependentUpon>newShoe.cs</DependentUpon>
     </Compile>
+    <Compile Include="Item\ItemForms\newClothing.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Item\ItemForms\newClothing.Designer.cs">
+      <DependentUpon>newClothing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Item\ItemForms\newNutrition.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Item\ItemForms\newNutrition.Designer.cs">
+      <DependentUpon>newNutrition.cs</DependentUpon>
+    </Compile>
     <Compile Include="newSupplier.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,6 +116,12 @@
       <DependentUpon>newSupplier.cs</DependentUpon>
     </Compile>
     <Compile Include="Item\Accessory\Nutrition.cs" />
+    <Compile Include="newWatch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="newWatch.Designer.cs">
+      <DependentUpon>newWatch.cs</DependentUpon>
+    </Compile>
     <Compile Include="Person\Customer.cs" />
     <Compile Include="Person\Person.cs" />
     <Compile Include="Person\SystemUser.cs" />
@@ -127,6 +145,9 @@
     <EmbeddedResource Include="Item\ItemForms\itemSelector.resx">
       <DependentUpon>itemSelector.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Item\ItemForms\newNutrition.resx">
+      <DependentUpon>newNutrition.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="loginForm.resx">
       <DependentUpon>loginForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -139,8 +160,14 @@
     <EmbeddedResource Include="Item\ItemForms\newShoe.resx">
       <DependentUpon>newShoe.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Item\ItemForms\newClothing.resx">
+      <DependentUpon>newClothing.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="newSupplier.resx">
       <DependentUpon>newSupplier.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="newWatch.resx">
+      <DependentUpon>newWatch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="posForm.resx">
       <DependentUpon>posForm.cs</DependentUpon>

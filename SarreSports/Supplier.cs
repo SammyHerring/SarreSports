@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 12/12/2018 | 17:02
-//Last Updated On:  3/1/2019 | 22:30
+//Last Updated On:  4/1/2019 | 23:38
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,9 +39,25 @@ namespace SarreSports
             return id;
         }
 
-        public void newProduct(Item product)
+        public (bool Success, int productID) newProduct(Item product)
         {
-            mProducts.Add(product);
+            if (!(product is null))
+            {
+                try
+                {
+                    mProducts.Add(product);
+                    return (true, product.ID);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(String.Format("Error: {0}",ex.Message));
+                    return (false, -1);
+                }
+            }
+            else
+            {
+                return (false, -1);
+            }
         }
 
         public List<Item> MProducts()

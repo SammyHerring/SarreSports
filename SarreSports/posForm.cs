@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 10/12/2018 | 16:59
-//Last Updated On:  4/1/2019 | 15:46
+//Last Updated On:  5/1/2019 | 16:21
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -105,7 +105,7 @@ namespace SarreSports
             uiInventorySupplierItemsListView.Columns.Add("Item ID", 100, HorizontalAlignment.Left);
             uiInventorySupplierItemsListView.Columns.Add("Item Name", 250, HorizontalAlignment.Left);
             uiInventorySupplierItemsListView.Columns.Add("Item Type", 125, HorizontalAlignment.Left);
-            uiInventorySupplierItemsListView.Columns.Add("Item Cost", 100, HorizontalAlignment.Left);
+            uiInventorySupplierItemsListView.Columns.Add("Item Cost", 125, HorizontalAlignment.Left);
             uiInventorySupplierItemsListView.Columns.Add("Available", 100, HorizontalAlignment.Left);
             uiInventorySupplierItemsListView.Columns.Add("Stock Level", 125, HorizontalAlignment.Left);
             uiInventorySupplierItemsListView.Columns.Add("Restock Level", 125, HorizontalAlignment.Left);
@@ -713,6 +713,7 @@ namespace SarreSports
 
         private void inventoryLoadSupplier(int supplierID)
         {
+            changeTabState(Tabs.Inventory, TabStates.Default);
             groupBoxControlsEnabled(uiInventorySupplierItemsGroupBox, true);
             Console.WriteLine(String.Format("Tab: Inventory. Supplier ID: {0}. Loaded.", supplierID));
 
@@ -757,9 +758,17 @@ namespace SarreSports
         {
             if (type == Item.Type.Clothing)
             {
+                if (!newClothing(uiInventorySupplierIDUpDown.Text, uiInventorySuppliersComboBox.Text))
+                {
+                    return false;
+                }
                 return true;
             } else if (type == Item.Type.Shoe)
-            {
+            {   
+                if (!newShoe(uiInventorySupplierIDUpDown.Text, uiInventorySuppliersComboBox.Text))
+                {
+                    return false;
+                }
                 return true;
             }
             else
@@ -774,35 +783,24 @@ namespace SarreSports
             {
                 if (type == Accessory.accessoryType.Bag)
                 {
-                    using (newBag itemCreator = new newBag(Accessory.accessoryType.Bag.ToString(), uiInventorySuppliersComboBox.Text))
+                    if (!newBag(uiInventorySupplierIDUpDown.Text, uiInventorySuppliersComboBox.Text))
                     {
-                        var result = itemCreator.ShowDialog();
-
-                        if (result == DialogResult.OK)
-                        {
-
-                        }
-
-                        itemCreator.Dispose();
-                    };
-                    ////var currentSuppplier = currentBranch.createSupplier(new Supplier(suppliersSearch.supplierName));
-                    //if (currentSuppplier.Success)
-                    //{
-                    //    changeTabState(Tabs.Inventory, TabStates.Default);
-                    //    inventoryLoadSupplier(currentSuppplier.supplierID); //Load newly created customer
-                    //}
-                    //else
-                    //{
-                    //    //Supplier Creation Error
-                    //    MessageBox.Show("Supplier Creation Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    //    changeTabState(Tabs.Inventory, TabStates.Default);
-                    //}
+                        return false;
+                    }
                     return true;
                 } else if (type == Accessory.accessoryType.Nutrition)
                 {
+                    if (!newNutrition(uiInventorySupplierIDUpDown.Text, uiInventorySuppliersComboBox.Text))
+                    {
+                        return false;
+                    }
                     return true;
                 } else if (type == Accessory.accessoryType.Watch)
                 {
+                    if (!newWatch(uiInventorySupplierIDUpDown.Text, uiInventorySuppliersComboBox.Text))
+                    {
+                        return false;
+                    }
                     return true;
                 }
                 else
@@ -826,14 +824,8 @@ namespace SarreSports
         {
             if (uiInventorySuppliersComboBox.SelectedIndex > -1)
             {
-                changeTabState(Tabs.Inventory, TabStates.Default);
                 inventoryLoadSupplier(uiInventorySuppliersComboBox.SelectedIndex+1);
             }
-            else
-            {
-                changeTabState(Tabs.Inventory, TabStates.Default);
-            }
-
         }
 
         private void uiInventorySupplierIDUpDown_KeyDown(object sender, KeyEventArgs e)
@@ -972,7 +964,7 @@ namespace SarreSports
             {
                 if (supplier.ID() == supplierID)
                 {
-                    foreach (var item in supplier.MProducts())
+                    foreach (Item item in supplier.MProducts())
                     {
                         ListViewItem supplierItem = new ListViewItem(item.ID.ToString() ?? "Not Found");
                         
@@ -980,7 +972,7 @@ namespace SarreSports
 
                         supplierItem.SubItems.Add(item.Name ?? "Not Found");
                         supplierItem.SubItems.Add(item.ItemType.ToString() ?? "Not Found");
-                        supplierItem.SubItems.Add(item.Cost.ToString() ?? "Not Found");
+                        supplierItem.SubItems.Add(item.Cost.ToString("C2") ?? "Not Found");
 
                         if (item.availableForSale)
                         {
@@ -1360,6 +1352,234 @@ namespace SarreSports
         }
 
         private bool IsInteger(string value) => value.All(c => c >= '0' && c <= '9');
+
+        //Form-wide New Form Instances
+        private bool newClothing(string supplierIDString, string supplierNameString)
+        {
+            using (newClothing itemCreator = new newClothing(Item.Type.Clothing.ToString(), supplierNameString))
+            {
+                var result = itemCreator.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    if (int.TryParse(supplierIDString, out int supplierID))
+                    {
+                        var item = currentBranch.findSupplier(supplierID).newProduct(
+                            new Clothing(itemCreator.itemNameReturn,
+                                Item.Type.Clothing,
+                                itemCreator.itemCostReturn,
+                                itemCreator.stockLevelReturn,
+                                itemCreator.restockLevelReturn,
+                                itemCreator.clothingSize,
+                                itemCreator.clothingColour,
+                                itemCreator.clothingType));
+                        if (item.Success)
+                        {
+                            inventoryLoadSupplier(supplierID);
+                            itemCreator.Dispose();
+                            return true;
+                        }
+                        else
+                        {
+                            itemCreator.Dispose();
+                            return false;
+                        }
+                    } else
+                    {
+                        {
+                            itemCreator.Dispose();
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    itemCreator.Dispose();
+                    return true;
+                }
+            };
+        }
+
+        private bool newShoe(string supplierIDString, string supplierNameString)
+        {
+            using (newShoe itemCreator = new newShoe(Item.Type.Shoe.ToString(), supplierNameString))
+            {
+                var result = itemCreator.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    if (int.TryParse(supplierIDString, out int supplierID))
+                    {
+                        var item = currentBranch.findSupplier(supplierID).newProduct(
+                            new Shoe(itemCreator.itemNameReturn,
+                                Item.Type.Shoe,
+                                itemCreator.itemCostReturn,
+                                itemCreator.stockLevelReturn,
+                                itemCreator.restockLevelReturn,
+                                itemCreator.shoeSize,
+                                itemCreator.shoeType));
+                        if (item.Success)
+                        {
+                            inventoryLoadSupplier(supplierID);
+                            itemCreator.Dispose();
+                            return true;
+                        }
+                        else
+                        {
+                            itemCreator.Dispose();
+                            return false;
+                        }
+                    } else
+                    {
+                        {
+                            itemCreator.Dispose();
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    itemCreator.Dispose();
+                    return true;
+                }
+            };
+        }
+
+        private bool newBag(string supplierIDString, string supplierNameString)
+        {
+            using (newBag itemCreator = new newBag(Accessory.accessoryType.Bag.ToString(), supplierNameString))
+            {
+                var result = itemCreator.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    if (int.TryParse(supplierIDString, out int supplierID))
+                    {
+                        var item = currentBranch.findSupplier(supplierID).newProduct(
+                            new Bag(itemCreator.itemNameReturn,
+                                Item.Type.Accessory,
+                                itemCreator.itemCostReturn,
+                                itemCreator.stockLevelReturn,
+                                itemCreator.restockLevelReturn,
+                                Accessory.accessoryType.Bag,
+                                itemCreator.capacityReturn));
+                        if (item.Success)
+                        {
+                            inventoryLoadSupplier(supplierID);
+                            itemCreator.Dispose();
+                            return true;
+                        }
+                        else
+                        {
+                            itemCreator.Dispose();
+                            return false;
+                        }
+                    } else
+                    {
+                        {
+                            itemCreator.Dispose();
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    itemCreator.Dispose();
+                    return true;
+                }
+            };
+        }
+
+        private bool newNutrition(string supplierIDString, string supplierNameString)
+        {
+            using (newNutrition itemCreator = new newNutrition(Accessory.accessoryType.Nutrition.ToString(), supplierNameString))
+            {
+                var result = itemCreator.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    if (int.TryParse(supplierIDString, out int supplierID))
+                    {
+                        var item = currentBranch.findSupplier(supplierID).newProduct(
+                            new Nutrition(itemCreator.itemNameReturn,
+                                Item.Type.Accessory,
+                                itemCreator.itemCostReturn,
+                                itemCreator.stockLevelReturn,
+                                itemCreator.restockLevelReturn,
+                                itemCreator.nutritionQuantity,
+                                Accessory.accessoryType.Nutrition,
+                                itemCreator.nutritionType));
+                        if (item.Success)
+                        {
+                            inventoryLoadSupplier(supplierID);
+                            itemCreator.Dispose();
+                            return true;
+                        }
+                        else
+                        {
+                            itemCreator.Dispose();
+                            return false;
+                        }
+                    } else
+                    {
+                        {
+                            itemCreator.Dispose();
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    itemCreator.Dispose();
+                    return true;
+                }
+            };
+        }
+
+        private bool newWatch(string supplierIDString, string supplierNameString)
+        {
+            using (newWatch itemCreator = new newWatch(Accessory.accessoryType.Nutrition.ToString(), supplierNameString))
+            {
+                var result = itemCreator.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    if (int.TryParse(supplierIDString, out int supplierID))
+                    {
+                        var item = currentBranch.findSupplier(supplierID).newProduct(
+                            new Watch(itemCreator.itemNameReturn,
+                                Item.Type.Accessory,
+                                itemCreator.itemCostReturn,
+                                itemCreator.stockLevelReturn,
+                                itemCreator.restockLevelReturn,
+                                Accessory.accessoryType.Watch,
+                                itemCreator.watchType));
+                        if (item.Success)
+                        {
+                            inventoryLoadSupplier(supplierID);
+                            itemCreator.Dispose();
+                            return true;
+                        }
+                        else
+                        {
+                            itemCreator.Dispose();
+                            return false;
+                        }
+                    } else
+                    {
+                        {
+                            itemCreator.Dispose();
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    itemCreator.Dispose();
+                    return true;
+                }
+            };
+        }
 
         //Form-wide Events
         private void uiLogoutButton_Click(object sender, EventArgs e)

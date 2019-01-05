@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/12/2018 | 17:26
-//Last Updated On:  2/1/2019 | 01:02
+//Last Updated On:  4/1/2019 | 23:41
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -364,6 +364,16 @@ namespace SarreSports
             {
                 return (false, -1);
             }
+        }
+
+        public Supplier findSupplier(int supplierID)
+        {
+            foreach (var supplier in mSuppliers)
+            {
+                if (supplier.ID() == supplierID) return supplier;
+            }
+
+            return null;
         }
 
         //Branch List Accessors

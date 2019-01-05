@@ -3,8 +3,8 @@
 //Author Email: s.s.herring1042@canterbury.ac.uk
 //Author URI: http://sherring.me
 //UserID: sh1042
-//Created On: 3/1/2019 | 14:07
-//Last Updated On:  4/1/2019 | 02:12
+//Created On: 4/1/2019 | 15:12
+//Last Updated On:  5/1/2019 | 00:53
 namespace SarreSports
 {
     partial class newItem
@@ -111,6 +111,7 @@ namespace SarreSports
             this.uiRestockLevelUpDown.Location = new System.Drawing.Point(226, 257);
             this.uiRestockLevelUpDown.Name = "uiRestockLevelUpDown";
             this.uiRestockLevelUpDown.Size = new System.Drawing.Size(586, 44);
+            this.uiRestockLevelUpDown.Maximum = 1000;
             this.uiRestockLevelUpDown.TabIndex = 7;
             // 
             // uiRestockLevelLabel
@@ -127,6 +128,7 @@ namespace SarreSports
             this.uiStockLevelUpDown.Location = new System.Drawing.Point(226, 191);
             this.uiStockLevelUpDown.Name = "uiStockLevelUpDown";
             this.uiStockLevelUpDown.Size = new System.Drawing.Size(586, 44);
+            this.uiStockLevelUpDown.Maximum = 1000;
             this.uiStockLevelUpDown.TabIndex = 5;
             // 
             // uiStockLevelLabel
@@ -144,6 +146,7 @@ namespace SarreSports
             this.uiItemCostUpDown.Location = new System.Drawing.Point(226, 120);
             this.uiItemCostUpDown.Name = "uiItemCostUpDown";
             this.uiItemCostUpDown.Size = new System.Drawing.Size(586, 44);
+            this.uiItemCostUpDown.Maximum = 10000.00m;
             this.uiItemCostUpDown.TabIndex = 3;
             // 
             // uiItemCostLabel

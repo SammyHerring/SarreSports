@@ -4,11 +4,11 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/1/2019 | 17:13
-//Last Updated On:  4/1/2019 | 17:13
+//Last Updated On:  4/1/2019 | 17:26
 namespace SarreSports
 {
     public interface IItemForm
     {
-        bool validateSpecificItemAttributes();
+        bool validateSpecificItemAttributes(out object[] elements);
     }
 }
