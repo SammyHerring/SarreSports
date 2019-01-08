@@ -3,8 +3,8 @@
 //Author Email: s.s.herring1042@canterbury.ac.uk
 //Author URI: http://sherring.me
 //UserID: sh1042
-//Created On: 4/1/2019 | 02:35
-//Last Updated On:  4/1/2019 | 14:49
+//Created On: 4/1/2019 | 17:34
+//Last Updated On:  7/1/2019 | 22:55
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +21,14 @@ namespace SarreSports
             Nutrition = 1,
             Watch = 2
         }
-
         public accessoryType AccessoryType { get; }
 
-        public Accessory(string name, Type itemType, decimal cost, int stockLevel, int restockLevel, accessoryType AccessoryType) 
+        protected Accessory(string name, Type itemType, decimal cost, int stockLevel, int restockLevel, accessoryType type) 
             : base(name, itemType, cost, stockLevel, restockLevel)
         {
+            this.AccessoryType = type;
         }
+
+        
     }
 }

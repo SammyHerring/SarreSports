@@ -52,6 +52,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Generic.cs" />
+    <Compile Include="genericNumericEntry.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="genericNumericEntry.Designer.cs">
+      <DependentUpon>genericNumericEntry.cs</DependentUpon>
+    </Compile>
     <Compile Include="Item\NewItemForms\IItemForm.cs" />
     <Compile Include="Item\Accessory.cs" />
     <Compile Include="Item\NewItemForms\itemSelector.cs">
@@ -116,10 +123,10 @@
       <DependentUpon>newSupplier.cs</DependentUpon>
     </Compile>
     <Compile Include="Item\Accessory\Nutrition.cs" />
-    <Compile Include="newWatch.cs">
+    <Compile Include="Item\NewItemForms\newWatch.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="newWatch.Designer.cs">
+    <Compile Include="Item\NewItemForms\newWatch.Designer.cs">
       <DependentUpon>newWatch.cs</DependentUpon>
     </Compile>
     <Compile Include="Person\Customer.cs" />
@@ -139,6 +146,45 @@
     <Compile Include="Item\Shoe.cs" />
     <Compile Include="Supplier.cs" />
     <Compile Include="Item\Accessory\Watch.cs" />
+    <Compile Include="Item\ViewItemForms\viewItem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Item\ViewItemForms\viewItem.Designer.cs">
+      <DependentUpon>viewItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Item\ViewItemForms\viewBag.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Item\ViewItemForms\viewBag.Designer.cs">
+      <DependentUpon>viewBag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Item\ViewItemForms\viewClothing.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Item\ViewItemForms\viewClothing.Designer.cs">
+      <DependentUpon>viewClothing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Item\ViewItemForms\viewNutrition.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Item\ViewItemForms\viewNutrition.Designer.cs">
+      <DependentUpon>viewNutrition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Item\ViewItemForms\viewShoe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Item\ViewItemForms\viewShoe.Designer.cs">
+      <DependentUpon>viewShoe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Item\ViewItemForms\viewWatch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Item\ViewItemForms\viewWatch.Designer.cs">
+      <DependentUpon>viewWatch.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="genericNumericEntry.resx">
+      <DependentUpon>genericNumericEntry.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="genericSearch.resx">
       <DependentUpon>genericSearch.cs</DependentUpon>
     </EmbeddedResource>
@@ -166,7 +212,7 @@
     <EmbeddedResource Include="newSupplier.resx">
       <DependentUpon>newSupplier.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="newWatch.resx">
+    <EmbeddedResource Include="Item\NewItemForms\newWatch.resx">
       <DependentUpon>newWatch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="posForm.resx">
@@ -181,6 +227,24 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Item\ViewItemForms\viewItem.resx">
+      <DependentUpon>viewItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Item\ViewItemForms\viewBag.resx">
+      <DependentUpon>viewBag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Item\ViewItemForms\viewClothing.resx">
+      <DependentUpon>viewClothing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Item\ViewItemForms\viewNutrition.resx">
+      <DependentUpon>viewNutrition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Item\ViewItemForms\viewShoe.resx">
+      <DependentUpon>viewShoe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Item\ViewItemForms\viewWatch.resx">
+      <DependentUpon>viewWatch.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -195,8 +259,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Item\ViewItemForms\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

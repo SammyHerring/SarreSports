@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 12/12/2018 | 17:04
-//Last Updated On:  5/1/2019 | 15:52
+//Last Updated On:  7/1/2019 | 15:29
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,5 +33,8 @@ namespace SarreSports
             this.size = size;
             this.type = type;
         }
+
+        public decimal Size => size;
+        public shoeType ShoeType => type;
     }
 }

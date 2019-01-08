@@ -16,5 +16,7 @@ namespace SarreSports
         {
             this.capacity = capacity;
         }
+
+        public int Capacity => capacity;
     }
 }

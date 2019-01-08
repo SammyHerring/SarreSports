@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 10/12/2018 | 16:59
-//Last Updated On:  5/1/2019 | 16:37
+//Last Updated On:  8/1/2019 | 00:55
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -36,6 +36,7 @@ namespace SarreSports
     {
         private Branch currentBranch;
         private SystemUser currentUser;
+        private List<Item> currentBasket = new List<Item>();
 
         private enum Tabs
         {
@@ -159,7 +160,7 @@ namespace SarreSports
 
         private void uiSaleSaleButton_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         private void uiSaleRemoveItemButton_Click(object sender, EventArgs e)
@@ -177,7 +178,7 @@ namespace SarreSports
         {
             string initialSearch = "";
 
-            if (!string.IsNullOrEmpty(uiSaleCustomerIDUpDown.Text) && IsInteger(uiSaleCustomerIDUpDown.Text))
+            if (!string.IsNullOrEmpty(uiSaleCustomerIDUpDown.Text) && Generic.IsInteger(uiSaleCustomerIDUpDown.Text))
             {
                 initialSearch = uiSaleCustomerIDUpDown.Text;
             } else if (!string.IsNullOrEmpty(uiSaleCustomerNameTextBox.Text))
@@ -227,7 +228,7 @@ namespace SarreSports
         {
             string initialSearch = "";
 
-            if (!string.IsNullOrEmpty(uiSaleProductIDUpDown.Text) && IsInteger(uiSaleProductIDUpDown.Text))
+            if (!string.IsNullOrEmpty(uiSaleProductIDUpDown.Text) && Generic.IsInteger(uiSaleProductIDUpDown.Text))
             {
                 initialSearch = uiSaleProductIDUpDown.Text;
             } else if (!string.IsNullOrEmpty(uiSaleProductNameTextBox.Text))
@@ -250,13 +251,83 @@ namespace SarreSports
 
         private void saleLoadProduct(int productID)
         {
+            changeTabState(Tabs.Sale, TabStates.Loaded_Product);
+            Console.WriteLine(String.Format("Tab: Sale. Product ID: {0}. Loaded.", productID));
 
+            uiSaleProductIDUpDown.Text = productID.ToString();
+            Item currentProduct = currentBranch.findProduct(productID);
+            if (currentProduct != null)
+            {
+                uiSaleProductNameTextBox.Text = currentProduct.Name;
+                if (currentProduct.ItemType == Item.Type.Accessory)
+                {
+                    Accessory currentAccessory = (Accessory)currentProduct;
+                    saleLoadItemViewer(productID, currentProduct.ItemType, currentAccessory.AccessoryType);
+                }
+                else
+                {
+                    saleLoadItemViewer(productID, currentProduct.ItemType);
+                }
+                
+                changeTabState(Tabs.Sale, TabStates.Loaded_Product);
+                uiSaleProductIDUpDown.Text = productID.ToString();
+                uiSaleProductNameTextBox.Text = currentProduct.Name;
+            }
+            else
+            {
+                MessageBox.Show("Product Not Found\n" +
+                                "Try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                changeTabState(Tabs.Sale, TabStates.Loaded_Customer);
+            }
+            
+        }
+
+        private void saleLoadItemViewer(int productID, Item.Type type, Accessory.accessoryType? accessoryType = null)
+        {
+            var newItem = currentBranch.newViewItemForm(productID, type, accessoryType, viewItem.viewItemState.Buy);
+            var product = currentBranch.findProduct(productID);
+
+            if (newItem.success)
+            {
+                if (newItem.valueReturn > 0)
+                {
+                    if (product.availableForSale && product.StockLevel >= newItem.valueReturn && saleCheckOrderedQuantity(product, newItem.valueReturn))
+                    {
+                        for (int itemCount = 0; itemCount < newItem.valueReturn; itemCount++)
+                            {
+                                currentBasket.Add(product);
+                            }
+                    } else
+                    {
+                        MessageBox.Show("Product Not Available.\n" +
+                                        "Due to quantity required or seller availability.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void saleLoadBasket()
+        {
+            uiSaleBasketListView.Items.Clear();
+            uiSaleBasketListView.Items.AddRange(getBasketListViewItems());
+        }
+
+        private bool saleCheckOrderedQuantity(Item product, int newOrderQuantity)
+        {
+            var currentBasketDuplicates = currentBasket
+                .GroupBy(i => i)
+                .Where(g => g.Count() > 1)
+                .Select(g => g.Key);
+
+            var itemQuantity = currentBasket.Count(Item => currentBasketDuplicates.Contains(product));
+
+            return (itemQuantity + newOrderQuantity <= product.StockLevel);
         }
 
         //Sale General Events
         private void uiSaleCustomerIDUpDown_KeyDown(object sender, KeyEventArgs e)
         {
-            if ((e.KeyCode == Keys.Enter) && !string.IsNullOrEmpty(uiSaleCustomerIDUpDown.Text) && IsInteger(uiSaleCustomerIDUpDown.Text))
+            if ((e.KeyCode == Keys.Enter) && !string.IsNullOrEmpty(uiSaleCustomerIDUpDown.Text) && Generic.IsInteger(uiSaleCustomerIDUpDown.Text))
             {
                 saleSearchCustomers();
             }
@@ -280,7 +351,7 @@ namespace SarreSports
 
         private void uiSaleProductIDUpDown_KeyDown(object sender, KeyEventArgs e)
         {
-            if ((e.KeyCode == Keys.Enter) && !string.IsNullOrEmpty(uiSaleProductIDUpDown.Text) && IsInteger(uiSaleProductIDUpDown.Text))
+            if ((e.KeyCode == Keys.Enter) && !string.IsNullOrEmpty(uiSaleProductIDUpDown.Text) && Generic.IsInteger(uiSaleProductIDUpDown.Text))
             {
                 saleSearchProducts();
             }
@@ -348,7 +419,7 @@ namespace SarreSports
         {
             string initialSearch = "";
 
-            if (!string.IsNullOrEmpty(uiCustomersCustomerIDUpDown.Text) && IsInteger(uiCustomersCustomerIDUpDown.Text))
+            if (!string.IsNullOrEmpty(uiCustomersCustomerIDUpDown.Text) && Generic.IsInteger(uiCustomersCustomerIDUpDown.Text))
             {
                 initialSearch = uiCustomersCustomerIDUpDown.Text;
             } else if (!string.IsNullOrEmpty(uiCustomersCustomerNameTextBox.Text))
@@ -634,7 +705,7 @@ namespace SarreSports
 
         private void uiCustomersCustomerIDUpDown_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(uiCustomersCustomerIDUpDown.Text) && IsInteger(uiCustomersCustomerIDUpDown.Text))
+            if (e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(uiCustomersCustomerIDUpDown.Text) && Generic.IsInteger(uiCustomersCustomerIDUpDown.Text))
             {
                 customersSearchCustomer();
             }
@@ -856,7 +927,7 @@ namespace SarreSports
 
         private void uiInventorySupplierIDUpDown_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(uiInventorySupplierIDUpDown.Text) && IsInteger(uiInventorySupplierIDUpDown.Text))
+            if (e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(uiInventorySupplierIDUpDown.Text) && Generic.IsInteger(uiInventorySupplierIDUpDown.Text))
             {
                 inventorySearchSupplier();
             }
@@ -953,11 +1024,37 @@ namespace SarreSports
             return customerListingListViewItems.ToArray();
         }
 
-        //uiSaleBasketListView.Columns.Add("Product ID", 200, HorizontalAlignment.Left);
-        //uiSaleBasketListView.Columns.Add("Product Name", 400, HorizontalAlignment.Left);
-        //uiSaleBasketListView.Columns.Add("Quantity", 125, HorizontalAlignment.Left);
-        //uiSaleBasketListView.Columns.Add("Item Cost", 125, HorizontalAlignment.Left);
-        //uiSaleBasketListView.Columns.Add("Total Cost", -2, HorizontalAlignment.Left);
+        public ListViewItem[] getBasketListViewItems()
+        {
+
+        var productListingListViewItems = new List<ListViewItem>();
+        var itemsAdded = new List<Item>();
+
+            var currentBasketDuplicates = currentBasket
+                .GroupBy(i => i)
+                .Where(g => g.Count() > 1)
+                .Select(g => g.Key);
+
+            foreach (Item item in currentBasket)
+            {
+                if ((currentBasketDuplicates.Contains(item) && !itemsAdded.Contains(item)) ||
+                    !currentBasketDuplicates.Contains(item))
+                {
+                    var itemQuantity = currentBasket.Count(Item => currentBasketDuplicates.Contains(item));
+
+                    ListViewItem productItem = new ListViewItem(item.ID.ToString());
+                    productItem.SubItems.Add(item.Name);
+                    productItem.SubItems.Add(itemQuantity.ToString());
+                    productItem.SubItems.Add(item.Cost.ToString("C2"));
+                    productItem.SubItems.Add((itemQuantity * item.Cost).ToString("C2"));
+
+                    itemsAdded.Add(item);
+                    productListingListViewItems.Add(productItem);
+                }
+            }
+
+            return productListingListViewItems.ToArray();
+        }
 
         public ListViewItem[] getProductListViewItems()
         {
@@ -1157,6 +1254,9 @@ namespace SarreSports
 
                             resetGroupBoxControls(uiSalePurchaseGroupBox);
                             groupBoxControlsEnabled(uiSalePurchaseGroupBox, false);
+
+                            //Data Control
+                            currentBasket.Clear();
                             break;
                         case TabStates.Loaded_Customer:
                             //Element 1
@@ -1178,6 +1278,8 @@ namespace SarreSports
                             uiSaleProductIDUpDown.Focus();
                             resetGroupBoxControls(uiSalePurchaseGroupBox);
                             groupBoxControlsEnabled(uiSalePurchaseGroupBox, true);
+
+                            saleLoadBasket();
                             break;
                         case TabStates.Loaded_Product:
                             //Element 3
@@ -1195,6 +1297,8 @@ namespace SarreSports
                             uiSaleAddToBasketButton.Enabled = false;
 
                             uiSaleCancelProductSelectionButton.Show();
+
+                            saleLoadBasket();
                             break;
                         default:
                             Console.WriteLine("Tab State Changed Failed.");
@@ -1384,8 +1488,6 @@ namespace SarreSports
                     break;
             }
         }
-
-        private bool IsInteger(string value) => value.All(c => c >= '0' && c <= '9');
 
         //Form-wide New Form Instances
         private bool newClothing(string supplierIDString, string supplierNameString)
@@ -1626,35 +1728,6 @@ namespace SarreSports
             {
                 e.Cancel = true;
             } 
-        }
-    }
-
-    /// <summary>
-    /// Extension to String Class to allow  new string specific functions
-    /// </summary>
-    public static class StringExtensions
-    {
-        /// <summary>
-        /// Capitalises first character of a string and returns the new string
-        /// </summary>
-        /// <param name="input">Input String</param>
-        /// <returns>Capitalised Input String</returns>
-        public static string FirstCharToUpper(this string input)
-        {
-            switch (input)
-            {
-                case null: throw new ArgumentNullException(nameof(input));
-                case "": return null; //throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)) IsUdtRet;
-                default:
-                    if (input.Contains(' '))
-                    {
-                        TextInfo textInfo = new CultureInfo("en-UK",false).TextInfo;
-                        return (string)textInfo.ToTitleCase(input);
-                    } else
-                    {
-                        return input.First().ToString().ToUpper() + input.Substring(1);
-                    }
-            }
         }
     }
 }

@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 5/1/2019 | 15:10
-//Last Updated On:  5/1/2019 | 15:57
+//Last Updated On:  7/1/2019 | 15:38
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -67,6 +67,10 @@ namespace SarreSports
                 uiSpecificItemAttributesErrorProvider.SetIconPadding(uiClothingColourTextBox, 10);
                 valid = false;
             }
+            else
+            {
+                clothingColour = uiClothingColourTextBox.Text;
+            }
 
             if (uiClothingTypeComboBox.SelectedIndex < 0)
             {
@@ -83,6 +87,11 @@ namespace SarreSports
             elements[1] = clothingColour;
             elements[2] = clothingType;
             return valid;
+        }
+
+        private void newClothing_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

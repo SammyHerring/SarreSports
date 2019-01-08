@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/12/2018 | 17:26
-//Last Updated On:  4/1/2019 | 23:41
+//Last Updated On:  7/1/2019 | 22:41
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -374,6 +374,92 @@ namespace SarreSports
             }
 
             return null;
+        }
+
+        //Product General Methods
+        public Item findProduct(int productID)
+        {
+            foreach (Supplier supplier in mSuppliers)
+            {
+                foreach (var product in supplier.MProducts())
+                {
+                    if (product.ID == productID) return product;
+                }
+            }
+
+            return null;
+        }
+
+        public Supplier findProductSupplier(int productID)
+        {
+            foreach (Supplier supplier in mSuppliers)
+            {
+                foreach (var product in supplier.MProducts())
+                {
+                    if (product.ID == productID) return supplier;
+                }
+            }
+
+            return null;
+        }
+
+        //public Item purchaseProduct
+
+        //Product Form Methods
+        public (bool success, int valueReturn) newViewItemForm(int productID, Item.Type type, Accessory.accessoryType? accessoryType, viewItem.viewItemState state = viewItem.viewItemState.View)
+        {
+            if (type == Item.Type.Accessory && accessoryType != null)
+            {
+                if (accessoryType == Accessory.accessoryType.Bag)
+                {
+                    return newViewBagForm(productID, this, state);
+                } else if (accessoryType == Accessory.accessoryType.Nutrition)
+                {
+                    return (false, -1);
+                } else if (accessoryType == Accessory.accessoryType.Watch)
+                {
+                    return (false, -1);
+                }
+                else
+                {
+                    //Failure to Select Type
+                    return (false, -1);
+                }
+            }
+            else
+            {
+                if (type == Item.Type.Clothing)
+                {
+                    return (false, -1);
+                } else if (type == Item.Type.Shoe)
+                {
+                    return (false, -1);
+                }
+                else
+                {
+                    //Failed to Select Type
+                    return (false, -1);
+                }
+            }
+        }
+
+        private (bool success, int valueReturn) newViewBagForm(int productID, Branch currentBranch, viewItem.viewItemState state)
+        {
+            using (viewBag itemCreator = new viewBag(productID, this, state))
+            {
+                var result = itemCreator.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    itemCreator.Dispose();
+                    return (true, itemCreator.valueReturn);
+                }
+                else
+                {
+                    itemCreator.Dispose();
+                    return (false, -1);
+                }
+            };
         }
 
         //Branch List Accessors

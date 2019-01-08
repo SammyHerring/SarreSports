@@ -61,7 +61,7 @@ namespace SarreSports
             this.uiSpecificItemAttributesGroupBox.Location = new System.Drawing.Point(24, 480);
             this.uiSpecificItemAttributesGroupBox.Name = "uiSpecificItemAttributesGroupBox";
             this.uiSpecificItemAttributesGroupBox.Size = new System.Drawing.Size(888, 186);
-            this.uiSpecificItemAttributesGroupBox.TabIndex = 8;
+            this.uiSpecificItemAttributesGroupBox.TabIndex = 4;
             this.uiSpecificItemAttributesGroupBox.TabStop = false;
             this.uiSpecificItemAttributesGroupBox.Text = "Specific Item Attributes";
             // 
@@ -71,7 +71,7 @@ namespace SarreSports
             this.uiNutritionTypeComboBox.Location = new System.Drawing.Point(226, 116);
             this.uiNutritionTypeComboBox.Name = "uiNutritionTypeComboBox";
             this.uiNutritionTypeComboBox.Size = new System.Drawing.Size(586, 45);
-            this.uiNutritionTypeComboBox.TabIndex = 5;
+            this.uiNutritionTypeComboBox.TabIndex = 3;
             // 
             // uiNutritionTypeLabel
             // 
@@ -79,7 +79,7 @@ namespace SarreSports
             this.uiNutritionTypeLabel.Location = new System.Drawing.Point(6, 119);
             this.uiNutritionTypeLabel.Name = "uiNutritionTypeLabel";
             this.uiNutritionTypeLabel.Size = new System.Drawing.Size(217, 37);
-            this.uiNutritionTypeLabel.TabIndex = 4;
+            this.uiNutritionTypeLabel.TabIndex = 2;
             this.uiNutritionTypeLabel.Text = "Nutrition Type";
             // 
             // uiNutritionQuantityUpDown
@@ -92,7 +92,7 @@ namespace SarreSports
             0});
             this.uiNutritionQuantityUpDown.Name = "uiNutritionQuantityUpDown";
             this.uiNutritionQuantityUpDown.Size = new System.Drawing.Size(586, 44);
-            this.uiNutritionQuantityUpDown.TabIndex = 3;
+            this.uiNutritionQuantityUpDown.TabIndex = 1;
             // 
             // uiNutritionQuantityLabel
             // 

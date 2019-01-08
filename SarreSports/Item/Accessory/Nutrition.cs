@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/1/2019 | 15:12
-//Last Updated On:  5/1/2019 | 15:52
+//Last Updated On:  7/1/2019 | 15:29
 namespace SarreSports
 {
     public class Nutrition : Accessory
@@ -25,5 +25,8 @@ namespace SarreSports
             this.quantity = quantity;
             this.type = type;
         }
+
+        public int Quantity => quantity;
+        public nutritionType NutritionType => type;
     }
 }

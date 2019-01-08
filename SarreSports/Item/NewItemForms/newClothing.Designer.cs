@@ -37,12 +37,12 @@ namespace SarreSports
         {
             this.components = new System.ComponentModel.Container();
             this.uiSpecificItemAttributesGroupBox = new System.Windows.Forms.GroupBox();
+            this.uiClothingColourTextBox = new System.Windows.Forms.TextBox();
+            this.uiClothingColourLabel = new System.Windows.Forms.Label();
             this.uiClothingTypeComboBox = new System.Windows.Forms.ComboBox();
             this.uiClothingTypeLabel = new System.Windows.Forms.Label();
             this.uiClothingSizeUpDown = new System.Windows.Forms.NumericUpDown();
             this.uiClothingSizeLabel = new System.Windows.Forms.Label();
-            this.uiClothingColourLabel = new System.Windows.Forms.Label();
-            this.uiClothingColourTextBox = new System.Windows.Forms.TextBox();
             this.uiSpecificItemAttributesErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.uiSpecificItemAttributesGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uiClothingSizeUpDown)).BeginInit();
@@ -64,6 +64,22 @@ namespace SarreSports
             this.uiSpecificItemAttributesGroupBox.TabIndex = 7;
             this.uiSpecificItemAttributesGroupBox.TabStop = false;
             this.uiSpecificItemAttributesGroupBox.Text = "Specific Item Attributes";
+            // 
+            // uiClothingColourTextBox
+            // 
+            this.uiClothingColourTextBox.Location = new System.Drawing.Point(226, 128);
+            this.uiClothingColourTextBox.Name = "uiClothingColourTextBox";
+            this.uiClothingColourTextBox.Size = new System.Drawing.Size(586, 44);
+            this.uiClothingColourTextBox.TabIndex = 7;
+            // 
+            // uiClothingColourLabel
+            // 
+            this.uiClothingColourLabel.AutoSize = true;
+            this.uiClothingColourLabel.Location = new System.Drawing.Point(6, 131);
+            this.uiClothingColourLabel.Name = "uiClothingColourLabel";
+            this.uiClothingColourLabel.Size = new System.Drawing.Size(112, 37);
+            this.uiClothingColourLabel.TabIndex = 6;
+            this.uiClothingColourLabel.Text = "Colour";
             // 
             // uiClothingTypeComboBox
             // 
@@ -103,22 +119,6 @@ namespace SarreSports
             this.uiClothingSizeLabel.TabIndex = 0;
             this.uiClothingSizeLabel.Text = "Clothing Size";
             // 
-            // uiClothingColourLabel
-            // 
-            this.uiClothingColourLabel.AutoSize = true;
-            this.uiClothingColourLabel.Location = new System.Drawing.Point(6, 131);
-            this.uiClothingColourLabel.Name = "uiClothingColourLabel";
-            this.uiClothingColourLabel.Size = new System.Drawing.Size(112, 37);
-            this.uiClothingColourLabel.TabIndex = 6;
-            this.uiClothingColourLabel.Text = "Colour";
-            // 
-            // uiClothingColourTextBox
-            // 
-            this.uiClothingColourTextBox.Location = new System.Drawing.Point(226, 128);
-            this.uiClothingColourTextBox.Name = "uiClothingColourTextBox";
-            this.uiClothingColourTextBox.Size = new System.Drawing.Size(586, 44);
-            this.uiClothingColourTextBox.TabIndex = 7;
-            // 
             // uiSpecificItemAttributesErrorProvider
             // 
             this.uiSpecificItemAttributesErrorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
@@ -132,6 +132,7 @@ namespace SarreSports
             this.Controls.Add(this.uiSpecificItemAttributesGroupBox);
             this.Name = "newClothing";
             this.Text = "PoS System | New Clothing";
+            this.Load += new System.EventHandler(this.newClothing_Load);
             this.Controls.SetChildIndex(this.uiAddItemButton, 0);
             this.Controls.SetChildIndex(this.uiSpecificItemAttributesGroupBox, 0);
             this.uiSpecificItemAttributesGroupBox.ResumeLayout(false);
