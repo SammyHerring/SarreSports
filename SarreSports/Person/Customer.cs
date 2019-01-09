@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/12/2018 | 18:18
-//Last Updated On:  28/12/2018 | 15:01
+//Last Updated On:  9/1/2019 | 02:19
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -116,9 +116,34 @@ namespace SarreSports
             }
         }
 
+        public List<Purchase> MPurchases => mPurchases;
+
+        public Purchase findPurchase(int purchaseID)
+        {
+            foreach (var purchase in mPurchases)
+            {
+                if (purchase.ID == purchaseID) return purchase;
+            }
+
+            return null;
+        }
+
         public bool SendCustomerDetails(Branch b)
         {
             return MailClient.SendCustomerDetailsToCustomer(this, b);
+        }
+
+        public (bool success, int purchaseID) newPurchase(DateTime date, List<Item> currentBasket, decimal orderTotalCost)
+        {
+            try
+            {
+                mPurchases.Add(new Purchase(date, currentBasket, orderTotalCost));
+                return (true, mPurchases.Last().ID);
+            }
+            catch (Exception)
+            {
+                return (false, -1);
+            }
         }
     }
 }

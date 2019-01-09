@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 6/1/2019 | 19:25
-//Last Updated On:  7/1/2019 | 22:52
+//Last Updated On:  8/1/2019 | 14:37
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -48,6 +48,14 @@ namespace SarreSports
         }
 
         private void uiSubmitButton_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                returnValue();
+            }
+        }
+
+        private void uiNumericValueUpDown_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {

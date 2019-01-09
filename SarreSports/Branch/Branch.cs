@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/12/2018 | 17:26
-//Last Updated On:  7/1/2019 | 22:41
+//Last Updated On:  9/1/2019 | 12:21
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +52,11 @@ namespace SarreSports
             return branchName;
         }
 
+        /// <summary>
+        /// Customer
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns></returns>
         //Customer General Methods
         public (bool Success, int customerID) createCustomer(Customer customer)
         {
@@ -100,6 +105,116 @@ namespace SarreSports
                 Console.WriteLine(String.Format("Error: {0}", ex.Message));
                 return false;
             }
+        }
+
+        public (bool success, int purchaseID, decimal purchaseCost) purchaseCustomer(int customerID, List<Item> currentBasket)
+        {
+            var currentCustomer = findCustomer(customerID);
+            if (currentCustomer != null)
+            {
+                decimal orderTotalCost = 0.0m;
+
+                foreach (var item in currentBasket)
+                {
+                    if (!item.sell(1))
+                    {
+                        return (false, -1, -1.0m);
+                    }
+                    else
+                    {
+                        orderTotalCost += item.Cost;
+                    }
+                }
+
+                var customerPurchaseOrder = currentCustomer.newPurchase(DateTime.Now, currentBasket, orderTotalCost);
+
+                if (customerPurchaseOrder.success)
+                {
+                    return (true, customerPurchaseOrder.purchaseID, orderTotalCost);
+                }
+                else
+                {
+                    return (false, -1, -1.0m);
+                }
+            }
+            else
+            {
+                return (false, -1, -1.0m);
+            }
+        }
+
+        public bool newPurchaseView(int purchaseID, int customerID)
+        {
+            try
+            {
+                Customer customer = findCustomer(customerID);
+                Purchase purchase = customer.findPurchase(purchaseID);
+                if (customer != null && purchase != null)
+                {
+                    using (viewPurchaseOrder purchasesOrderView = new viewPurchaseOrder(purchaseID.ToString(),
+                        customer.FullName(),
+                        purchase.PurchaseDate,
+                        purchase.OrderTotalCost,
+                        getPurchaseViewListItems(purchase.MItems)))
+                    {
+                        var result = purchasesOrderView.ShowDialog();
+                        purchasesOrderView.Dispose();
+                    };
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("New Purchase View Loading Error.");
+                    return false;
+                }
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
+
+        private ListViewItem[] getPurchaseViewListItems(List<Item> items)
+        {
+            var productListingListViewItems = new List<ListViewItem>();
+            var itemsAdded = new List<Item>();
+
+            var currentBasketDuplicates = items
+                .GroupBy(i => i)
+                .Where(g => g.Count() > 1)
+                .Select(g => g.Key);
+
+            foreach (Item item in items)
+            {
+                if ((currentBasketDuplicates.Contains(item) && !itemsAdded.Contains(item)) ||
+                    !currentBasketDuplicates.Contains(item))
+                {
+                    var itemQuantity = 0;
+
+                    //If Multiple of Item Count Instances otherwise assume one item selected
+                    if (currentBasketDuplicates.Contains(item))
+                    {
+                        itemQuantity = items.Count(Item => currentBasketDuplicates.Contains(item) && Item == item);
+                    }
+                    else
+                    {
+                        itemQuantity = 1;
+                    }
+
+                    ListViewItem productItem = new ListViewItem(item.ID.ToString());
+                    productItem.SubItems.Add(item.Name);
+                    productItem.SubItems.Add(itemQuantity.ToString());
+                    productItem.SubItems.Add(item.Cost.ToString("C2"));
+                    productItem.SubItems.Add((itemQuantity * item.Cost).ToString("C2"));
+
+                    itemsAdded.Add(item);
+                    productListingListViewItems.Add(productItem);
+                }
+            }
+
+            return productListingListViewItems.ToArray();
         }
 
         //Customer Attribute Accessor Methods
@@ -344,6 +459,9 @@ namespace SarreSports
             }
         }
 
+        /// <summary>
+        /// Supplier
+        /// </summary>
         //Supplier General Methods
         public (bool Success, int supplierID) createSupplier(Supplier supplier)
         {
@@ -376,7 +494,10 @@ namespace SarreSports
             return null;
         }
 
-        //Product General Methods
+        /// <summary>
+        /// Product
+        /// </summary>
+        //Product General Method
         public Item findProduct(int productID)
         {
             foreach (Supplier supplier in mSuppliers)
@@ -389,6 +510,30 @@ namespace SarreSports
 
             return null;
         }
+
+        public Predicate<Item> predicateProduct(int productID)
+        {
+            return Item => Item.ID == productID;
+        }
+
+        public bool removeProduct(int productID)
+        {
+            foreach (Supplier supplier in mSuppliers)
+            {
+                foreach (var product in supplier.MProducts())
+                {
+                    if (product.ID == productID)
+                    {
+                        supplier.MProducts().Remove(product);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool productCheckStockAndAvaliability(Item product, int quantity) => (product.availableForSale && quantity <= product.StockLevel);
 
         public Supplier findProductSupplier(int productID)
         {
@@ -403,22 +548,53 @@ namespace SarreSports
             return null;
         }
 
-        //public Item purchaseProduct
+        public bool checkIfProductSold(int productID)
+        {
+            foreach (Customer customer in mCustomers)
+            {
+                foreach (Purchase purchase in customer.MPurchases)
+                {
+                    foreach (Item item in purchase.MItems)
+                    {
+                        if (item.ID == productID) return true;
+                    }
+                }
+            }
+
+            return false;
+        }
 
         //Product Form Methods
-        public (bool success, int valueReturn) newViewItemForm(int productID, Item.Type type, Accessory.accessoryType? accessoryType, viewItem.viewItemState state = viewItem.viewItemState.View)
+        public (bool success, int valueReturn) newViewItemForm(int productID, viewItem.viewItemState state = viewItem.viewItemState.View)
         {
+            Item.Type? type = findProductType(productID);
+            Accessory.accessoryType? accessoryType = null;
+
+            if (type == null)
+            {
+                return (false, -1);
+            }
+            
+            if (type == Item.Type.Accessory)
+            {
+                accessoryType = findAccessoryType(productID);
+                if (accessoryType == null)
+                {
+                    return (false, -1);
+                }
+            }
+
             if (type == Item.Type.Accessory && accessoryType != null)
             {
                 if (accessoryType == Accessory.accessoryType.Bag)
                 {
-                    return newViewBagForm(productID, this, state);
+                    return newViewBagForm(productID, state);
                 } else if (accessoryType == Accessory.accessoryType.Nutrition)
                 {
-                    return (false, -1);
+                    return newViewNutritionForm(productID, state);
                 } else if (accessoryType == Accessory.accessoryType.Watch)
                 {
-                    return (false, -1);
+                    return newViewWatchForm(productID, state);
                 }
                 else
                 {
@@ -430,10 +606,10 @@ namespace SarreSports
             {
                 if (type == Item.Type.Clothing)
                 {
-                    return (false, -1);
+                    return newViewClothingForm(productID, state);
                 } else if (type == Item.Type.Shoe)
                 {
-                    return (false, -1);
+                    return newViewShoeForm(productID, state);
                 }
                 else
                 {
@@ -443,7 +619,7 @@ namespace SarreSports
             }
         }
 
-        private (bool success, int valueReturn) newViewBagForm(int productID, Branch currentBranch, viewItem.viewItemState state)
+        private (bool success, int valueReturn) newViewBagForm(int productID, viewItem.viewItemState state)
         {
             using (viewBag itemCreator = new viewBag(productID, this, state))
             {
@@ -462,6 +638,112 @@ namespace SarreSports
             };
         }
 
+        private (bool success, int valueReturn) newViewClothingForm(int productID, viewItem.viewItemState state)
+        {
+            using (viewClothing itemCreator = new viewClothing(productID, this, state))
+            {
+                var result = itemCreator.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    itemCreator.Dispose();
+                    return (true, itemCreator.valueReturn);
+                }
+                else
+                {
+                    itemCreator.Dispose();
+                    return (false, -1);
+                }
+            };
+        }
+
+        private (bool success, int valueReturn) newViewNutritionForm(int productID, viewItem.viewItemState state)
+        {
+            using (viewNutrition itemCreator = new viewNutrition(productID, this, state))
+            {
+                var result = itemCreator.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    itemCreator.Dispose();
+                    return (true, itemCreator.valueReturn);
+                }
+                else
+                {
+                    itemCreator.Dispose();
+                    return (false, -1);
+                }
+            };
+        }
+
+        private (bool success, int valueReturn) newViewShoeForm(int productID, viewItem.viewItemState state)
+        {
+            using (viewShoe itemCreator = new viewShoe(productID, this, state))
+            {
+                var result = itemCreator.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    itemCreator.Dispose();
+                    return (true, itemCreator.valueReturn);
+                }
+                else
+                {
+                    itemCreator.Dispose();
+                    return (false, -1);
+                }
+            };
+        }
+       
+        private (bool success, int valueReturn) newViewWatchForm(int productID, viewItem.viewItemState state)
+        {
+            using (viewWatch itemCreator = new viewWatch(productID, this, state))
+            {
+                var result = itemCreator.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    itemCreator.Dispose();
+                    return (true, itemCreator.valueReturn);
+                }
+                else
+                {
+                    itemCreator.Dispose();
+                    return (false, -1);
+                }
+            };
+        }
+
+        private Item.Type? findProductType(int productID)
+        {
+            try
+            {
+                return findProduct(productID).ItemType;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private Accessory.accessoryType? findAccessoryType(int productID)
+        {
+            try
+            {
+                var product = (Accessory) findProduct(productID);
+                return product.AccessoryType;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
+
+        /// <summary>
+        /// Branch
+        /// </summary>
+        /// <returns></returns>
         //Branch List Accessors
         public List<SystemUser> MUsers()
         {

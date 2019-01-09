@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 12/12/2018 | 17:02
-//Last Updated On:  4/1/2019 | 23:38
+//Last Updated On:  9/1/2019 | 12:25
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +25,6 @@ namespace SarreSports
         {
             this.name = name;
             this.id = Interlocked.Increment(ref nextID);
-            mProducts.Add(new Clothing("Goals", Item.Type.Clothing, 79.99m, 12, 10, 5, "Blue", Clothing.clothingType.Jackets));
-            mProducts.Add(new Shoe("Goals", Item.Type.Shoe, 79.99m, 5, 10, 10, Shoe.shoeType.Track));
         }
 
         public string Name()

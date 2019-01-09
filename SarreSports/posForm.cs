@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 10/12/2018 | 16:59
-//Last Updated On:  8/1/2019 | 00:55
+//Last Updated On:  9/1/2019 | 12:29
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -86,6 +86,7 @@ namespace SarreSports
             //Initialise Basket Listing List View
             uiSaleBasketListView.View = View.Details;
             uiSaleBasketListView.LabelEdit = false;
+            uiSaleBasketListView.FullRowSelect = true;
             //Initialise Basket Listing List View Column Values
             uiSaleBasketListView.Columns.Add("Product ID", 200, HorizontalAlignment.Left);
             uiSaleBasketListView.Columns.Add("Product Name", 400, HorizontalAlignment.Left);
@@ -95,6 +96,7 @@ namespace SarreSports
             //Initialise Basket Listing List View
             uiCustomersPurchasesListView.View = View.Details;
             uiCustomersPurchasesListView.LabelEdit = false;
+            uiCustomersPurchasesListView.FullRowSelect = true;
             //Initialise Basket Listing List View Column Values
             uiCustomersPurchasesListView.Columns.Add("Purchase ID", 200, HorizontalAlignment.Left);
             uiCustomersPurchasesListView.Columns.Add("Purchase Date", 400, HorizontalAlignment.Left);
@@ -102,6 +104,7 @@ namespace SarreSports
             //Initialise Basket Listing List View
             uiInventorySupplierItemsListView.View = View.Details;
             uiInventorySupplierItemsListView.LabelEdit = false;
+            uiInventorySupplierItemsListView.FullRowSelect = true;
             //Initialise Basket Listing List View Column Values
             uiInventorySupplierItemsListView.Columns.Add("Item ID", 100, HorizontalAlignment.Left);
             uiInventorySupplierItemsListView.Columns.Add("Item Name", 250, HorizontalAlignment.Left);
@@ -137,9 +140,9 @@ namespace SarreSports
             saleSearchProducts();
         }
 
-        private void uiSaleAddToBasketButton_Click(object sender, EventArgs e)
+        private void uiSaleViewItemButton_Click(object sender, EventArgs e)
         {
-
+            saleLoadProduct(Int32.Parse(uiSaleProductIDUpDown.Text));
         }
 
         private void uiSaleCancelProductSelectionButton_Click(object sender, EventArgs e)
@@ -160,12 +163,12 @@ namespace SarreSports
 
         private void uiSaleSaleButton_Click(object sender, EventArgs e)
         {
-            
+            salePurchaseBasket();
         }
 
         private void uiSaleRemoveItemButton_Click(object sender, EventArgs e)
         {
-
+            saleRemoveItem();
         }
 
         private void uiSaleCancelButton_Click(object sender, EventArgs e)
@@ -259,15 +262,7 @@ namespace SarreSports
             if (currentProduct != null)
             {
                 uiSaleProductNameTextBox.Text = currentProduct.Name;
-                if (currentProduct.ItemType == Item.Type.Accessory)
-                {
-                    Accessory currentAccessory = (Accessory)currentProduct;
-                    saleLoadItemViewer(productID, currentProduct.ItemType, currentAccessory.AccessoryType);
-                }
-                else
-                {
-                    saleLoadItemViewer(productID, currentProduct.ItemType);
-                }
+                saleLoadItemViewer(productID);
                 
                 changeTabState(Tabs.Sale, TabStates.Loaded_Product);
                 uiSaleProductIDUpDown.Text = productID.ToString();
@@ -282,9 +277,9 @@ namespace SarreSports
             
         }
 
-        private void saleLoadItemViewer(int productID, Item.Type type, Accessory.accessoryType? accessoryType = null)
+        private void saleLoadItemViewer(int productID)
         {
-            var newItem = currentBranch.newViewItemForm(productID, type, accessoryType, viewItem.viewItemState.Buy);
+            var newItem = currentBranch.newViewItemForm(productID, viewItem.viewItemState.Buy);
             var product = currentBranch.findProduct(productID);
 
             if (newItem.success)
@@ -322,6 +317,109 @@ namespace SarreSports
             var itemQuantity = currentBasket.Count(Item => currentBasketDuplicates.Contains(product));
 
             return (itemQuantity + newOrderQuantity <= product.StockLevel);
+        }
+
+        private (bool avaliable, IItem product) saleCurrentBasketCheck()
+        {
+            foreach (var item in currentBasket)
+            {
+                var itemQuantity = currentBasket.Count(Item => currentBasket.Contains(item) && Item == item);
+
+                if (!currentBranch.productCheckStockAndAvaliability(item, itemQuantity)) return (false, (Item)item);
+            }
+
+            return (true, new NullItem());
+        }
+
+        private void salePurchaseBasket()
+        {
+            if (uiSaleBasketListView.Items.Count > 0 && currentBasket.Count > 0)
+            {
+                var basketCheck = saleCurrentBasketCheck();
+                if (basketCheck.avaliable)
+                {
+                    var purchase = currentBranch.purchaseCustomer(int.Parse(uiSaleCustomerIDUpDown.Text), currentBasket);
+                    if (!purchase.success)
+                    {
+                        MessageBox.Show("Customer Purchase Failed.", 
+                            "Purchase Error", 
+                            MessageBoxButtons.OK, 
+                            MessageBoxIcon.Error);
+                        changeTabState(Tabs.Sale, TabStates.Default);
+                    }
+                    else
+                    {
+                        MessageBox.Show(String.Format("Customer Purchase Success.\n" +
+                                        "Order Total Value: {0:C2}", purchase.purchaseCost), 
+                            String.Format("Purchase: #{0}", purchase.purchaseID), 
+                            MessageBoxButtons.OK, 
+                            MessageBoxIcon.Error);
+                        changeTabState(Tabs.Sale, TabStates.Default);
+                        changeTabState(Tabs.Customers, TabStates.Default);
+                        changeTabState(Tabs.Inventory, TabStates.Default);
+                    }
+                }
+                else
+                {
+                    Item item = (Item)basketCheck.product;
+                    MessageBox.Show(String.Format("Product {0} in your basket is not available.\n" +
+                                    "Due to quantity required or seller availability.", item.Name), 
+                                    "Basket Error", 
+                                    MessageBoxButtons.OK, 
+                                    MessageBoxIcon.Error);
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("No Items Selected.",
+                    "Basket Error",
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error,
+                    MessageBoxDefaultButton.Button1);
+            }
+        }
+
+        private void saleRemoveItem()
+        {
+            if (uiSaleBasketListView.SelectedItems.Count > 0)
+            {
+                if (Int32.Parse(uiSaleBasketListView.SelectedItems[0].SubItems[2].Text) > 1)
+                {
+                    DialogResult removeItemDialog = MessageBox.Show(String.Format("Would you like to remove all {0} of this item?", 
+                                                                                    uiSaleBasketListView.SelectedItems[0].SubItems[2].Text),
+                        String.Format("Remove {0} from Basket", uiSaleBasketListView.SelectedItems[0].SubItems[1].Text),
+                        MessageBoxButtons.YesNoCancel, 
+                        MessageBoxIcon.Question,
+                        MessageBoxDefaultButton.Button1);
+
+                    if (removeItemDialog == DialogResult.Yes)
+                    {
+                        // Remove All Item of Selected Type
+                        currentBasket.RemoveAll(currentBranch.predicateProduct(int.Parse(uiSaleBasketListView.SelectedItems[0].SubItems[0].Text)));
+                        saleLoadCustomers(Int32.Parse(uiSaleCustomerIDUpDown.Text));
+                    } else if (removeItemDialog == DialogResult.No)
+                    {
+                        //Remove One Item of Selected Type
+                        currentBasket.Remove(currentBranch.findProduct(int.Parse(uiSaleBasketListView.SelectedItems[0].SubItems[0].Text)));
+                        saleLoadCustomers(Int32.Parse(uiSaleCustomerIDUpDown.Text));
+                    }
+                }
+                else
+                {
+                    //Remove One Item of Selected Type
+                    currentBasket.Remove(currentBranch.findProduct(int.Parse(uiSaleBasketListView.SelectedItems[0].SubItems[0].Text)));
+                    saleLoadCustomers(Int32.Parse(uiSaleCustomerIDUpDown.Text));
+                }
+            }
+            else
+            {
+                MessageBox.Show("No Item Selected.",
+                    "Basket Error",
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error,
+                    MessageBoxDefaultButton.Button1);
+            }
         }
 
         //Sale General Events
@@ -362,6 +460,14 @@ namespace SarreSports
             if (e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(uiSaleProductNameTextBox.Text))
             {
                     saleSearchProducts();
+            }
+        }
+
+        private void uiSaleBasketListView_DoubleClick(object sender, EventArgs e)
+        {
+            if (uiSaleBasketListView.SelectedItems.Count > 0)
+            {
+                var newItem = currentBranch.newViewItemForm(Int32.Parse(uiSaleBasketListView.SelectedItems[0].Text));
             }
         }
 
@@ -459,7 +565,8 @@ namespace SarreSports
                 {
                     //Customer Creation Success
                     //Query user if user should be emailed their registration details
-                    DialogResult emailCustomerQuery = MessageBox.Show("Do you want to email the customer with their details?", "Customer Registration Email", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult emailCustomerQuery = MessageBox.Show("Do you want to email the customer with their details?", 
+                        "Customer Registration Email", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if(emailCustomerQuery == DialogResult.Yes)
                     {
                         currentBranch.emailCustomer(currentCustomer.customerID);
@@ -561,6 +668,8 @@ namespace SarreSports
                     uiCustomersMobileNoTextBox.Text = currentBranch.getMobileNo(customerID) ?? "Not Found";
                     uiCustomersPostCodeTextBox.Text = currentBranch.getPostCode(customerID) ?? "Not Found";
                     uiCustomersPoliciesGDPRCheckBox.Checked = currentBranch.getGDPR(customerID) ?? false;
+
+                    uiCustomersPurchasesListView.Items.AddRange(getPurchasesListViewItem(customerID));
                 }
                 else
                 {
@@ -723,6 +832,23 @@ namespace SarreSports
                 if (createCustomerDialog == DialogResult.Yes)
                 {
                     customersNewCustomer();
+                }
+            }
+        }
+
+        private void uiCustomersPurchasesListView_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (uiCustomersPurchasesListView.SelectedItems.Count > 0)
+            {
+                if (!currentBranch.newPurchaseView(int.Parse(uiCustomersPurchasesListView.SelectedItems[0].Text), 
+                                                    int.Parse(uiCustomersCustomerIDUpDown.Text) 
+                                                    ))
+                {
+                    MessageBox.Show("Purchase view failed to load.",
+                        "Error",
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Error,
+                        MessageBoxDefaultButton.Button1);
                 }
             }
         }
@@ -913,7 +1039,31 @@ namespace SarreSports
 
         private void inventoryRemoveItem()
         {
+            if (uiInventorySupplierItemsListView.SelectedItems.Count > 0)
+            {
+                int productID = int.Parse(uiInventorySupplierItemsListView.SelectedItems[0].Text);
 
+                if (!currentBranch.checkIfProductSold(productID))
+                {
+                    //If Not Sold to any Customer - Remove Item from List
+                    if (!currentBranch.removeProduct(productID))
+                    {
+                        MessageBox.Show("Product Removal Failure.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Product Removed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        changeTabState(Tabs.Inventory, TabStates.Default);
+                    }
+                }
+                else
+                {
+                    //If Sold to any Customer - Remove Item From Product Availability
+                    currentBranch.findProduct(productID).availableForSale = false;
+                    MessageBox.Show("Product Removed from Sale", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    changeTabState(Tabs.Inventory, TabStates.Default);
+                }
+            }
         }
 
         //Inventory General Events
@@ -930,6 +1080,14 @@ namespace SarreSports
             if (e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(uiInventorySupplierIDUpDown.Text) && Generic.IsInteger(uiInventorySupplierIDUpDown.Text))
             {
                 inventorySearchSupplier();
+            }
+        }
+
+        private void uiInventorySupplierItemsListView_DoubleClick(object sender, EventArgs e)
+        {
+            if (uiInventorySupplierItemsListView.SelectedItems.Count > 0)
+            {
+                currentBranch.newViewItemForm(int.Parse(uiInventorySupplierItemsListView.SelectedItems[0].Text));
             }
         }
 
@@ -1040,7 +1198,17 @@ namespace SarreSports
                 if ((currentBasketDuplicates.Contains(item) && !itemsAdded.Contains(item)) ||
                     !currentBasketDuplicates.Contains(item))
                 {
-                    var itemQuantity = currentBasket.Count(Item => currentBasketDuplicates.Contains(item));
+                    var itemQuantity = 0;
+
+                    //If Multiple of Item Count Instances otherwise assume one item selected
+                    if (currentBasketDuplicates.Contains(item))
+                    {
+                        itemQuantity = currentBasket.Count(Item => currentBasketDuplicates.Contains(item) && Item == item);
+                    }
+                    else
+                    {
+                        itemQuantity = 1;
+                    }
 
                     ListViewItem productItem = new ListViewItem(item.ID.ToString());
                     productItem.SubItems.Add(item.Name);
@@ -1054,6 +1222,27 @@ namespace SarreSports
             }
 
             return productListingListViewItems.ToArray();
+        }
+
+        public ListViewItem[] getPurchasesListViewItem(int customerID)
+        {
+            var customerListingListViewItems = new List<ListViewItem>();
+
+            foreach (var customer in currentBranch.MCustomers())
+            {
+                if (customer.ID() == customerID)
+                {
+                    foreach (var purchase in customer.MPurchases)
+                    {
+                        ListViewItem purchaseItem = new ListViewItem(purchase.ID.ToString());
+                        purchaseItem.SubItems.Add(purchase.PurchaseDate.ToString("dd/MM/yyyy hh:mm tt"));
+                        purchaseItem.SubItems.Add(purchase.OrderTotalCost.ToString("C2"));
+                        customerListingListViewItems.Add(purchaseItem);
+                    }
+                }
+            }
+
+            return customerListingListViewItems.ToArray();
         }
 
         public ListViewItem[] getProductListViewItems()
@@ -1250,6 +1439,7 @@ namespace SarreSports
                             uiSaleCustomerSearchButton.Enabled = true;
 
                             //Element 4 (inside GroupBox Controls)
+                            uiSaleViewItemButton.Enabled = false;
                             uiSaleCancelProductSelectionButton.Hide();
 
                             resetGroupBoxControls(uiSalePurchaseGroupBox);
@@ -1274,10 +1464,10 @@ namespace SarreSports
                             //Element 4
                             uiSaleCancelProductSelectionButton.Hide(); 
 
-
                             uiSaleProductIDUpDown.Focus();
                             resetGroupBoxControls(uiSalePurchaseGroupBox);
                             groupBoxControlsEnabled(uiSalePurchaseGroupBox, true);
+                            uiSaleViewItemButton.Enabled = false;
 
                             saleLoadBasket();
                             break;
@@ -1294,7 +1484,7 @@ namespace SarreSports
                             uiSaleProductNameTextBox.Enabled = false;
 
                             uiSaleProductSearchButton.Enabled = false;
-                            uiSaleAddToBasketButton.Enabled = false;
+                            uiSaleViewItemButton.Enabled = true;
 
                             uiSaleCancelProductSelectionButton.Show();
 

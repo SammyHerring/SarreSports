@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 12/12/2018 | 17:04
-//Last Updated On:  4/1/2019 | 02:50
+//Last Updated On:  8/1/2019 | 19:01
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace SarreSports
 {
-    public abstract class Item
+    public abstract class Item : IItem
     {
         private string name;
         private static int nextID;
@@ -52,5 +52,18 @@ namespace SarreSports
         public int RestockLevel => restockLevel;
         public bool Restock() => (restockLevel >= stockLevel);
         public bool availableForSale { get; set; }
+
+        public bool sell(int quantity)
+        {
+            if (quantity <= stockLevel && quantity > 0)
+            {
+                stockLevel -= quantity;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

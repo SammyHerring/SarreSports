@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 26/12/2018 | 22:35
-//Last Updated On:  1/1/2019 | 20:37
+//Last Updated On:  8/1/2019 | 15:33
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -69,7 +69,7 @@ namespace SarreSports
                 {
                     for (int listIndex = uiSearchQueryListView.Items.Count - 1; listIndex >= 0; listIndex--)
                     {
-                        if (IsInteger(uiSearchQueryTextBox.Text))
+                        if (Generic.IsInteger(uiSearchQueryTextBox.Text))
                         {
                             if (uiSearchQueryListView.Items[listIndex].ToString().ToLower()
                                 .Contains(uiSearchQueryTextBox.Text.ToLower()))
@@ -149,6 +149,7 @@ namespace SarreSports
         private void loadList(ListViewItem[] queryListSource)
         {
             uiSearchQueryListView.Items.AddRange(queryListSource);
+            uiSearchQueryListView.Sort();
         }
 
         //Control Events
@@ -164,7 +165,10 @@ namespace SarreSports
 
         private void uiSearchQueryListView_KeyDown(object sender, KeyEventArgs e)
         {
-            selectEntity();
+            if (e.KeyCode == Keys.Enter)
+            {
+                selectEntity();
+            }
         }
 
         private void uiSelectButton_Click(object sender, EventArgs e)
@@ -179,7 +183,7 @@ namespace SarreSports
 
         private void uiSearchQueryTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && (!string.IsNullOrEmpty(uiSearchQueryTextBox.Text)))
+            if (e.KeyCode == Keys.Enter && (!string.IsNullOrWhiteSpace(uiSearchQueryTextBox.Text)))
             {
                 search();
                 uiSearchQueryTextBox.Focus();
@@ -208,8 +212,5 @@ namespace SarreSports
         {
             resetSearch();
         }
-
-        //General Functions
-        private bool IsInteger(string value) => value.All(c => c >= '0' && c <= '9');
     }
 }

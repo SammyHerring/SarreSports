@@ -12,6 +12,21 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,12 +68,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Generic.cs" />
-    <Compile Include="genericNumericEntry.cs">
+    <Compile Include="Other_Forms\genericNumericEntry.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="genericNumericEntry.Designer.cs">
+    <Compile Include="Other_Forms\genericNumericEntry.Designer.cs">
       <DependentUpon>genericNumericEntry.cs</DependentUpon>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Item\IItem.cs" />
     <Compile Include="Item\NewItemForms\IItemForm.cs" />
     <Compile Include="Item\Accessory.cs" />
     <Compile Include="Item\NewItemForms\itemSelector.cs">
@@ -68,10 +85,10 @@
       <DependentUpon>itemSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="Item\Accessory\Bag.cs" />
-    <Compile Include="genericSearch.cs">
+    <Compile Include="Other_Forms\genericSearch.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="genericSearch.Designer.cs">
+    <Compile Include="Other_Forms\genericSearch.Designer.cs">
       <DependentUpon>genericSearch.cs</DependentUpon>
     </Compile>
     <Compile Include="Branch\Branch.cs" />
@@ -116,10 +133,10 @@
     <Compile Include="Item\NewItemForms\newNutrition.Designer.cs">
       <DependentUpon>newNutrition.cs</DependentUpon>
     </Compile>
-    <Compile Include="newSupplier.cs">
+    <Compile Include="Other_Forms\newSupplier.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="newSupplier.Designer.cs">
+    <Compile Include="Other_Forms\newSupplier.Designer.cs">
       <DependentUpon>newSupplier.cs</DependentUpon>
     </Compile>
     <Compile Include="Item\Accessory\Nutrition.cs" />
@@ -129,6 +146,7 @@
     <Compile Include="Item\NewItemForms\newWatch.Designer.cs">
       <DependentUpon>newWatch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Item\NullItem.cs" />
     <Compile Include="Person\Customer.cs" />
     <Compile Include="Person\Person.cs" />
     <Compile Include="Person\SystemUser.cs" />
@@ -182,10 +200,16 @@
     <Compile Include="Item\ViewItemForms\viewWatch.Designer.cs">
       <DependentUpon>viewWatch.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="genericNumericEntry.resx">
+    <Compile Include="Other_Forms\viewPurchaseOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Other_Forms\viewPurchaseOrder.Designer.cs">
+      <DependentUpon>viewPurchaseOrder.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Other_Forms\genericNumericEntry.resx">
       <DependentUpon>genericNumericEntry.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="genericSearch.resx">
+    <EmbeddedResource Include="Other_Forms\genericSearch.resx">
       <DependentUpon>genericSearch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Item\NewItemForms\itemSelector.resx">
@@ -209,7 +233,7 @@
     <EmbeddedResource Include="Item\NewItemForms\newClothing.resx">
       <DependentUpon>newClothing.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="newSupplier.resx">
+    <EmbeddedResource Include="Other_Forms\newSupplier.resx">
       <DependentUpon>newSupplier.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Item\NewItemForms\newWatch.resx">
@@ -245,6 +269,9 @@
     <EmbeddedResource Include="Item\ViewItemForms\viewWatch.resx">
       <DependentUpon>viewWatch.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Other_Forms\viewPurchaseOrder.resx">
+      <DependentUpon>viewPurchaseOrder.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -259,6 +286,17 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

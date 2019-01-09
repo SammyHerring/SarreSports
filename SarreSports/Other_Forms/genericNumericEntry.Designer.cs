@@ -74,6 +74,7 @@ namespace SarreSports
             this.uiNumericValueUpDown.Name = "uiNumericValueUpDown";
             this.uiNumericValueUpDown.Size = new System.Drawing.Size(716, 44);
             this.uiNumericValueUpDown.TabIndex = 3;
+            this.uiNumericValueUpDown.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uiNumericValueUpDown_KeyDown);
             // 
             // uiSubmitButton
             // 
