@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 10/12/2018 | 16:59
-//Last Updated On:  9/1/2019 | 12:28
+//Last Updated On:  9/1/2019 | 20:45
 namespace SarreSports
 {
     partial class posForm
@@ -101,6 +101,14 @@ namespace SarreSports
             this.uiInventorySuppliersLabel = new System.Windows.Forms.Label();
             this.uiInventorySuppliersComboBox = new System.Windows.Forms.ComboBox();
             this.uiAdminTab = new System.Windows.Forms.TabPage();
+            this.uiAdminUsersGroupBox = new System.Windows.Forms.GroupBox();
+            this.uiAdminDeleteUser = new System.Windows.Forms.Button();
+            this.uiAdminAddUser = new System.Windows.Forms.Button();
+            this.uiAdminBranchUsersListView = new System.Windows.Forms.ListView();
+            this.uiAdminDeleteBranchButton = new System.Windows.Forms.Button();
+            this.uiAdminAddBranchButton = new System.Windows.Forms.Button();
+            this.uiAdminBranchesComboBox = new System.Windows.Forms.ComboBox();
+            this.uiAdminBranchesLabel = new System.Windows.Forms.Label();
             this.uiLogoutButton = new System.Windows.Forms.Button();
             this.uiCustomersErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.uiPosViewTabControl.SuspendLayout();
@@ -116,6 +124,8 @@ namespace SarreSports
             this.uiInventoryTab.SuspendLayout();
             this.uiInventorySupplierItemsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uiInventorySupplierIDUpDown)).BeginInit();
+            this.uiAdminTab.SuspendLayout();
+            this.uiAdminUsersGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uiCustomersErrorProvider)).BeginInit();
             this.SuspendLayout();
             // 
@@ -829,6 +839,11 @@ namespace SarreSports
             // 
             // uiAdminTab
             // 
+            this.uiAdminTab.Controls.Add(this.uiAdminUsersGroupBox);
+            this.uiAdminTab.Controls.Add(this.uiAdminDeleteBranchButton);
+            this.uiAdminTab.Controls.Add(this.uiAdminAddBranchButton);
+            this.uiAdminTab.Controls.Add(this.uiAdminBranchesComboBox);
+            this.uiAdminTab.Controls.Add(this.uiAdminBranchesLabel);
             this.uiAdminTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uiAdminTab.Location = new System.Drawing.Point(8, 56);
             this.uiAdminTab.Name = "uiAdminTab";
@@ -837,6 +852,85 @@ namespace SarreSports
             this.uiAdminTab.TabIndex = 3;
             this.uiAdminTab.Text = "Admin";
             this.uiAdminTab.UseVisualStyleBackColor = true;
+            // 
+            // uiAdminUsersGroupBox
+            // 
+            this.uiAdminUsersGroupBox.Controls.Add(this.uiAdminDeleteUser);
+            this.uiAdminUsersGroupBox.Controls.Add(this.uiAdminAddUser);
+            this.uiAdminUsersGroupBox.Controls.Add(this.uiAdminBranchUsersListView);
+            this.uiAdminUsersGroupBox.Location = new System.Drawing.Point(25, 107);
+            this.uiAdminUsersGroupBox.Name = "uiAdminUsersGroupBox";
+            this.uiAdminUsersGroupBox.Size = new System.Drawing.Size(2156, 1168);
+            this.uiAdminUsersGroupBox.TabIndex = 4;
+            this.uiAdminUsersGroupBox.TabStop = false;
+            this.uiAdminUsersGroupBox.Text = "Branch User Management";
+            // 
+            // uiAdminDeleteUser
+            // 
+            this.uiAdminDeleteUser.Location = new System.Drawing.Point(1804, 1092);
+            this.uiAdminDeleteUser.Name = "uiAdminDeleteUser";
+            this.uiAdminDeleteUser.Size = new System.Drawing.Size(319, 55);
+            this.uiAdminDeleteUser.TabIndex = 6;
+            this.uiAdminDeleteUser.Text = "Delete User";
+            this.uiAdminDeleteUser.UseVisualStyleBackColor = true;
+            this.uiAdminDeleteUser.Click += new System.EventHandler(this.uiAdminDeleteUser_Click);
+            // 
+            // uiAdminAddUser
+            // 
+            this.uiAdminAddUser.Location = new System.Drawing.Point(1453, 1092);
+            this.uiAdminAddUser.Name = "uiAdminAddUser";
+            this.uiAdminAddUser.Size = new System.Drawing.Size(319, 55);
+            this.uiAdminAddUser.TabIndex = 5;
+            this.uiAdminAddUser.Text = "Add User";
+            this.uiAdminAddUser.UseVisualStyleBackColor = true;
+            this.uiAdminAddUser.Click += new System.EventHandler(this.uiAdminAddUser_Click);
+            // 
+            // uiAdminBranchUsersListView
+            // 
+            this.uiAdminBranchUsersListView.Location = new System.Drawing.Point(32, 48);
+            this.uiAdminBranchUsersListView.Name = "uiAdminBranchUsersListView";
+            this.uiAdminBranchUsersListView.Size = new System.Drawing.Size(2091, 1021);
+            this.uiAdminBranchUsersListView.TabIndex = 0;
+            this.uiAdminBranchUsersListView.UseCompatibleStateImageBehavior = false;
+            // 
+            // uiAdminDeleteBranchButton
+            // 
+            this.uiAdminDeleteBranchButton.Location = new System.Drawing.Point(1854, 34);
+            this.uiAdminDeleteBranchButton.Name = "uiAdminDeleteBranchButton";
+            this.uiAdminDeleteBranchButton.Size = new System.Drawing.Size(319, 55);
+            this.uiAdminDeleteBranchButton.TabIndex = 3;
+            this.uiAdminDeleteBranchButton.Text = "Delete Branch";
+            this.uiAdminDeleteBranchButton.UseVisualStyleBackColor = true;
+            this.uiAdminDeleteBranchButton.Click += new System.EventHandler(this.uiAdminDeleteBranchButton_Click);
+            // 
+            // uiAdminAddBranchButton
+            // 
+            this.uiAdminAddBranchButton.Location = new System.Drawing.Point(1503, 34);
+            this.uiAdminAddBranchButton.Name = "uiAdminAddBranchButton";
+            this.uiAdminAddBranchButton.Size = new System.Drawing.Size(319, 55);
+            this.uiAdminAddBranchButton.TabIndex = 2;
+            this.uiAdminAddBranchButton.Text = "Add Branch";
+            this.uiAdminAddBranchButton.UseVisualStyleBackColor = true;
+            this.uiAdminAddBranchButton.Click += new System.EventHandler(this.uiAdminAddBranchButton_Click);
+            // 
+            // uiAdminBranchesComboBox
+            // 
+            this.uiAdminBranchesComboBox.FormattingEnabled = true;
+            this.uiAdminBranchesComboBox.Location = new System.Drawing.Point(184, 40);
+            this.uiAdminBranchesComboBox.Name = "uiAdminBranchesComboBox";
+            this.uiAdminBranchesComboBox.Size = new System.Drawing.Size(727, 45);
+            this.uiAdminBranchesComboBox.TabIndex = 1;
+            this.uiAdminBranchesComboBox.SelectionChangeCommitted += new System.EventHandler(this.uiAdminBranchesComboBox_SelectionChangeCommitted);
+            // 
+            // uiAdminBranchesLabel
+            // 
+            this.uiAdminBranchesLabel.AutoSize = true;
+            this.uiAdminBranchesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uiAdminBranchesLabel.Location = new System.Drawing.Point(18, 43);
+            this.uiAdminBranchesLabel.Name = "uiAdminBranchesLabel";
+            this.uiAdminBranchesLabel.Size = new System.Drawing.Size(160, 37);
+            this.uiAdminBranchesLabel.TabIndex = 0;
+            this.uiAdminBranchesLabel.Text = "Branches";
             // 
             // uiLogoutButton
             // 
@@ -887,6 +981,9 @@ namespace SarreSports
             this.uiInventoryTab.PerformLayout();
             this.uiInventorySupplierItemsGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.uiInventorySupplierIDUpDown)).EndInit();
+            this.uiAdminTab.ResumeLayout(false);
+            this.uiAdminTab.PerformLayout();
+            this.uiAdminUsersGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.uiCustomersErrorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -961,5 +1058,13 @@ namespace SarreSports
         private System.Windows.Forms.Button uiInventoryRemoveItem;
         private System.Windows.Forms.ListView uiInventorySupplierItemsListView;
         private System.Windows.Forms.Button uiInventoryNewItem;
+        private System.Windows.Forms.Button uiAdminDeleteBranchButton;
+        private System.Windows.Forms.Button uiAdminAddBranchButton;
+        private System.Windows.Forms.ComboBox uiAdminBranchesComboBox;
+        private System.Windows.Forms.Label uiAdminBranchesLabel;
+        private System.Windows.Forms.GroupBox uiAdminUsersGroupBox;
+        private System.Windows.Forms.ListView uiAdminBranchUsersListView;
+        private System.Windows.Forms.Button uiAdminDeleteUser;
+        private System.Windows.Forms.Button uiAdminAddUser;
     }
 }

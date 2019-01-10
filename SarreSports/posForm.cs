@@ -4,13 +4,12 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 10/12/2018 | 16:59
-//Last Updated On:  9/1/2019 | 12:29
+//Last Updated On:  10/1/2019 | 02:06
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
-using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -34,6 +33,7 @@ namespace SarreSports
 {
     public partial class posForm : Form
     {
+        private PoS systemCore;
         private Branch currentBranch;
         private SystemUser currentUser;
         private List<Item> currentBasket = new List<Item>();
@@ -54,7 +54,7 @@ namespace SarreSports
             Loaded_Product = 4
         }
 
-        public posForm(IBranch b, SystemUser u)
+        public posForm(PoS s, IBranch b, SystemUser u)
         {
             InitializeComponent();
             switch (b)
@@ -64,6 +64,7 @@ namespace SarreSports
                     this.Close();
                     break;
                 case Branch _:
+                    systemCore = s;
                     currentBranch = (Branch) b;
                     currentUser = u;
                     uiBranchTitleLabel.Text = b.BranchName();
@@ -83,29 +84,31 @@ namespace SarreSports
                 uiPosViewTabControl.TabPages.Remove(uiAdminTab);
             }
             //Initialise Form List View
-            //Initialise Basket Listing List View
+            //Initialise Sale Basket Listing List View
             uiSaleBasketListView.View = View.Details;
             uiSaleBasketListView.LabelEdit = false;
             uiSaleBasketListView.FullRowSelect = true;
-            //Initialise Basket Listing List View Column Values
+            //Initialise Sale Basket Listing List View Column Values
             uiSaleBasketListView.Columns.Add("Product ID", 200, HorizontalAlignment.Left);
             uiSaleBasketListView.Columns.Add("Product Name", 400, HorizontalAlignment.Left);
             uiSaleBasketListView.Columns.Add("Quantity", 125, HorizontalAlignment.Left);
             uiSaleBasketListView.Columns.Add("Item Cost", 125, HorizontalAlignment.Left);
             uiSaleBasketListView.Columns.Add("Total Cost", -2, HorizontalAlignment.Left);
-            //Initialise Basket Listing List View
+
+            //Initialise Customer Purchases Listing List View
             uiCustomersPurchasesListView.View = View.Details;
             uiCustomersPurchasesListView.LabelEdit = false;
             uiCustomersPurchasesListView.FullRowSelect = true;
-            //Initialise Basket Listing List View Column Values
+            //Initialise Customer Purchases Listing List View Column Values
             uiCustomersPurchasesListView.Columns.Add("Purchase ID", 200, HorizontalAlignment.Left);
             uiCustomersPurchasesListView.Columns.Add("Purchase Date", 400, HorizontalAlignment.Left);
             uiCustomersPurchasesListView.Columns.Add("Total Cost", -2, HorizontalAlignment.Left);
-            //Initialise Basket Listing List View
+
+            //Initialise Supplier Items Listing List View
             uiInventorySupplierItemsListView.View = View.Details;
             uiInventorySupplierItemsListView.LabelEdit = false;
             uiInventorySupplierItemsListView.FullRowSelect = true;
-            //Initialise Basket Listing List View Column Values
+            //Initialise Supplier Items Listing List View Column Values
             uiInventorySupplierItemsListView.Columns.Add("Item ID", 100, HorizontalAlignment.Left);
             uiInventorySupplierItemsListView.Columns.Add("Item Name", 250, HorizontalAlignment.Left);
             uiInventorySupplierItemsListView.Columns.Add("Item Type", 125, HorizontalAlignment.Left);
@@ -114,6 +117,18 @@ namespace SarreSports
             uiInventorySupplierItemsListView.Columns.Add("Stock Level", 125, HorizontalAlignment.Left);
             uiInventorySupplierItemsListView.Columns.Add("Restock Level", 125, HorizontalAlignment.Left);
             uiInventorySupplierItemsListView.Columns.Add("Restock?", -2, HorizontalAlignment.Left);
+
+            
+            //Initialise Branch Users Listing List View
+            uiAdminBranchUsersListView.View = View.Details;
+            uiAdminBranchUsersListView.LabelEdit = false;
+            uiAdminBranchUsersListView.FullRowSelect = true;
+            //Initialise Branch Users Listing List View Column Values
+            uiAdminBranchUsersListView.Columns.Add("SystemUID", 200, HorizontalAlignment.Left);
+            uiAdminBranchUsersListView.Columns.Add("User Type", 150, HorizontalAlignment.Left);
+            uiAdminBranchUsersListView.Columns.Add("First Name", 325, HorizontalAlignment.Left);
+            uiAdminBranchUsersListView.Columns.Add("Last Name", -2, HorizontalAlignment.Left);
+
             //Set Default Tab Edit States
             setDefaultFormState();
         }
@@ -1095,10 +1110,143 @@ namespace SarreSports
         /// Admin Tab Functions
         /// </summary>
         //Admin Button Events
+        private void uiAdminAddBranchButton_Click(object sender, EventArgs e)
+        {
+            addBranch();
+        }
+
+        private void uiAdminDeleteBranchButton_Click(object sender, EventArgs e)
+        {
+            if (uiAdminBranchesComboBox.SelectedIndex > -1)
+            {
+                deleteBranch();
+            }
+            else
+            {
+                MessageBox.Show("Select Branch", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void uiAdminAddUser_Click(object sender, EventArgs e)
+        {
+            if (uiAdminBranchesComboBox.SelectedIndex > -1)
+            {
+                addUser();
+            }
+            else
+            {
+                MessageBox.Show("Select Branch", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void uiAdminDeleteUser_Click(object sender, EventArgs e)
+        {
+            if (uiAdminBranchesComboBox.SelectedIndex > -1 && uiAdminBranchUsersListView.SelectedItems.Count > 0)
+            {
+                deleteUser();
+            }
+            else
+            {
+                MessageBox.Show("Select Branch", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         //Admin General Functions
+        private void addBranch()
+        {
+            using (newBranch branchCreator = new newBranch())
+            {
+                var result = branchCreator.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    var branch = systemCore.createBranch(branchCreator.branchName);
+                    if (branch.Success)
+                    {
+                        MessageBox.Show(String.Format("Branch {0} created.", branch.branchID), "Branch Created", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        changeTabState(Tabs.Admin, TabStates.Default);
+                    }
+                    else
+                    {
+                        MessageBox.Show("New Branch Creation Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                branchCreator.Dispose();
+            };
+        }
+
+        private void deleteBranch()
+        {
+            if (uiAdminBranchesComboBox.SelectedIndex != currentBranch.ID)
+            {
+                if (systemCore.removeBranch(uiAdminBranchesComboBox.SelectedIndex))
+                {
+                    MessageBox.Show("Branch Removed.", "Branch Listing Change", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    changeTabState(Tabs.Admin, TabStates.Default);
+                }
+                else
+                {
+                    MessageBox.Show("Branch Deletion Error.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Cannot delete active Branch.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void loadBranch()
+        {
+            uiAdminBranchUsersListView.Items.Clear();
+            uiAdminBranchUsersListView.Items.AddRange(getBranchListViewItems(uiAdminBranchesComboBox.SelectedIndex));
+        }
+
+        private void addUser()
+        {
+            using (newSystemUser systemUserCreator = new newSystemUser())
+            {
+                var result = systemUserCreator.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    var newUser = systemCore.createSystemUser(uiAdminBranchesComboBox.SelectedIndex, 
+                                                            new SystemUser(systemUserCreator.username,
+                                                                systemUserCreator.password,
+                                                                systemUserCreator.userType,
+                                                                systemUserCreator.firstName,
+                                                                systemUserCreator.lastName));
+                    if (newUser.Success)
+                    {
+                        MessageBox.Show(String.Format("System User {0} created.", newUser.systemUID), "System User Created", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        changeTabState(Tabs.Admin, TabStates.Default);
+                    }
+                    else
+                    {
+                        MessageBox.Show("New System User Creation Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                systemUserCreator.Dispose();
+            };
+        }
+
+        private void deleteUser()
+        {
+            if (systemCore.removeUser(uiAdminBranchesComboBox.SelectedIndex, int.Parse(uiAdminBranchUsersListView.SelectedItems[0].Text)))
+            {
+                MessageBox.Show("User Removed.", "Branch Listing Change", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                changeTabState(Tabs.Admin, TabStates.Default);
+            }
+            else
+            {
+                MessageBox.Show("User Deletion Error.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         //Admin General Events
+        private void uiAdminBranchesComboBox_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            loadBranch();
+        }
 
         //Form-wide
         //Form-wide Functions
@@ -1325,6 +1473,28 @@ namespace SarreSports
 
             }
             return itemsListingListViewItems.ToArray();
+        }
+
+        public ListViewItem[] getBranchListViewItems(int branchID)
+        {
+            var supplierListingListViewItems = new List<ListViewItem>();
+
+            foreach (var branch in systemCore.MBranches)
+            {
+                if (branch.ID == branchID)
+                {
+                    foreach (var user in branch.MUsers())
+                    {
+                        ListViewItem userItem = new ListViewItem(user.SystemUID.ToString());
+                        userItem.SubItems.Add(user.Type().ToString());
+                        userItem.SubItems.Add(user.FirstName);
+                        userItem.SubItems.Add(user.LastName);
+                        supplierListingListViewItems.Add(userItem);
+                    }
+                }
+            }
+
+            return supplierListingListViewItems.ToArray();
         }
 
         private void setDefaultFormState()
@@ -1673,6 +1843,20 @@ namespace SarreSports
                     }
                     break;
                 case Tabs.Admin:
+                    switch (state)
+                    {
+                        case TabStates.Default:
+                            uiAdminBranchesComboBox.Items.Clear();
+                            uiAdminBranchesComboBox.ResetText();
+
+                            foreach (var branch in systemCore.MBranches) {
+                                uiAdminBranchesComboBox.Items.Add(branch.BranchName());
+                            }
+
+                            uiAdminBranchUsersListView.Items.Clear();
+                            
+                            break;
+                    }
                     break;
                 default:
                     break;

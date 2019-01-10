@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 3/12/2018 | 23:46
-//Last Updated On:  20/12/2018 | 14:44
+//Last Updated On:  10/1/2019 | 02:00
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SarreSports
 {
-    class PoS
+    public class PoS
     {
         private List<Branch> mBranches = new List<Branch>();
         private List<SystemUser> defaultUsers = new List<SystemUser>(); //Default List of Users for Testing
@@ -24,15 +24,13 @@ namespace SarreSports
             defaultUsers.Add(new SystemUser("manager", "abc", SystemUser.UserType.Manager, "Sarre", "Manager"));
             defaultUsers.Add(new SystemUser("admin", "admin", SystemUser.UserType.Admin, "System", "Administrator"));
             mBranches.Add(new Branch("Sarre Running Sport UK", defaultUsers));
-            //Additional Branches May be Implemented for Testing
+
+            //Additional Branches May be Implemented Manually for Testing -- uncomment two lines below
             //mBranches.Add(new Branch("Sarre Running Sport US", defaultUsers));
             //mBranches.Add(new Branch("Sarre Running Sport Canada", defaultUsers));
         }
 
-        public List<Branch> MBranches()
-        {
-            return mBranches;
-        }
+        public List<Branch> MBranches => mBranches;
 
         public List<SystemUser> MUsers(IBranch branch)
         {
@@ -43,10 +41,105 @@ namespace SarreSports
             return null;
         }
 
+        public List<SystemUser> MUsers(int branchID)
+        {
+            foreach (var branch in mBranches)
+            {
+                if (branch.ID == branchID)
+                {
+                    return branch.MUsers();
+                }
+            }
+            return null;
+        }
+
+        public (bool Success, int branchID) createBranch(string branchName)
+        {
+            if (!(String.IsNullOrWhiteSpace(branchName)))
+            {
+                try
+                {
+                    mBranches.Add(new Branch(branchName, new List<SystemUser>()));
+                    return (true, mBranches.Last().ID);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(String.Format("Error: {0}",ex.Message));
+                    return (false, -1);
+                }
+            }
+            else
+            {
+                return (false, -1);
+            }
+        }
+
+        public bool removeBranch(int branchID)
+        {
+            foreach (var branch in mBranches)
+            {
+                if (branch.ID == branchID)
+                {
+                    mBranches.Remove(branch);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public (bool Success, int systemUID) createSystemUser(int branchID, SystemUser user)
+        {
+            if (!(user is null))
+            {
+                try
+                {
+                    foreach (var branch in MBranches)
+                    {
+                        if (branch.ID == branchID)
+                        {
+                            return (true, branch.addSystemUser(user));
+                        }
+                    }
+
+                    return (false, -1);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(String.Format("Error: {0}",ex.Message));
+                    return (false, -1);
+                }
+            }
+            else
+            {
+                return (false, -1);
+            }
+        }
+
+        public bool removeUser(int branchID, int systemUID)
+        {
+            foreach (var branch in mBranches)
+            {
+                if (branch.ID == branchID)
+                {
+                    foreach (var user in branch.MUsers())
+                    {
+                        if (user.SystemUID == systemUID)
+                        {
+                            branch.MUsers().Remove(user);
+                            return true;
+                        }
+
+                    }
+
+                }
+            }
+            return false;
+        }
+
         private IBranch findBranchReference(IBranch branchRef)
         {
             IBranch branchReturn = NullBranch.Instance;
-            foreach (var branch in MBranches())
+            foreach (var branch in MBranches)
             {
                 if (branch == branchRef)
                 {

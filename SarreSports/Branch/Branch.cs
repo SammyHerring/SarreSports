@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/12/2018 | 17:26
-//Last Updated On:  9/1/2019 | 12:21
+//Last Updated On:  9/1/2019 | 22:34
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -529,7 +529,6 @@ namespace SarreSports
                     }
                 }
             }
-
             return false;
         }
 
@@ -744,6 +743,13 @@ namespace SarreSports
         /// Branch
         /// </summary>
         /// <returns></returns>
+
+        public int addSystemUser(SystemUser user)
+        {
+            mUsers.Add(user);
+            return mUsers.Last().SystemUID;
+        }
+
         //Branch List Accessors
         public List<SystemUser> MUsers()
         {

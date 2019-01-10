@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 3/12/2018 | 21:01
-//Last Updated On:  1/1/2019 | 20:36
+//Last Updated On:  10/1/2019 | 01:44
 using System;
 using System.Windows.Forms;
 
@@ -22,10 +22,15 @@ namespace SarreSports
         private void loginForm_Load(object sender, EventArgs e)
         {
             resetFormValues();
-            foreach (var branch in posSystem.MBranches()) {
+
+            uiBranchSelectorComboBox.Items.Clear();
+            foreach (var branch in posSystem.MBranches) {
                 uiBranchSelectorComboBox.Items.Add(branch.BranchName());
             }
-            //uiBranchSelectorComboBox.Items.Add("Test Null Branch"); //For Testing Only - Tests Null Branch Instance Handling
+
+            //For Testing Only - Tests Null Branch Instance Handling -- uncomment to demonstrate null handling
+            //uiBranchSelectorComboBox.Items.Add("Test Null Branch");
+            
             uiBranchSelectorComboBox.SelectedIndex = uiBranchSelectorComboBox.Items.Count - 1;
         }
 
@@ -47,10 +52,10 @@ namespace SarreSports
                     {
                         SystemUser currentUser = findBranchUserReference((Branch) currentBranch, uiUsernameTextBox.Text,
                             uiPasswordTextBox.Text);
-                        if (!(string.IsNullOrEmpty(currentUser.ToString())) && authenticateUser(currentUser))
+                        if (currentUser != null && !(string.IsNullOrWhiteSpace(currentUser.ToString() ?? "")) && authenticateUser(currentUser))
                         {
                             //LoggedIn
-                            posForm posF = new posForm(currentBranch, currentUser);
+                            posForm posF = new posForm(posSystem, currentBranch, currentUser);
                             this.Hide();
                             posF.ShowDialog();
                             this.Show();
@@ -74,7 +79,7 @@ namespace SarreSports
         private IBranch findBranchReference(int branchID)
         {
             IBranch branchReturn = NullBranch.Instance;
-            foreach (var branch in posSystem.MBranches())
+            foreach (var branch in posSystem.MBranches)
             {
                 if (branch.ID == branchID)
                 {
@@ -123,7 +128,13 @@ namespace SarreSports
         private void resetFormValues()
         {
             uiBranchSelectorComboBox.Focus();
+            uiBranchSelectorComboBox.ResetText();
+            uiBranchSelectorComboBox.Items.Clear();
+            foreach (var branch in posSystem.MBranches) {
+                uiBranchSelectorComboBox.Items.Add(branch.BranchName());
+            }
             uiBranchSelectorComboBox.SelectedIndex = uiBranchSelectorComboBox.Items.Count - 1;
+
             uiUsernameTextBox.Text = "";
             uiPasswordTextBox.Text = "";
         }

@@ -68,6 +68,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Generic.cs" />
+    <Compile Include="Branch\newBranch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Branch\newBranch.Designer.cs">
+      <DependentUpon>newBranch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Person\newSystemUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Person\newSystemUser.Designer.cs">
+      <DependentUpon>newSystemUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Other_Forms\genericNumericEntry.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -206,6 +218,12 @@
     <Compile Include="Other_Forms\viewPurchaseOrder.Designer.cs">
       <DependentUpon>viewPurchaseOrder.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Branch\newBranch.resx">
+      <DependentUpon>newBranch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Person\newSystemUser.resx">
+      <DependentUpon>newSystemUser.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Other_Forms\genericNumericEntry.resx">
       <DependentUpon>genericNumericEntry.cs</DependentUpon>
     </EmbeddedResource>

@@ -4,11 +4,12 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/12/2018 | 18:18
-//Last Updated On:  20/12/2018 | 14:44
+//Last Updated On:  9/1/2019 | 22:26
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SarreSports
@@ -17,6 +18,8 @@ namespace SarreSports
     {
         public enum UserType {Clerk, Manager, Admin};
 
+        private static int nextUID;
+        private readonly int systemUID;
         private string username;
         private string password;
         private UserType userType;
@@ -24,10 +27,13 @@ namespace SarreSports
         public SystemUser(string username, string password, UserType userType, string firstName, string lastName) : 
             base(firstName, lastName)
         {
+            this.systemUID = Interlocked.Increment(ref nextUID);
             this.username = username;
             this.password = password;
             this.userType = userType;
         }
+
+        public int SystemUID => systemUID;
 
         public string Username()
         {
