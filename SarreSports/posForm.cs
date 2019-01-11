@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 10/12/2018 | 16:59
-//Last Updated On:  10/1/2019 | 02:06
+//Last Updated On:  11/1/2019 | 01:01
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -33,11 +33,15 @@ namespace SarreSports
 {
     public partial class posForm : Form
     {
+        //Stored References used to access other classes
         private PoS systemCore;
         private Branch currentBranch;
         private SystemUser currentUser;
+
+        //Stored list used to store items when added within form
         private List<Item> currentBasket = new List<Item>();
 
+        //Tab Enumerators used to manage form UI states
         private enum Tabs
         {
             Sale = 0,
@@ -57,6 +61,7 @@ namespace SarreSports
         public posForm(PoS s, IBranch b, SystemUser u)
         {
             InitializeComponent();
+            //Only open form if the Branch is not a null instance
             switch (b)
             {
                 case NullBranch _:
@@ -139,10 +144,7 @@ namespace SarreSports
         //Sale Button Events
         private void uiSaleNewCustomerButton_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(uiSaleCustomerNameTextBox.Text)) uiCustomersCustomerNameTextBox.Text = uiSaleCustomerNameTextBox.Text;
-            uiSaleCustomerNameTextBox.Clear();
-            uiPosViewTabControl.SelectedTab = uiCustomersTab;
-            customersNewCustomer();
+            saleNewCustomer();
         }
 
         private void uiSaleSearchButton_Click(object sender, EventArgs e)
@@ -162,6 +164,7 @@ namespace SarreSports
 
         private void uiSaleCancelProductSelectionButton_Click(object sender, EventArgs e)
         {
+            //Handles sale tab state when product is not selected and reloads customer_loaded state
             if (int.TryParse(uiSaleCustomerIDUpDown.Text, out int customerID))
             {
                 changeTabState(Tabs.Sale, TabStates.Loaded_Customer);
@@ -192,10 +195,27 @@ namespace SarreSports
         }
 
         //Sale General Functions
+        /// <summary>
+        /// saleNewCustomer | Handles events where a new customer request occurs in Sale Tab and redirects user to customers tab.
+        /// Customer Name Formatting Helper for Customers tab called to Sale Tab
+        /// </summary>
+        private void saleNewCustomer()
+        {
+            if (!string.IsNullOrEmpty(uiSaleCustomerNameTextBox.Text)) uiCustomersCustomerNameTextBox.Text = uiSaleCustomerNameTextBox.Text;
+            uiSaleCustomerNameTextBox.Clear();
+            uiPosViewTabControl.SelectedTab = uiCustomersTab;
+            customersNewCustomer();
+        }
+
+        /// <summary>
+        /// saleSearchCustomers | Handles events where a customer search request occurs from Sale Tab.
+        /// Search Form considers values entered, while prioritising the Customer ID number for a pre-search upon calling the genericSearch form.
+        /// </summary>
         private void saleSearchCustomers()
         {
             string initialSearch = "";
 
+            //Check IF ID Number OR Customer Name Entered to pass to Generic Search Form
             if (!string.IsNullOrEmpty(uiSaleCustomerIDUpDown.Text) && Generic.IsInteger(uiSaleCustomerIDUpDown.Text))
             {
                 initialSearch = uiSaleCustomerIDUpDown.Text;
@@ -214,13 +234,17 @@ namespace SarreSports
                 }
                 else
                 {
-                    changeTabState(Tabs.Sale, TabStates.Default);
+                    changeTabState(Tabs.Sale, TabStates.Default); //IF NOT Selected, Load Default Sale Tab State
                 }
 
                 customerSearch.Dispose();
             };
         }
 
+        /// <summary>
+        /// saleLoadCustomers | Loads Customer in Sale Tab using a Branch User Check Query
+        /// </summary>
+        /// <param name="customerID">Uses Customer ID (int) to check existance of user in Current Branch</param>
         private void saleLoadCustomers(int customerID)
         {
             if (!string.IsNullOrEmpty(customerID.ToString()))
@@ -242,6 +266,10 @@ namespace SarreSports
             }
         }
 
+        /// <summary>
+        /// saleSearchProducts | Handles events where a product search request occurs from Sale Tab.
+        /// Search Form considers values entered, while prioritising the Product ID number for a pre-search upon calling the genericSearch form.
+        /// </summary>
         private void saleSearchProducts()
         {
             string initialSearch = "";
@@ -267,6 +295,10 @@ namespace SarreSports
             };
         }
 
+        /// <summary>
+        /// saleLoadProduct | Loads Product in Sale Tab
+        /// </summary>
+        /// <param name="productID">Uses Product ID to Load Product and Call Product Item Viewer</param>
         private void saleLoadProduct(int productID)
         {
             changeTabState(Tabs.Sale, TabStates.Loaded_Product);
@@ -292,20 +324,28 @@ namespace SarreSports
             
         }
 
+        /// <summary>
+        /// saleLoadItemViewer | Method to call Item Viewer for Sale Tab to Return Item Purchase Quantity
+        /// </summary>
+        /// <param name="productID">Uses Prodcut ID to Load Product Item Viewer</param>
         private void saleLoadItemViewer(int productID)
         {
             var newItem = currentBranch.newViewItemForm(productID, viewItem.viewItemState.Buy);
             var product = currentBranch.findProduct(productID);
 
+            //IF Quantity of Product Purchased
             if (newItem.success)
             {
+                //IF Purchase Quantity greater than zero
                 if (newItem.valueReturn > 0)
                 {
+                    //IF Purchase Quantity Available and Product Available For Sale
                     if (product.availableForSale && product.StockLevel >= newItem.valueReturn && saleCheckOrderedQuantity(product, newItem.valueReturn))
                     {
+                        //FOR the Quantity being Purchased
                         for (int itemCount = 0; itemCount < newItem.valueReturn; itemCount++)
                             {
-                                currentBasket.Add(product);
+                                currentBasket.Add(product); //Add Product to Current Basket
                             }
                     } else
                     {
@@ -316,12 +356,22 @@ namespace SarreSports
             }
         }
 
+        /// <summary>
+        /// saleLoadBasket | Loads Sale Tab Basket using Current Basket List Items
+        /// </summary>
         private void saleLoadBasket()
         {
             uiSaleBasketListView.Items.Clear();
             uiSaleBasketListView.Items.AddRange(getBasketListViewItems());
         }
 
+        /// <summary>
+        /// saleCheckOrderedQuantity | IF adding a given product to your current basket for a second time.
+        /// This method ensures that there is enough stock available for both the items already and being added to your basket.
+        /// </summary>
+        /// <param name="product">Passes product reference for stock level check</param>
+        /// <param name="newOrderQuantity">Passes the the new product quantity being requested</param>
+        /// <returns></returns>
         private bool saleCheckOrderedQuantity(Item product, int newOrderQuantity)
         {
             var currentBasketDuplicates = currentBasket
@@ -334,6 +384,11 @@ namespace SarreSports
             return (itemQuantity + newOrderQuantity <= product.StockLevel);
         }
 
+        /// <summary>
+        /// saleCurrentBasketCheck | Checks each item in Current Basket before coming to the sale that the product stock quantity or availability.
+        /// This is because due to the tab states, a products availability may change while an item is in the basket list.
+        /// </summary>
+        /// <returns>Returns a boolean whether the sale may proceed. In the event a sale cannot proceed, the item causing the error is returned.</returns>
         private (bool avaliable, IItem product) saleCurrentBasketCheck()
         {
             foreach (var item in currentBasket)
@@ -346,16 +401,23 @@ namespace SarreSports
             return (true, new NullItem());
         }
 
+        /// <summary>
+        /// salePurchaseBasket | Ensure appropriate product availibility checks are performed and if successful then pass the items to the branch for customer purchase
+        /// </summary>
         private void salePurchaseBasket()
         {
+            //IF Items in Basket
             if (uiSaleBasketListView.Items.Count > 0 && currentBasket.Count > 0)
             {
                 var basketCheck = saleCurrentBasketCheck();
+                //IF All Items in Basket are Available in Required Quantity
                 if (basketCheck.avaliable)
                 {
                     var purchase = currentBranch.purchaseCustomer(int.Parse(uiSaleCustomerIDUpDown.Text), currentBasket);
+                    //IF Purchase of Product to given Customer was successful
                     if (!purchase.success)
                     {
+                        //Purchase Not Successful
                         MessageBox.Show("Customer Purchase Failed.", 
                             "Purchase Error", 
                             MessageBoxButtons.OK, 
@@ -364,6 +426,8 @@ namespace SarreSports
                     }
                     else
                     {
+                        //Purchase Successful - return user with Purchase ID for reference
+                        //Refresh all related tab states to ensure data consistency
                         MessageBox.Show(String.Format("Customer Purchase Success.\n" +
                                         "Order Total Value: {0:C2}", purchase.purchaseCost), 
                             String.Format("Purchase: #{0}", purchase.purchaseID), 
@@ -376,6 +440,7 @@ namespace SarreSports
                 }
                 else
                 {
+                    //Alert user to which product was not available
                     Item item = (Item)basketCheck.product;
                     MessageBox.Show(String.Format("Product {0} in your basket is not available.\n" +
                                     "Due to quantity required or seller availability.", item.Name), 
@@ -387,6 +452,7 @@ namespace SarreSports
             }
             else
             {
+                //Alert user that no product was selected
                 MessageBox.Show("No Items Selected.",
                     "Basket Error",
                     MessageBoxButtons.OK, 
@@ -395,12 +461,17 @@ namespace SarreSports
             }
         }
 
+        /// <summary>
+        /// saleRemoveItem | Checks whether the user wishes to remove all of a given item or just one from currentBasket list
+        /// </summary>
         private void saleRemoveItem()
         {
             if (uiSaleBasketListView.SelectedItems.Count > 0)
             {
+                //IF Item Quantity is Greater than 1
                 if (Int32.Parse(uiSaleBasketListView.SelectedItems[0].SubItems[2].Text) > 1)
                 {
+                    //Query whether the user would like one or all of a given item removed
                     DialogResult removeItemDialog = MessageBox.Show(String.Format("Would you like to remove all {0} of this item?", 
                                                                                     uiSaleBasketListView.SelectedItems[0].SubItems[2].Text),
                         String.Format("Remove {0} from Basket", uiSaleBasketListView.SelectedItems[0].SubItems[1].Text),
@@ -531,11 +602,18 @@ namespace SarreSports
         }
 
         //Customer General Functions
+        /// <summary>
+        /// customersNewCustomer | Change Customers Tab state to New Customer
+        /// </summary>
         private void customersNewCustomer()
         {
             changeTabState(Tabs.Customers, TabStates.New_Customer, true);
         }
 
+        /// <summary>
+        /// customersSearchCustomer | Handles events where a customer search request occurs from Customers Tab.
+        /// Search Form considers values entered, while prioritising the Customer ID number for a pre-search upon calling the genericSearch form.
+        /// </summary>
         private void customersSearchCustomer()
         {
             string initialSearch = "";
@@ -565,8 +643,12 @@ namespace SarreSports
             };
         }
         
+        /// <summary>
+        /// customersCreateCustomer | Validate Customer Tab details and if Successful create the customer in the Current Branch
+        /// </summary>
         private void customersCreateCustomer()
         {
+            //IF Customers Details Valid
             if (customersValidateCustomerDetails())
             {
                 var currentCustomer = currentBranch.createCustomer(new Customer(
@@ -576,6 +658,7 @@ namespace SarreSports
                     uiCustomersPostCodeTextBox.Text,
                     uiCustomersMobileNoTextBox.Text,
                     uiCustomersEmailAddressTextBox.Text));
+                //IF Customer Successfully created
                 if (currentCustomer.Success)
                 {
                     //Customer Creation Success
@@ -601,6 +684,9 @@ namespace SarreSports
             }
         }
 
+        /// <summary>
+        /// customersEditCustomer | Validate new Customer details and if successful update Customer record
+        /// </summary>
         private void customersEditCustomer()
         {
             if (uiCustomersCustomerEditSaveButton.Text == "Edit")
@@ -662,6 +748,10 @@ namespace SarreSports
             }
         }
 
+        /// <summary>
+        /// customersLoadCustomer | Loads Customer by Querying Current Branch with CustomerID
+        /// </summary>
+        /// <param name="customerID">CustomerID used to find Customer Details</param>
         private void customersLoadCustomer(int customerID)
         {
             if (!string.IsNullOrEmpty(customerID.ToString()))
@@ -695,6 +785,9 @@ namespace SarreSports
             }
         }
 
+        /// <summary>
+        /// customersSaveQRCode | Saves dynamically generated QR Code using Intellisense Form
+        /// </summary>
         private void customersSaveQRCode()
         {
             SaveFileDialog dialog = new SaveFileDialog();
@@ -713,6 +806,9 @@ namespace SarreSports
             }
         }
 
+        /// <summary>
+        /// customersPrintQRCode | Prints dynamically generated QR Code using Intellisense For,
+        /// </summary>
         private void customersPrintQRCode()
         {
             PrintDocument printDoc = new PrintDocument();
@@ -737,6 +833,9 @@ namespace SarreSports
             }
         }
 
+        /// <summary>
+        /// customersEmailDetails | If Customer Loaded, call email customer details within current branch
+        /// </summary>
         private void customersEmailDetails()
         {
             if (int.TryParse(uiCustomersCustomerIDUpDown.Text, out int customerID))
@@ -751,6 +850,10 @@ namespace SarreSports
             
         }
 
+        /// <summary>
+        /// customersValidateCustomerDetails | Validate customer form details
+        /// </summary>
+        /// <returns>Returns boolean value regarding success of validation</returns>
         private bool customersValidateCustomerDetails()
         {
             bool valid = true;
@@ -853,8 +956,10 @@ namespace SarreSports
 
         private void uiCustomersPurchasesListView_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            //IF Customers ListView Item Selected
             if (uiCustomersPurchasesListView.SelectedItems.Count > 0)
             {
+                //Call method to open purchase view
                 if (!currentBranch.newPurchaseView(int.Parse(uiCustomersPurchasesListView.SelectedItems[0].Text), 
                                                     int.Parse(uiCustomersCustomerIDUpDown.Text) 
                                                     ))
@@ -893,6 +998,10 @@ namespace SarreSports
         }
 
         //Inventory General Functions
+        /// <summary>
+        /// inventorySearchSupplier | Handles events where a supplier search request occurs from Inventory Tab.
+        /// Search Form considers values entered, while prioritising the Supplier ID number for a pre-search upon calling the genericSearch form.
+        /// </summary>
         private void inventorySearchSupplier()
         {
             string initialSearch = "";
@@ -920,15 +1029,18 @@ namespace SarreSports
             };
         }
 
+        /// <summary>
+        /// inventoryCreateSupplier | Validate supplier creator input and create supplier in Branch
+        /// </summary>
         private void inventoryCreateSupplier()
         {
-            using (newSupplier suppliersSearch = new newSupplier())
+            using (newSupplier supplierCreator = new newSupplier())
             {
-                var result = suppliersSearch.ShowDialog();
+                var result = supplierCreator.ShowDialog();
 
                 if (result == DialogResult.OK)
                 {
-                    var currentSuppplier = currentBranch.createSupplier(new Supplier(suppliersSearch.supplierName));
+                    var currentSuppplier = currentBranch.createSupplier(new Supplier(supplierCreator.supplierName));
                     if (currentSuppplier.Success)
                     {
                         changeTabState(Tabs.Inventory, TabStates.Default);
@@ -945,10 +1057,14 @@ namespace SarreSports
                 {
                     changeTabState(Tabs.Inventory, TabStates.Default);
                 }
-                suppliersSearch.Dispose();
+                supplierCreator.Dispose();
             };
         }
 
+        /// <summary>
+        /// inventoryLoadSupplier | Update form controls with supplier details
+        /// </summary>
+        /// <param name="supplierID">Use supplierID to set form control values</param>
         private void inventoryLoadSupplier(int supplierID)
         {
             changeTabState(Tabs.Inventory, TabStates.Default);
@@ -961,6 +1077,9 @@ namespace SarreSports
             uiInventorySupplierItemsListView.Items.AddRange(getSupplierItemsListViewItems(supplierID));
         }
 
+        /// <summary>
+        /// Call appropriate item creator class for a given object as provided by itemSelector class
+        /// </summary>
         private void inventoryCreateItem()
         {
             using (itemSelector itemSelector = new itemSelector())
@@ -992,6 +1111,11 @@ namespace SarreSports
             };
         }
 
+        /// <summary>
+        /// Call specific item creator for a standard parent-level item
+        /// </summary>
+        /// <param name="type">Accepts item type value</param>
+        /// <returns>Returns whether the item creation was successful</returns>
         private bool inventoryNewStandardItem(Item.Type type)
         {
             if (type == Item.Type.Clothing)
@@ -1015,6 +1139,11 @@ namespace SarreSports
             }
         }
 
+        /// <summary>
+        /// Call specific item creator for a child item (an Accessory)
+        /// </summary>
+        /// <param name="type">Acccepts accessory item type value</param>
+        /// <returns>Returns whether the accessory item creation was successful</returns>
         private bool inventoryNewAccessoryItem(Accessory.accessoryType? type)
         {
             if (type != null)
@@ -1052,6 +1181,9 @@ namespace SarreSports
             }
         }
 
+        /// <summary>
+        /// inventoryRemoveItem | Either remove product from a given suppliers inventory or remove it from sale availability
+        /// </summary>
         private void inventoryRemoveItem()
         {
             if (uiInventorySupplierItemsListView.SelectedItems.Count > 0)
@@ -1112,14 +1244,14 @@ namespace SarreSports
         //Admin Button Events
         private void uiAdminAddBranchButton_Click(object sender, EventArgs e)
         {
-            addBranch();
+            adminAddBranch();
         }
 
         private void uiAdminDeleteBranchButton_Click(object sender, EventArgs e)
         {
             if (uiAdminBranchesComboBox.SelectedIndex > -1)
             {
-                deleteBranch();
+                adminDeleteBranch();
             }
             else
             {
@@ -1131,7 +1263,7 @@ namespace SarreSports
         {
             if (uiAdminBranchesComboBox.SelectedIndex > -1)
             {
-                addUser();
+                adminAddUser();
             }
             else
             {
@@ -1143,7 +1275,7 @@ namespace SarreSports
         {
             if (uiAdminBranchesComboBox.SelectedIndex > -1 && uiAdminBranchUsersListView.SelectedItems.Count > 0)
             {
-                deleteUser();
+                adminDeleteUser();
             }
             else
             {
@@ -1152,7 +1284,10 @@ namespace SarreSports
         }
 
         //Admin General Functions
-        private void addBranch()
+        /// <summary>
+        /// adminAddBranch | Call Branch Creator Form and create branch in PoS Core
+        /// </summary>
+        private void adminAddBranch()
         {
             using (newBranch branchCreator = new newBranch())
             {
@@ -1175,7 +1310,10 @@ namespace SarreSports
             };
         }
 
-        private void deleteBranch()
+        /// <summary>
+        /// adminDeleteBranch | Find and delete branch in PoS Core
+        /// </summary>
+        private void adminDeleteBranch()
         {
             if (uiAdminBranchesComboBox.SelectedIndex != currentBranch.ID)
             {
@@ -1195,13 +1333,19 @@ namespace SarreSports
             }
         }
 
-        private void loadBranch()
+        /// <summary>
+        /// adminLoadBranch | Find and load given branch from PoS Core
+        /// </summary>
+        private void adminLoadBranch()
         {
             uiAdminBranchUsersListView.Items.Clear();
             uiAdminBranchUsersListView.Items.AddRange(getBranchListViewItems(uiAdminBranchesComboBox.SelectedIndex));
         }
 
-        private void addUser()
+        /// <summary>
+        /// adminAddUser | Add user to given branch in PoS Core
+        /// </summary>
+        private void adminAddUser()
         {
             using (newSystemUser systemUserCreator = new newSystemUser())
             {
@@ -1229,27 +1373,43 @@ namespace SarreSports
             };
         }
 
-        private void deleteUser()
+        /// <summary>
+        /// adminDeleteUser | Delete user in given branch in PoS Core
+        /// </summary>
+        private void adminDeleteUser()
         {
-            if (systemCore.removeUser(uiAdminBranchesComboBox.SelectedIndex, int.Parse(uiAdminBranchUsersListView.SelectedItems[0].Text)))
+            if (currentUser.SystemUID != int.Parse(uiAdminBranchUsersListView.SelectedItems[0].Text))
             {
-                MessageBox.Show("User Removed.", "Branch Listing Change", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                changeTabState(Tabs.Admin, TabStates.Default);
+                if (systemCore.removeUser(uiAdminBranchesComboBox.SelectedIndex, int.Parse(uiAdminBranchUsersListView.SelectedItems[0].Text)))
+                {
+                    MessageBox.Show("User Removed.", "Branch Listing Change", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    changeTabState(Tabs.Admin, TabStates.Default);
+                }
+                else
+                {
+                    MessageBox.Show("User Deletion Error.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
-                MessageBox.Show("User Deletion Error.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Cannot delete active user.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
         }
 
         //Admin General Events
         private void uiAdminBranchesComboBox_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            loadBranch();
+            adminLoadBranch();
         }
 
         //Form-wide
         //Form-wide Functions
+        /// <summary>
+        /// Format passed full name string. Method will consider validation of the name as well as variants that a user may have.
+        /// </summary>
+        /// <param name="fullName">Pass Full Name string</param>
+        /// <returns>Returns FullName, First Name and Last Names as seperate strings</returns>
         private (string, string, string)  customerNameFormattingHelper(string fullName)
         {
             string firstName = "";
@@ -1316,6 +1476,10 @@ namespace SarreSports
             return (fullName, firstName, lastName);
         }
 
+        /// <summary>
+        /// ListViewItem[] Return forms to provide item arrays for posForm ListView controls
+        /// </summary>
+        /// <returns>ListViewItem Array</returns>
         public ListViewItem[] getCustomerListViewItems()
         {
             var customerListingListViewItems = new List<ListViewItem>();
@@ -1497,6 +1661,9 @@ namespace SarreSports
             return supplierListingListViewItems.ToArray();
         }
 
+        /// <summary>
+        /// setDefaultFormState | Call State Manager for every Tab instance and initialise default states
+        /// </summary>
         private void setDefaultFormState()
         {
             changeTabState(Tabs.Admin, TabStates.Default);
@@ -1505,6 +1672,12 @@ namespace SarreSports
             changeTabState(Tabs.Sale, TabStates.Default);
         }
 
+        /// <summary>
+        /// resetGroupBoxControls | Reset the values of any GroupBox controls
+        /// Form also considers control tags where required for some methods such as nameFormattingHelper
+        /// </summary>
+        /// <param name="box">GroupBox control reference</param>
+        /// <param name="protectedText">Use control tag boolean</param>
         private void resetGroupBoxControls(GroupBox box, bool protectedText = false)
         {
             foreach (Control ctr in box.Controls)
@@ -1550,6 +1723,11 @@ namespace SarreSports
             }
         }
 
+        /// <summary>
+        /// groupBoxControlsEnabled | Set enabled state of any GroupBox controls
+        /// </summary>
+        /// <param name="box">GroupBox control reference</param>
+        /// <param name="state">GroupBox enabled state boolean</param>
         private void groupBoxControlsEnabled(GroupBox box, bool state)
         {
             foreach (Control ctr in box.Controls)
@@ -1585,6 +1763,15 @@ namespace SarreSports
             }
         }
 
+        /// <summary>
+        /// changeTabState | posForm Tab State Manager
+        /// This method is used to manage the UI states of each tab as each tab requires each of them to
+        /// interact while all being active simultaneously to the user. Therefore, this state manager
+        /// prevents error or data inconsistencies accross tabs.
+        /// </summary>
+        /// <param name="tab">Tab enumerator</param>
+        /// <param name="state">Tab State enumerator</param>
+        /// <param name="nameHelper">Defines whether the name formatting helper is being used at point of call</param>
         private void changeTabState(Tabs tab, TabStates state, bool nameHelper = false)
         {
             Console.WriteLine(string.Format("Tab State Change Request. Tab: {0}. New Tab State: {1}", tab, state));
@@ -1864,6 +2051,12 @@ namespace SarreSports
         }
 
         //Form-wide New Form Instances
+        /// <summary>
+        /// New Item Form instances that call upon the current branch to create new item entities
+        /// </summary>
+        /// <param name="supplierIDString">Supplier ID as String</param>
+        /// <param name="supplierNameString">Supplier Name as String</param>
+        /// <returns></returns>
         private bool newClothing(string supplierIDString, string supplierNameString)
         {
             using (newClothing itemCreator = new newClothing(Item.Type.Clothing.ToString(), supplierNameString))

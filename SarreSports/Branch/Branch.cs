@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/12/2018 | 17:26
-//Last Updated On:  9/1/2019 | 22:34
+//Last Updated On:  11/1/2019 | 01:22
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +16,7 @@ namespace SarreSports
 {
     public class Branch : IBranch, IDisposable
     {
+        //Branch Attributes
         private string branchName;
         private List<SystemUser> mUsers = new List<SystemUser>();
         private List<Customer> mCustomers = new List<Customer>();
@@ -26,7 +27,7 @@ namespace SarreSports
         
         public int ID { get; private set; }
 
-        //Instance Constructor /w System Users being passed
+        //Branch Constructor /w System Users being passed
         public Branch(string branchName, List<SystemUser> mUsers)
         {
             this.branchName = branchName; //Set Branch Name Attribute
@@ -55,7 +56,6 @@ namespace SarreSports
         /// <summary>
         /// Customer
         /// </summary>
-        /// <param name="customer"></param>
         /// <returns></returns>
         //Customer General Methods
         public (bool Success, int customerID) createCustomer(Customer customer)

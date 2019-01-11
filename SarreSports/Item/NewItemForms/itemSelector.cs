@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/1/2019 | 15:38
-//Last Updated On:  8/1/2019 | 14:35
+//Last Updated On:  11/1/2019 | 01:14
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,7 +19,7 @@ namespace SarreSports
 {
     public partial class itemSelector : Form
     {
-        //Public Form Return Valiues
+        //Public Form Return Values
         public Item.Type itemTypeReturn { get; set; }
         public Accessory.accessoryType? accessoryTypeReturn { get; set; }
         

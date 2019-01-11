@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/12/2018 | 18:18
-//Last Updated On:  9/1/2019 | 22:26
+//Last Updated On:  11/1/2019 | 01:15
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +16,7 @@ namespace SarreSports
 {
     public class SystemUser : Person
     {
+        //SystemUser Attributes
         public enum UserType {Clerk, Manager, Admin};
 
         private static int nextUID;
@@ -24,6 +25,7 @@ namespace SarreSports
         private string password;
         private UserType userType;
 
+        //SystemUser Constructor
         public SystemUser(string username, string password, UserType userType, string firstName, string lastName) : 
             base(firstName, lastName)
         {
@@ -33,6 +35,7 @@ namespace SarreSports
             this.userType = userType;
         }
 
+        //System User Accessors & Methods
         public int SystemUID => systemUID;
 
         public string Username()

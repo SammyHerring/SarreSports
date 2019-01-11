@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 12/12/2018 | 17:04
-//Last Updated On:  7/1/2019 | 15:24
+//Last Updated On:  11/1/2019 | 01:20
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +15,7 @@ namespace SarreSports
 {
     public class Clothing : Item
     {
+        //Clothing Attributes
         private int size;
         private string colour;
 
@@ -29,6 +30,7 @@ namespace SarreSports
         }
         private clothingType style;
 
+        //Clothing Constructor
         public Clothing(string name, Type itemType, decimal cost, int stockLevel, int restockLevel, int size, string colour, clothingType style) :
             base(name, itemType, cost, stockLevel, restockLevel)
         {
@@ -37,6 +39,7 @@ namespace SarreSports
             this.style = style;
         }
 
+        //Clothing Accessors
         public int Size => size;
         public string Colour => colour;
         public clothingType Style => style;

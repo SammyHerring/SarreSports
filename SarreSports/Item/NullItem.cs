@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 8/1/2019 | 18:19
-//Last Updated On:  8/1/2019 | 18:27
+//Last Updated On:  11/1/2019 | 01:19
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +24,7 @@ namespace SarreSports
         {
         }
 
+        //Static NullItem Instance that may be called as comparable to Item through IItem interface
         public static NullItem Instance  
         {  
             get {  

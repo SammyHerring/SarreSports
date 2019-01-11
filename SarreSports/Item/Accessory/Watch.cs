@@ -4,11 +4,12 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/1/2019 | 15:12
-//Last Updated On:  7/1/2019 | 15:29
+//Last Updated On:  11/1/2019 | 01:16
 namespace SarreSports
 {
     public class Watch : Accessory
     {
+        //Watch Attributes
         public enum watchType
         {
             Simple = 0, 
@@ -18,12 +19,14 @@ namespace SarreSports
         }
         private watchType type;
 
+        //Watch Constructor
         public Watch(string name, Type itemType, decimal cost, int stockLevel, int restockLevel, accessoryType accessoryType, watchType type) :
             base(name, itemType, cost, stockLevel, restockLevel, accessoryType)
         {
             this.type = type;
         }
 
+        //Watch Accessor
         public watchType WatchType => type;
     }
 }

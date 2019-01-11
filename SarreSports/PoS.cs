@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 3/12/2018 | 23:46
-//Last Updated On:  10/1/2019 | 02:00
+//Last Updated On:  11/1/2019 | 01:10
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +15,11 @@ namespace SarreSports
 {
     public class PoS
     {
+        //PoS Core Attributes
         private List<Branch> mBranches = new List<Branch>();
         private List<SystemUser> defaultUsers = new List<SystemUser>(); //Default List of Users for Testing
 
+        //PoS Core Constructor
         public PoS()
         {
             defaultUsers.Add(new SystemUser("clerk", "123", SystemUser.UserType.Clerk, "Sarre", "Clerk"));
@@ -30,6 +32,7 @@ namespace SarreSports
             //mBranches.Add(new Branch("Sarre Running Sport Canada", defaultUsers));
         }
 
+        //PoS Core Accessors
         public List<Branch> MBranches => mBranches;
 
         public List<SystemUser> MUsers(IBranch branch)
@@ -53,6 +56,7 @@ namespace SarreSports
             return null;
         }
 
+        //PoS Core Methods
         public (bool Success, int branchID) createBranch(string branchName)
         {
             if (!(String.IsNullOrWhiteSpace(branchName)))

@@ -4,10 +4,11 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 8/1/2019 | 18:21
-//Last Updated On:  8/1/2019 | 18:31
+//Last Updated On:  11/1/2019 | 01:20
 namespace SarreSports
 {
     public interface IItem
     {
+        //Interface exists to allow NullItem to be interfaced
     }
 }

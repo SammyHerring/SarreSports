@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/12/2018 | 18:18
-//Last Updated On:  9/1/2019 | 02:19
+//Last Updated On:  11/1/2019 | 01:16
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +19,7 @@ namespace SarreSports
 {
     public class Customer : Person
     {
+        //Customer Attributes
         //GDPR - Auto Property Method below
         private static int nextID;
         private readonly int id;
@@ -27,6 +28,7 @@ namespace SarreSports
         private string email;
         private List<Purchase> mPurchases = new List<Purchase>();
 
+        //Customer Constructor
         public Customer(string firstName, string lastName, bool GDPR, string postCode, string mobileNo, string email) :
             base(firstName, lastName)
         {
@@ -37,6 +39,7 @@ namespace SarreSports
             this.email = email;
         }
 
+        //Customer Accessors
         public bool GDPR { get; set; }
 
         public int ID()
@@ -118,6 +121,7 @@ namespace SarreSports
 
         public List<Purchase> MPurchases => mPurchases;
 
+        //Customer Methods
         public Purchase findPurchase(int purchaseID)
         {
             foreach (var purchase in mPurchases)

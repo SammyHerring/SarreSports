@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 12/12/2018 | 17:04
-//Last Updated On:  8/1/2019 | 19:01
+//Last Updated On:  11/1/2019 | 01:19
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +16,7 @@ namespace SarreSports
 {
     public abstract class Item : IItem
     {
+        //Item Attributes
         private string name;
         private static int nextID;
         private readonly int id;
@@ -33,6 +34,7 @@ namespace SarreSports
         private int restockLevel;
         //Avaliable For Sale - AutoProperty 
 
+        //Item Constructor
         public Item(string name, Type itemType, decimal cost, int stockLevel, int restockLevel)
         {
             this.name = name;
@@ -44,15 +46,17 @@ namespace SarreSports
             this.availableForSale = true;
         }
 
+        //Item Accessors
         public string Name => name;
         public int ID => id;
         public Type ItemType => itemType;
         public decimal Cost => cost;
         public int StockLevel => stockLevel;
         public int RestockLevel => restockLevel;
+
+        //Item Methods
         public bool Restock() => (restockLevel >= stockLevel);
         public bool availableForSale { get; set; }
-
         public bool sell(int quantity)
         {
             if (quantity <= stockLevel && quantity > 0)

@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 12/12/2018 | 17:02
-//Last Updated On:  9/1/2019 | 12:25
+//Last Updated On:  11/1/2019 | 01:09
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +16,20 @@ namespace SarreSports
 {
     public class Supplier
     {
+        //Supplier Attributes
         private string name;
         private static int nextID;
         private readonly int id;
         private List<Item> mProducts = new List<Item>();
 
+        //Supplier Constructor
         public Supplier(string name)
         {
             this.name = name;
             this.id = Interlocked.Increment(ref nextID);
         }
 
+        //Supplier Accessors
         public string Name()
         {
             return name;
@@ -37,6 +40,12 @@ namespace SarreSports
             return id;
         }
 
+        public List<Item> MProducts()
+        {
+            return mProducts;
+        }
+
+        //Supplier Methods
         public (bool Success, int productID) newProduct(Item product)
         {
             if (!(product is null))
@@ -56,11 +65,6 @@ namespace SarreSports
             {
                 return (false, -1);
             }
-        }
-
-        public List<Item> MProducts()
-        {
-            return mProducts;
         }
     }
 }

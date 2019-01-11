@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 4/1/2019 | 17:34
-//Last Updated On:  7/1/2019 | 22:55
+//Last Updated On:  11/1/2019 | 01:21
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +15,7 @@ namespace SarreSports
 {
     public abstract class Accessory : Item
     {
+        //Accessory Attributes
         public enum accessoryType
         {
             Bag = 0,
@@ -23,6 +24,7 @@ namespace SarreSports
         }
         public accessoryType AccessoryType { get; }
 
+        //Accessory Constructor
         protected Accessory(string name, Type itemType, decimal cost, int stockLevel, int restockLevel, accessoryType type) 
             : base(name, itemType, cost, stockLevel, restockLevel)
         {

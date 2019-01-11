@@ -9,6 +9,7 @@ namespace SarreSports
 {
     public class Nutrition : Accessory
     {
+        //Nutrition Attributes
         private int quantity;
 
         public enum nutritionType
@@ -18,6 +19,7 @@ namespace SarreSports
         }
         private nutritionType type;
 
+        //Nutrition Constructor
         public Nutrition(string name, Type itemType, decimal cost, int stockLevel, int restockLevel, int quantity, 
             accessoryType accessoryType, nutritionType type) :
             base(name, itemType, cost, stockLevel, restockLevel, accessoryType)
@@ -26,6 +28,7 @@ namespace SarreSports
             this.type = type;
         }
 
+        //Nutrition Accessors
         public int Quantity => quantity;
         public nutritionType NutritionType => type;
     }

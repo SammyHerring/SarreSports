@@ -4,7 +4,7 @@
 //Author URI: http://sherring.me
 //UserID: sh1042
 //Created On: 12/12/2018 | 17:04
-//Last Updated On:  7/1/2019 | 15:29
+//Last Updated On:  11/1/2019 | 01:18
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +15,7 @@ namespace SarreSports
 {
     public class Shoe : Item
     {
+        //Shoe Attributes
         private decimal size;
 
         public enum shoeType
@@ -27,6 +28,7 @@ namespace SarreSports
         }
         private shoeType type;
 
+        //Shoe Constructor
         public Shoe(string name, Type itemType, decimal cost, int stockLevel, int restockLevel, decimal size, shoeType type) :
             base(name, itemType, cost, stockLevel, restockLevel)
         {
@@ -34,6 +36,7 @@ namespace SarreSports
             this.type = type;
         }
 
+        //Shoe Accessors
         public decimal Size => size;
         public shoeType ShoeType => type;
     }
